@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_bottom_home"
+        android:title="Trang chủ"
+        android:icon="@drawable/ic_home"/>
+    <item android:id="@+id/placeholder1"
+        android:title="" />
+    <item android:id="@+id/placeholder2"
+        android:title="" />
+    <item android:id="@+id/placeholder3"
+        android:title="" />
+    <item android:id="@+id/nav_bottom_settings"
+        android:title="cài đặt"
+        android:icon="@drawable/ic_outline_settings"/>
+</menu>

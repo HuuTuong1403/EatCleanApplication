@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.eatcleanapp.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_signin"
+        android:name="com.example.eatcleanapp.ui.home.signin.SignInFragment"
+        android:label="Đăng nhập"
+        tools:layout="@layout/sign_in_fragment"/>
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.eatcleanapp.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_signup"
+        android:name="com.example.eatcleanapp.ui.home.signup.SignUpFragment"
+        android:label="Đăng ký"
+        tools:layout="@layout/fragment_sign_up"/>
 </navigation>
