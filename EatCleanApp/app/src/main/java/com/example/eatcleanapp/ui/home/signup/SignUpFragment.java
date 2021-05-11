@@ -23,6 +23,7 @@ public class SignUpFragment extends Fragment {
 
     private SignUpViewModel mViewModel;
     private FragmentSignUpBinding binding;
+    private View view;
 
     public static SignUpFragment newInstance() {
         return new SignUpFragment();
@@ -31,27 +32,14 @@ public class SignUpFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mViewModel =
-                new ViewModelProvider(this).get(SignUpViewModel.class);
+        view = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
-        binding = FragmentSignUpBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        final TextView textView = binding.textSignup;
-        mViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        return root;
+        return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

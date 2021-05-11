@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SubActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.EatCleanApp.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            app:contentInsetStart="0dp"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/bg_nav"
+            app:titleTextColor="@color/black"
+            app:popupTheme="@style/Theme.EatCleanApp.PopupOverlay" >
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textSize="20sp"
+                android:layout_marginRight="40dp"
+                android:textAllCaps="true"
+                android:textColor="@color/gray"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:id="@+id/txvTitle"/>
+        </androidx.appcompat.widget.Toolbar>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <include layout="@layout/content_sub" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

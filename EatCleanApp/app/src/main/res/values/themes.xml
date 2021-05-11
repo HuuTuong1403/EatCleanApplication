@@ -26,11 +26,11 @@
 
     <style name="Theme.EatCleanApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColor">@color/black</item>
+        <item name="android:homeAsUpIndicator">@drawable/back24</item>
     </style>
+
     <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
         <item name="color">@android:color/black</item>
     </style>
-
-
 </resources>

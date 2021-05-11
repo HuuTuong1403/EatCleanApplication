@@ -1,29 +1,29 @@
 package com.example.eatcleanapp.ui.home.signin;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+
 import com.example.eatcleanapp.R;
-import com.example.eatcleanapp.databinding.FragmentHomeBinding;
+
+import com.example.eatcleanapp.SubActivity;
 import com.example.eatcleanapp.databinding.SignInFragmentBinding;
-import com.example.eatcleanapp.ui.home.HomeViewModel;
+import com.example.eatcleanapp.ui.home.HomeFragment;
+
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -31,26 +31,23 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.facebook.login.widget.ProfilePictureView;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class SignInFragment extends Fragment {
 
-    private SignInViewModel mViewModel;
+    //private SignInViewModel mViewModel;
     private SignInFragmentBinding binding;
+    View view;
     private LoginButton loginButton;
-    private ProfilePictureView profilePictureView;
     private CallbackManager callbackManager;
+    private TextView txvSignUp, txvForgotPass;
+
     public static SignInFragment newInstance() {
         return new SignInFragment();
     }
@@ -60,6 +57,34 @@ public class SignInFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         FacebookSdk.getApplicationContext();
         callbackManager = CallbackManager.Factory.create();
+        view = inflater.inflate(R.layout.sign_in_fragment, container, false);
+        loginButton();
+        AnhXa();
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
+        loginButton.setFragment(this);
+        setLogin_Button();
+
+        txvSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SubActivity.class);
+                intent.putExtra("fragment-back", 1);
+                startActivity(intent);
+            }
+        });
+
+        txvForgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SubActivity.class);
+                intent.putExtra("fragment-back", 2);
+                startActivity(intent);
+            }
+        });
+        return view;
+    }
+
+    private void loginButton(){
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -78,23 +103,6 @@ public class SignInFragment extends Fragment {
             }
         });
 
-        mViewModel = new ViewModelProvider(this).get(SignInViewModel.class);
-
-        binding = SignInFragmentBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        AnhXa();
-        mViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-
-            }
-        });
-        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
-        loginButton.setFragment(this);
-        setLogin_Button();
-
-        return root;
     }
 
     private void setLogin_Button() {
@@ -103,6 +111,15 @@ public class SignInFragment extends Fragment {
             public void onSuccess(LoginResult loginResult) {
                 result();
                 loginButton.setVisibility(View.INVISIBLE);
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                HomeFragment homeFragment = new HomeFragment();
+                /*Bundle bundle = new Bundle();
+                bundle.putBoolean("isLoggin", true);
+                homeFragment.setArguments(bundle);*/
+
+                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, homeFragment);
+                fragmentTransaction.commit();
             }
 
             @Override
@@ -122,8 +139,6 @@ public class SignInFragment extends Fragment {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) {
                 Log.d("JSON", response.getJSONObject().toString());
-                binding.imageprofilepictureview.setProfileId(Profile.getCurrentProfile().getId());
-
             }
         });
         Bundle parameters = new Bundle();
@@ -135,7 +150,7 @@ public class SignInFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(SignInViewModel.class);
+        //mViewModel = new ViewModelProvider(this).get(SignInViewModel.class);
 
     }
 
@@ -146,8 +161,9 @@ public class SignInFragment extends Fragment {
     }
 
     public void AnhXa(){
-        profilePictureView = binding.imageprofilepictureview;
-        loginButton = binding.loginButton;
+        loginButton = (LoginButton)view.findViewById(R.id.login_button);
+        txvSignUp = (TextView)view.findViewById(R.id.signup);
+        txvForgotPass = (TextView)view.findViewById(R.id.txv_forgotpass);
     }
 
     @Override

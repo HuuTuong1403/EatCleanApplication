@@ -17,9 +17,4 @@
         android:label="Đăng nhập"
         tools:layout="@layout/sign_in_fragment"/>
 
-    <fragment
-        android:id="@+id/nav_signup"
-        android:name="com.example.eatcleanapp.ui.home.signup.SignUpFragment"
-        android:label="Đăng ký"
-        tools:layout="@layout/fragment_sign_up"/>
 </navigation>
