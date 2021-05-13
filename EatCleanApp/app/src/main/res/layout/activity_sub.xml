@@ -12,11 +12,10 @@
         android:theme="@style/Theme.EatCleanApp.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
-            app:contentInsetStart="0dp"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/bg_nav"
+            android:layout_height="45dp"
+            android:background="@color/gray"
             app:titleTextColor="@color/black"
             app:popupTheme="@style/Theme.EatCleanApp.PopupOverlay" >
             <TextView
@@ -25,7 +24,8 @@
                 android:textSize="20sp"
                 android:layout_marginRight="40dp"
                 android:textAllCaps="true"
-                android:textColor="@color/gray"
+                android:fontFamily="@font/robotomonoitalicvariablefont"
+                android:textColor="@color/black"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:id="@+id/txvTitle"/>
@@ -33,7 +33,6 @@
 
 
     </com.google.android.material.appbar.AppBarLayout>
-
     <include layout="@layout/content_sub" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -19,4 +19,11 @@
         tools:layout="@layout/fragment_forgot_password">
     </fragment>
 
+    <fragment
+        android:id="@+id/profile_fragment"
+        android:name="com.example.eatcleanapp.ui.home.profile.ProfileFragment"
+        android:label="Thông tin tài khoản"
+        tools:layout="@layout/fragment_profile">
+    </fragment>
+
 </navigation>

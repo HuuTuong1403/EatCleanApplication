@@ -1,5 +1,8 @@
 package com.example.eatcleanapp;
 
+import android.annotation.SuppressLint;
+import android.app.StatusBarManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -13,12 +16,12 @@ import android.widget.Toast;
 
 import com.example.eatcleanapp.ui.home.HomeFragment;
 import com.example.eatcleanapp.ui.home.signin.SignInFragment;
+import com.example.eatcleanapp.ui.quantrivien.AdminActivity;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -36,6 +39,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.eatcleanapp.databinding.ActivityMainBinding;
 
 import org.jetbrains.annotations.NotNull;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -60,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(binding.appBarMain.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
+
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_favorites, R.id.nav_settings, R.id.nav_signin)
                 .setDrawerLayout(drawer)
@@ -87,9 +92,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 });
             }
         });
+
+        binding.appBarMain.btnprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SubActivity.class);
+                intent.putExtra("fragment-back", 3);
+                startActivity(intent);
+            }
+        });
+
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         replaceFragment(new HomeFragment(), "Trang chủ");
         currentFragment = FRAGMENT_HOME;
+
+
     }
 
     @Override
@@ -121,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+    public boolean onNavigationItemSelected(@NotNull MenuItem item) {
         int id = item.getItemId();
         switch(id){
             case R.id.nav_home:{
@@ -140,6 +157,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             }
             case R.id.nav_favorites:{
+                Intent intent = new Intent(MainActivity.this, AdminActivity.class);
+                startActivity(intent);
+                finish();
                 break;
             }
             case R.id.nav_settings:{
