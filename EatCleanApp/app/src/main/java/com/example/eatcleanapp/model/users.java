@@ -1,29 +1,35 @@
 package com.example.eatcleanapp.model;
 
+import com.android.volley.RequestQueue;
+
 public class users {
     private String IDUser;
     private String Email;
-    private String Phone;
     private String Password;
     private String FullName;
-    private String Gender;
     private String 	Image;
-    private int LoginFB;
+    private String LoginFB;
     private String IDRole;
 
+    public String getLoginFB() {
+        return LoginFB;
+    }
 
-    public users(String IDUser, String email, String phone, String password,
-                 String fullName, String gender, String image, int loginFB, String IDRole) {
+    public void setLoginFB(String loginFB) {
+        LoginFB = loginFB;
+    }
+
+    public users(String IDUser, String email, String password,
+                 String fullName, String image, String loginFB, String IDRole) {
         this.IDUser = IDUser;
         Email = email;
-        Phone = phone;
         Password = password;
         FullName = fullName;
-        Gender = gender;
         Image = image;
         LoginFB = loginFB;
         this.IDRole = IDRole;
     }
+
 
     public String getIDUser() {
         return IDUser;
@@ -39,14 +45,6 @@ public class users {
 
     public void setEmail(String email) {
         Email = email;
-    }
-
-    public String getPhone() {
-        return Phone;
-    }
-
-    public void setPhone(String phone) {
-        Phone = phone;
     }
 
     public String getPassword() {
@@ -65,13 +63,6 @@ public class users {
         FullName = fullName;
     }
 
-    public String getGender() {
-        return Gender;
-    }
-
-    public void setGender(String gender) {
-        Gender = gender;
-    }
 
     public String getImage() {
         return Image;
@@ -81,13 +72,6 @@ public class users {
         Image = image;
     }
 
-    public int getLoginFB() {
-        return LoginFB;
-    }
-
-    public void setLoginFB(int loginFB) {
-        LoginFB = loginFB;
-    }
 
     public String getIDRole() {
         return IDRole;
@@ -96,4 +80,5 @@ public class users {
     public void setIDRole(String IDRole) {
         this.IDRole = IDRole;
     }
+
 }

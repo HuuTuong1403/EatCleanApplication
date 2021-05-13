@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Fortune Telling</string>
+    <string name="txtTen">Full Name</string>
+    <string name="txtNgaySinh">Date Of Birth</string>
+    <string name="txtThangSinh">Month Of Birth</string>
+    <string name="txtNamSinh">Year Of Birth</string>
+    <string name="txtKetQua">Reasult</string>
+
+</resources>
