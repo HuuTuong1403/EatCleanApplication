@@ -11,10 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EatCleanApp">
+        <activity android:name=".ui.quantrivien.AdminActivity">
+            android:theme="@style/Theme.EatCleanApp.NoActionBar"
+        </activity>
         <activity
             android:name=".SubActivity"
             android:label="@string/title_activity_sub"
-            android:theme="@style/Theme.EatCleanApp.NoActionBar"></activity>
+            android:theme="@style/Theme.EatCleanApp.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

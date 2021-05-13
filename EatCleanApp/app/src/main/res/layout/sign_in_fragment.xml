@@ -33,6 +33,7 @@
                     android:layout_width="350dp"
                     android:layout_gravity="center"
                     android:layout_height="70dp"
+                    app:startIconDrawable="@drawable/ic_person_outline24"
                     android:layout_marginBottom="20dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                     <com.google.android.material.textfield.TextInputEditText
@@ -47,6 +48,7 @@
                     android:layout_marginBottom="20dp"
                     android:layout_gravity="center"
                     android:layout_height="70dp"
+                    app:startIconDrawable="@drawable/ic_lock_24"
                     app:endIconMode="password_toggle"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                     <com.google.android.material.textfield.TextInputEditText
@@ -69,11 +71,11 @@
                 <com.facebook.login.widget.LoginButton
                     android:id="@+id/login_button"
                     android:layout_width="340dp"
+                    android:textSize="20sp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:textSize="20sp"/>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="30dp" />
                 <TextView
                     android:id="@+id/txv_forgotpass"
                     android:layout_width="wrap_content"
@@ -96,6 +98,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
                         android:text="@string/signup"
                         android:id="@+id/signup"
                         android:textColor="@color/orange"

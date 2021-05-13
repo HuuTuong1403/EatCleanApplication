@@ -62,6 +62,11 @@ public class SubActivity extends AppCompatActivity {
                 navGraph.setStartDestination(R.id.forgot_pass_fragment);
                 break;
             }
+            case 3: {
+                txvTitle.setText("Thông tin tài khoản");
+                navGraph.setStartDestination(R.id.profile_fragment);
+                break;
+            }
         }
         navController.setGraph(navGraph);
     }

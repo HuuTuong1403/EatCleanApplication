@@ -1,13 +1,16 @@
 package com.example.eatcleanapp.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,6 +19,8 @@ import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.databinding.FragmentHomeBinding;
 import com.google.android.material.navigation.NavigationView;
 
+import org.jetbrains.annotations.NotNull;
+
 public class HomeFragment extends Fragment {
 
     //private HomeViewModel homeViewModel;
@@ -23,7 +28,7 @@ public class HomeFragment extends Fragment {
 
     private View view;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
+    public View onCreateView(@NotNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         //homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
@@ -37,7 +42,17 @@ public class HomeFragment extends Fragment {
             }
         });*/
         view = inflater.inflate(R.layout.fragment_home, container, false);
-
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            int id = bundle.getInt("isloggin");
+            if(id == 1){
+                NavigationView navigationView = (NavigationView)getActivity().findViewById(R.id.nav_view);
+                Menu menu = navigationView.getMenu();
+                menu.findItem(R.id.nav_signin).setVisible(false);
+                ImageButton btnProfile = (ImageButton)getActivity().findViewById(R.id.btnprofile);
+                btnProfile.setVisibility(View.VISIBLE);
+            }
+        }
         return view;
     }
 
