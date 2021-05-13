@@ -6,15 +6,17 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -35,6 +37,8 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -43,7 +47,7 @@ public class SignInFragment extends Fragment {
 
     //private SignInViewModel mViewModel;
     private SignInFragmentBinding binding;
-    View view;
+    private View view;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
     private TextView txvSignUp, txvForgotPass;
@@ -53,13 +57,14 @@ public class SignInFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         FacebookSdk.getApplicationContext();
         callbackManager = CallbackManager.Factory.create();
         view = inflater.inflate(R.layout.sign_in_fragment, container, false);
         loginButton();
         AnhXa();
+
         loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
         loginButton.setFragment(this);
         setLogin_Button();
@@ -111,15 +116,21 @@ public class SignInFragment extends Fragment {
             public void onSuccess(LoginResult loginResult) {
                 result();
                 loginButton.setVisibility(View.INVISIBLE);
+
+                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
+                NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.mobile_navigation);
+                navGraph.setStartDestination(R.id.nav_home);
+                navController.setGraph(navGraph);
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 HomeFragment homeFragment = new HomeFragment();
-                /*Bundle bundle = new Bundle();
-                bundle.putBoolean("isLoggin", true);
-                homeFragment.setArguments(bundle);*/
-
+                Bundle bundle = new Bundle();
+                bundle.putInt("isloggin", 1);
+                homeFragment.setArguments(bundle);
                 fragmentTransaction.replace(R.id.nav_host_fragment_content_main, homeFragment);
                 fragmentTransaction.commit();
+                TextView txvTitle = (TextView)getActivity().findViewById(R.id.txvTitleHome);
+                txvTitle.setText("Trang chủ");
             }
 
             @Override
@@ -155,13 +166,13 @@ public class SignInFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void AnhXa(){
-        loginButton = (LoginButton)view.findViewById(R.id.login_button);
+        loginButton = (LoginButton) view.findViewById(R.id.login_button);
         txvSignUp = (TextView)view.findViewById(R.id.signup);
         txvForgotPass = (TextView)view.findViewById(R.id.txv_forgotpass);
     }

@@ -20,8 +20,8 @@
                 android:id="@+id/toolbar"
                 app:titleMarginStart="75dp"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/bg_nav"
+                android:layout_height="45dp"
+                android:background="@color/gray"
                 app:titleTextColor="@color/black"
                 app:popupTheme="@style/Theme.EatCleanApp.PopupOverlay">
             </androidx.appcompat.widget.Toolbar>
@@ -33,8 +33,9 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:textSize="21sp"
+                android:fontFamily="@font/robotomonoitalicvariablefont"
                 android:textAllCaps="true"
-                android:textColor="@color/gray"
+                android:textColor="@color/black"
                 android:textStyle="bold"/>
 
             <ImageButton
@@ -44,15 +45,19 @@
                 android:layout_height="32dp"
                 android:visibility="invisible"
                 android:src="@drawable/user24"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
                 android:layout_toLeftOf="@+id/searchbox"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="12dp"/>
 
             <ImageButton
                 android:id="@+id/searchbox"
-                android:layout_width="32dp"
+                android:layout_width="28dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:background="@android:color/transparent"
-                android:layout_height="32dp"
+                android:layout_height="28dp"
                 android:src="@drawable/search24"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="12dp"
@@ -71,8 +76,8 @@
     <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarSearch"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/bg_nav"
+            android:layout_height="45dp"
+            android:background="@color/gray"
             app:titleTextColor="@color/black"
             app:popupTheme="@style/Theme.EatCleanApp.PopupOverlay">
             <RelativeLayout
