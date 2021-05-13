@@ -4,43 +4,32 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.databinding.FragmentHomeBinding;
+import com.example.eatcleanapp.ui.home.tabHome.ViewPagerAdapterHome;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import org.jetbrains.annotations.NotNull;
 
 public class HomeFragment extends Fragment {
-
-    //private HomeViewModel homeViewModel;
-    //private FragmentHomeBinding binding;
-
+    private ViewPager viewPager;
+    private BottomNavigationView bottomNavigationView;
     private View view;
 
     public View onCreateView(@NotNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        //homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-
-        //binding = FragmentHomeBinding.inflate(inflater, container, false);
-        //View root = binding.getRoot();
-        /*final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });*/
         view = inflater.inflate(R.layout.fragment_home, container, false);
         Bundle bundle = getArguments();
         if(bundle != null){
@@ -53,12 +42,59 @@ public class HomeFragment extends Fragment {
                 btnProfile.setVisibility(View.VISIBLE);
             }
         }
+        initUI();
         return view;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        //binding = null;
+    }
+
+    private void initUI(){
+        viewPager = view.findViewById(R.id.view_pager_home);
+        bottomNavigationView = view.findViewById(R.id.bottom_menu_home);
+
+        ViewPagerAdapterHome viewPagerAdapter = new ViewPagerAdapterHome(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        viewPager.setAdapter(viewPagerAdapter);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId()){
+                    case R.id.menu_blog_home:
+                        viewPager.setCurrentItem(0);
+                        break;
+                    case R.id.menu_recipes_home:
+                        viewPager.setCurrentItem(1);
+                        break;
+                }
+                return true;
+            }
+        });
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch(position){
+                    case 0:
+                        bottomNavigationView.getMenu().findItem(R.id.menu_blog_home).setChecked(true);
+                        break;
+                    case 1:
+                        bottomNavigationView.getMenu().findItem(R.id.menu_recipes_home).setChecked(true);
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 }

@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
+import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 
 import com.example.eatcleanapp.SubActivity;
@@ -36,6 +37,7 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.material.navigation.NavigationView;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -75,6 +77,7 @@ public class SignInFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), SubActivity.class);
                 intent.putExtra("fragment-back", 1);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
             }
         });
 
@@ -84,6 +87,7 @@ public class SignInFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), SubActivity.class);
                 intent.putExtra("fragment-back", 2);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
             }
         });
         return view;
@@ -116,21 +120,14 @@ public class SignInFragment extends Fragment {
             public void onSuccess(LoginResult loginResult) {
                 result();
                 loginButton.setVisibility(View.INVISIBLE);
-
-                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
-                NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.mobile_navigation);
-                navGraph.setStartDestination(R.id.nav_home);
-                navController.setGraph(navGraph);
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 HomeFragment homeFragment = new HomeFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt("isloggin", 1);
                 homeFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, homeFragment);
-                fragmentTransaction.commit();
-                TextView txvTitle = (TextView)getActivity().findViewById(R.id.txvTitleHome);
-                txvTitle.setText("Trang chủ");
+
+                ((MainActivity)getActivity()).replaceFragment(homeFragment, "Trang chủ");
+                NavigationView naview = getActivity().findViewById(R.id.nav_view);
+                naview.getMenu().findItem(R.id.nav_home).setChecked(true);
             }
 
             @Override
