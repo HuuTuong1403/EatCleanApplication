@@ -18,15 +18,15 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch(position){
             case 0:
-                return new BlogApprovalAdminFragment();
-            case 1:
                 return new NotificationAdminFragment();
+            case 1:
+                return new BlogApprovalAdminFragment();
             case 2:
                 return new RecipesApprovalAdminFragment();
             case 3:
                 return new SettingAdminFragment();
             default:
-                return new BlogApprovalAdminFragment();
+                return new NotificationAdminFragment();
         }
     }
 

@@ -23,16 +23,18 @@ import com.example.eatcleanapp.databinding.ActivityAdminBinding;
 import com.example.eatcleanapp.databinding.ActivityMainBinding;
 import com.example.eatcleanapp.ui.home.HomeFragment;
 import com.example.eatcleanapp.ui.home.signin.SignInFragment;
+import com.example.eatcleanapp.ui.quantrivien.home.HomeAdminFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import org.jetbrains.annotations.NotNull;
 
 public class AdminActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private AppBarConfiguration mAppBarConfiguration;
     private ActivityAdminBinding binding;
     private TextView txvTitleAdmin;
 
+    private static final int FRAGMENT_HOME = 1;
+    private int currentFragment = FRAGMENT_HOME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +49,17 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, binding.appBarAdmin.toolbarAdmin, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.menu_home_nav_admin)
-                .setDrawerLayout(drawerLayout)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_admin);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu24);
 
         navigationView.getMenu().findItem(R.id.menu_home_nav_admin).setChecked(true);
+        replaceFragment(new HomeAdminFragment(), "Trang chủ Admin");
+        currentFragment = FRAGMENT_HOME;
     }
 
     @Override
@@ -76,7 +76,13 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         switch(id){
-
+            case R.id.menu_home_nav_admin:
+                if(FRAGMENT_HOME != currentFragment)
+                {
+                    replaceFragment(new HomeAdminFragment(), "Trang chủ");
+                    currentFragment = FRAGMENT_HOME;
+                }
+                break;
         }
         DrawerLayout drawerLayout = findViewById(R.id.drawer_admin);
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -86,7 +92,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
     public void replaceFragment(Fragment fragment, String title){
         txvTitleAdmin.setText(title);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment);
+        fragmentTransaction.replace(R.id.content_frame_admin, fragment);
         fragmentTransaction.commit();
     }
 }

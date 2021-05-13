@@ -22,17 +22,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.NavGraph;
-import androidx.navigation.NavHostController;
-import androidx.navigation.NavInflater;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -43,10 +37,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private TextView txvTitle;
     private boolean doubleBackToExitPressedOnce = false;
+    private NavigationView navigationView;
 
     private static final int FRAGMENT_HOME = 1;
     private static final int FRAGMENT_SIGNIN = 2;
@@ -61,17 +55,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         txvTitle = (TextView)findViewById(R.id.txvTitleHome);
-        setSupportActionBar(binding.appBarMain.toolbar);
+        Toolbar toolbar = binding.appBarMain.toolbar;
+        setSupportActionBar(toolbar);
         DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
+        navigationView = binding.navView;
 
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_favorites, R.id.nav_settings, R.id.nav_signin)
-                .setDrawerLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
         AppBarLayout appBarLayout = (AppBarLayout)findViewById(R.id.app_bar_search);
@@ -99,14 +90,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = new Intent(MainActivity.this, SubActivity.class);
                 intent.putExtra("fragment-back", 3);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
             }
         });
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         replaceFragment(new HomeFragment(), "Trang chủ");
         currentFragment = FRAGMENT_HOME;
-
-
+        navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
     }
 
     @Override
@@ -128,13 +119,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }, 2000);
         }
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
     }
 
     @Override
@@ -176,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void replaceFragment(Fragment fragment, String title){
         txvTitle.setText(title);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment);
+        fragmentTransaction.replace(R.id.content_frame, fragment);
         fragmentTransaction.commit();
     }
 }

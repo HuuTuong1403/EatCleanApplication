@@ -1,6 +1,5 @@
 package com.example.eatcleanapp.model;
 
-import com.android.volley.RequestQueue;
 
 public class users {
     private String IDUser;
