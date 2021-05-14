@@ -9,7 +9,7 @@ public class users {
     private String 	Image;
     private String LoginFB;
     private String IDRole;
-
+    private String Username;
     public String getLoginFB() {
         return LoginFB;
     }
@@ -18,8 +18,16 @@ public class users {
         LoginFB = loginFB;
     }
 
-    public users(String IDUser, String email, String password,
-                 String fullName, String image, String loginFB, String IDRole) {
+    public String getUsername() {
+        return Username;
+    }
+
+    public void setUsername(String username) {
+        Username = username;
+    }
+
+    public users(String IDUser, String email, String password, String fullName, String image, String loginFB,
+                 String IDRole, String username) {
         this.IDUser = IDUser;
         Email = email;
         Password = password;
@@ -27,8 +35,8 @@ public class users {
         Image = image;
         LoginFB = loginFB;
         this.IDRole = IDRole;
+        Username = username;
     }
-
 
     public String getIDUser() {
         return IDUser;

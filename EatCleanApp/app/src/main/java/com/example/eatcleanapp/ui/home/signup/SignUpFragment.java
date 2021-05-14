@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.databinding.FragmentSignUpBinding;
 import com.example.eatcleanapp.databinding.SignInFragmentBinding;
@@ -41,8 +43,12 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class SignUpFragment extends Fragment {
 
@@ -56,7 +62,8 @@ public class SignUpFragment extends Fragment {
     }
     private String registerUserLink = "https://eatcleanrecipes.000webhostapp.com/registerUser.php";
     private String getUserLink = "https://eatcleanrecipes.000webhostapp.com/getUser.php";
-    private ArrayList<users> usersList = new ArrayList<>();
+    private  List<users> usersList;
+    String IDUser;
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -66,17 +73,58 @@ public class SignUpFragment extends Fragment {
         backgroundImage.setAlpha(80);
         Mapping();
 
-         GetData(getUserLink);
+        usersList = new ArrayList<>();
+        GetData();
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (edtPassword.getText().toString().trim().equals(edtPasswordAgain.getText().toString().trim())){
-                    registerUser(registerUserLink);
+                Random rd = new Random();
+
+                String Username = edtUsername.getText().toString().trim();
+                String Email = edtEmail.getText().toString().trim();
+
+                Boolean checkIDUser = true;
+                while (checkIDUser == true){
+                    checkIDUser = false;
+                    int x = rd.nextInt((50000-1000 + 1) + 1000);
+                    IDUser = "ID-U-" + x;
+                    for (users user: usersList
+                    ) {
+                        if (IDUser.equals(user.getIDUser())){
+                            checkIDUser = true;
+                            break;
+                        }
+                    }
+                }
+
+                Boolean checkEmail = false;
+                Boolean checkUsername = false;
+                for (users user: usersList) {
+                    if (Email.equals(user.getEmail())){
+                        checkEmail = true;
+                    }
+                    if (Username.equals(user.getUsername())){
+                        checkUsername = true;
+                    }
+                }
+                if (checkEmail == false){
+                    if (checkUsername == false){
+                        if (edtPassword.getText().toString().trim().equals(edtPasswordAgain.getText().toString().trim())){
+                            registerUser(registerUserLink);
+                        }
+                        else{
+                            Toast.makeText(getActivity(), "Mật khẩu không giống nhau, vui lòng nhập lại", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    else{
+                        Toast.makeText(getActivity(), "Username đã bị trùng, vui lòng nhập email khác", Toast.LENGTH_LONG).show();
+                    }
                 }
                 else{
-                    Toast.makeText(getActivity(), "Mật khẩu không giống nhau, vui lòng nhập lại", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Email đã bị trùng, vui lòng nhập email khác", Toast.LENGTH_LONG).show();
                 }
+
             }
         });
         return view;
@@ -115,9 +163,6 @@ public class SignUpFragment extends Fragment {
         }){
             protected Map<String, String> getParams () throws AuthFailureError{
                 Map<String,String> params = new HashMap<>();
-                Random rd = new Random();
-                int x = rd.nextInt((50000-1000 + 1) + 1000);
-                String IDUser = "ID-U-" + x;
                 params.put("IDUser", IDUser);
                 params.put("Email", edtEmail.getText().toString().trim());
                 params.put("Password", edtPassword.getText().toString().trim());
@@ -125,41 +170,28 @@ public class SignUpFragment extends Fragment {
                 params.put("Image", "");
                 params.put("LoginFB", "0");
                 params.put("IDRole", "R003");
+                params.put("Username", edtUsername.getText().toString().trim());
                 return  params;
             }
         };
         requestQueue.add(stringRequest);
     }
 
-    private void GetData (String url){
-        RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+    private void GetData (){
+        APIService.apiService.getUser().enqueue(new Callback<List<users>>() {
             @Override
-            public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i ++){
-                    try {
-                        JSONObject object = response.getJSONObject(i);
-                        usersList.add(new users(
-                                object.getString("IDUser"),
-                                object.getString("Email"),
-                                object.getString("Password"),
-                                object.getString("FullName"),
-                                object.getString("Image"),
-                                object.getString("LoginFB"),
-                                object.getString("IDRole")
-                        ));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
+            public void onResponse(Call<List<users>> call, retrofit2.Response<List<users>> response) {
+                /*for (int i = 0; i < response.body().size(); i ++){
+                    usersList.add(response.body().get(i));
+                }*/
+                usersList = response.body();
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_LONG).show();
+            public void onFailure(Call<List<users>> call, Throwable t) {
+                Toast.makeText(view.getContext(), t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(jsonArrayRequest);
     }
 
 }
