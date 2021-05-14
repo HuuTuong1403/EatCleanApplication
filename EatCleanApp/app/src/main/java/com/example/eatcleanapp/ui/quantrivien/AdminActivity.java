@@ -34,13 +34,14 @@ import org.jetbrains.annotations.NotNull;
 public class AdminActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActivityAdminBinding binding;
-    private TextView txvTitleAdmin, txv_user_fullname_admin, txv_user_email_admin;
+    private TextView txvTitleAdmin;
     private static final int FRAGMENT_HOME = 1;
     private int currentFragment = FRAGMENT_HOME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = ActivityAdminBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         txvTitleAdmin = (TextView)findViewById(R.id.txvTitleAdmin);
@@ -60,9 +61,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
         if(bundleReceive != null){
             users user = (users) bundleReceive.get("object_user");
             if(user != null){
-                //txv_user_email_admin.setText(user.getEmail());
-                //txv_user_fullname_admin.setText(user.getFullName());
-                Toast.makeText(this, "T la admin", Toast.LENGTH_SHORT).show();
+                ChangeText(user);
             }
         }
         navigationView.getMenu().findItem(R.id.menu_home_nav_admin).setChecked(true);
@@ -70,9 +69,13 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
         currentFragment = FRAGMENT_HOME;
     }
 
-    private void Mapping(){
-        txv_user_fullname_admin = (TextView)findViewById(R.id.user_fullname_admin);
-        txv_user_email_admin = (TextView)findViewById(R.id.user_email_admin);
+    private void ChangeText(users user){
+        NavigationView navigationView   = (NavigationView)findViewById(R.id.nav_admin);
+        View headerView                 = navigationView.getHeaderView(0);
+        TextView txv_fullname           = (TextView)headerView.findViewById(R.id.user_fullname_admin);
+        TextView txv_email              = (TextView)headerView.findViewById(R.id.user_email_admin);
+        txv_fullname.setText(user.getFullName());
+        txv_email.setText(user.getEmail());
     }
 
 
