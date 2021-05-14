@@ -181,9 +181,6 @@ public class SignUpFragment extends Fragment {
         APIService.apiService.getUser().enqueue(new Callback<List<users>>() {
             @Override
             public void onResponse(Call<List<users>> call, retrofit2.Response<List<users>> response) {
-                /*for (int i = 0; i < response.body().size(); i ++){
-                    usersList.add(response.body().get(i));
-                }*/
                 usersList = response.body();
             }
 

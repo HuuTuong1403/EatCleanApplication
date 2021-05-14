@@ -1,7 +1,9 @@
 package com.example.eatcleanapp.model;
 
 
-public class users {
+import java.io.Serializable;
+
+public class users implements Serializable {
     private String IDUser;
     private String Email;
     private String Password;
