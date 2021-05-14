@@ -84,7 +84,7 @@ public class SignInFragment extends Fragment {
         txvForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SubActivity.class);
+                Intent intent = new Intent(view.getContext(), SubActivity.class);
                 intent.putExtra("fragment-back", 2);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);

@@ -1,5 +1,6 @@
 package com.example.eatcleanapp.ui.home.tabHome;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,6 +21,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.recipes;
+import com.example.eatcleanapp.ui.home.detail.DetailActivity;
 import com.example.eatcleanapp.ui.home.tabHome.recipes.RecipesAdapter;
 
 import org.json.JSONArray;
@@ -30,14 +32,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RecipesFragment extends Fragment {
+public class RecipesFragment extends Fragment implements RecipesAdapter.ItemClickListener{
 
     private View view;
     private RecyclerView rcvRecipes;
     private RecipesAdapter mRecipesAdapter;
-    List<recipes> listRecipes = new ArrayList<recipes>();
+    private List<recipes> listRecipes;
+    private String getRecipeLink;
+    private RequestQueue requestQueue;
+
     public static RecipesFragment newInstance() { return new RecipesFragment(); }
-    private String getRecipeLink = "https://eatcleanrecipes.000webhostapp.com/getRecipes.php";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,29 +51,35 @@ public class RecipesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_recipes, container, false);
-        rcvRecipes = view.findViewById(R.id.list_recipes);
-        mRecipesAdapter = new RecipesAdapter(getContext());
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
-
+        Mapping();
+        mRecipesAdapter = new RecipesAdapter(getContext(), this);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         rcvRecipes.setLayoutManager(gridLayoutManager);
 
         GetData(getRecipeLink);
         rcvRecipes.setAdapter(mRecipesAdapter);
         return view;
     }
+
+    private void Mapping(){
+        requestQueue = Volley.newRequestQueue(view.getContext());
+        listRecipes = new ArrayList<>();
+        rcvRecipes = view.findViewById(R.id.list_recipes);
+        getRecipeLink = "https://eatcleanrecipes.000webhostapp.com/getRecipes.php";
+    }
+
+
     private void GetData (String url){
-        RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                //oast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_LONG).show();
                 for (int i = 0; i < response.length(); i ++){
                     try {
                         JSONObject object = response.getJSONObject(i);
                         listRecipes.add(new recipes(
                                 object.getString("IDRecipes"),
-                                object.getString("RecipesAuthor"),
                                 object.getString("RecipesTitle"),
+                                object.getString("RecipesAuthor"),
                                 object.getString("RecipesContent"),
                                 object.getString("NutritionalIngredients"),
                                 object.getString("Ingredients"),
@@ -90,21 +100,11 @@ public class RecipesFragment extends Fragment {
         });
         requestQueue.add(jsonArrayRequest);
     }
-    /*private List<Recipes> getListData(){
-        List<Recipes> list = new ArrayList<>();
-        list.add(new Recipes(R.drawable.background, "Tường"));
-        list.add(new Recipes(R.drawable.background, "Tường"));
-        list.add(new Recipes(R.drawable.background, "Tường"));
-        list.add(new Recipes(R.drawable.background, "Tường"));
-        list.add(new Recipes(R.drawable.background, "Tường"));
-        list.add(new Recipes(R.drawable.background, "Tường"));
-        list.add(new Recipes(R.drawable.background, "Tường"));
-        list.add(new Recipes(R.drawable.background, "Tường"));
-        list.add(new Recipes(R.drawable.background, "Tường"));
-        list.add(new Recipes(R.drawable.background, "Tường"));
-        list.add(new Recipes(R.drawable.background, "Tường"));
-        list.add(new Recipes(R.drawable.background, "Tường"));
 
-        return list;
-    }*/
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(view.getContext(), DetailActivity.class);
+        intent.putExtra("detail-back", 1);
+        startActivity(intent);
+    }
 }

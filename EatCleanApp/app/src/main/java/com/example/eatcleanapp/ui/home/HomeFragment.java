@@ -62,10 +62,10 @@ public class HomeFragment extends Fragment {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch(item.getItemId()){
-                    case R.id.menu_blog_home:
+                    case R.id.menu_recipes_home:
                         viewPager.setCurrentItem(0);
                         break;
-                    case R.id.menu_recipes_home:
+                    case R.id.menu_blog_home:
                         viewPager.setCurrentItem(1);
                         break;
                 }
@@ -83,10 +83,10 @@ public class HomeFragment extends Fragment {
             public void onPageSelected(int position) {
                 switch(position){
                     case 0:
-                        bottomNavigationView.getMenu().findItem(R.id.menu_blog_home).setChecked(true);
+                        bottomNavigationView.getMenu().findItem(R.id.menu_recipes_home).setChecked(true);
                         break;
                     case 1:
-                        bottomNavigationView.getMenu().findItem(R.id.menu_recipes_home).setChecked(true);
+                        bottomNavigationView.getMenu().findItem(R.id.menu_blog_home).setChecked(true);
                         break;
                 }
             }
