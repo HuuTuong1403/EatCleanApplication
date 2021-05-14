@@ -56,6 +56,7 @@ public class SignUpFragment extends Fragment {
     }
     private String registerUserLink = "https://eatcleanrecipes.000webhostapp.com/registerUser.php";
     private String getUserLink = "https://eatcleanrecipes.000webhostapp.com/getUser.php";
+    private ArrayList<users> usersList = new ArrayList<>();
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -65,8 +66,8 @@ public class SignUpFragment extends Fragment {
         backgroundImage.setAlpha(80);
         Mapping();
 
-        ArrayList<users> usersList = getUser(getUserLink);
-        Toast.makeText(getActivity(), usersList.toString() , Toast.LENGTH_LONG).show();
+         GetData(getUserLink);
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +95,7 @@ public class SignUpFragment extends Fragment {
         edtFullName = (TextInputEditText) view.findViewById(R.id.signup_edtFullname);
         btnRegister = (Button) view.findViewById(R.id.signup_btnRegister);
     }
-    public void registerUser(String url){
+    private void registerUser(String url){
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -128,41 +129,37 @@ public class SignUpFragment extends Fragment {
             }
         };
         requestQueue.add(stringRequest);
-
     }
-    public ArrayList<users> getUser(String url){
-        ArrayList<users> usersList = new ArrayList<>();
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+
+    private void GetData (String url){
+        RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i++){
+                for (int i = 0; i < response.length(); i ++){
                     try {
-                        JSONObject jsonObject = response.getJSONObject(i);
+                        JSONObject object = response.getJSONObject(i);
                         usersList.add(new users(
-                                jsonObject.getString("IDUser"),
-                                jsonObject.getString("Email"),
-                                jsonObject.getString("Password"),
-                                jsonObject.getString("FullName"),
-                                jsonObject.getString("Image"),
-                                jsonObject.getString("LoginFB"),
-                                jsonObject.getString("IDRole")
+                                object.getString("IDUser"),
+                                object.getString("Email"),
+                                object.getString("Password"),
+                                object.getString("FullName"),
+                                object.getString("Image"),
+                                object.getString("LoginFB"),
+                                object.getString("IDRole")
                         ));
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_LONG).show();
             }
         });
         requestQueue.add(jsonArrayRequest);
-        return usersList;
     }
 
 }

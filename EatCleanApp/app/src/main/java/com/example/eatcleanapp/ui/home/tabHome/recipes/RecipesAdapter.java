@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eatcleanapp.R;
+import com.example.eatcleanapp.model.recipes;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -20,13 +21,13 @@ import java.util.List;
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>{
 
     private Context context;
-    private List<Recipes> mListRecipes;
+    private List<recipes> mListRecipes;
 
     public RecipesAdapter(Context context) {
         this.context = context;
     }
 
-    public void setData(List<Recipes> list){
+    public void setData(List<recipes> list){
         this.mListRecipes = list;
         notifyDataSetChanged();
     }
@@ -40,12 +41,12 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
 
     @Override
     public void onBindViewHolder(@NonNull RecipesViewHolder holder, int position) {
-        Recipes recipes = mListRecipes.get(position);
+        recipes recipes = mListRecipes.get(position);
         if(recipes == null){
             return;
         }
-        holder.recipes_image.setImageResource(recipes.getRecipesImage());
-        holder.recipes_name.setText(recipes.getRecipesName());
+        //holder.recipes_image.setImageResource(recipes.get());
+        holder.recipes_name.setText(recipes.getRecipesTitle());
     }
 
     @Override
