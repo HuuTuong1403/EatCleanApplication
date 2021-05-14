@@ -30,6 +30,7 @@ import com.example.eatcleanapp.databinding.SignInFragmentBinding;
 import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.home.HomeFragment;
 
+import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;
 import com.example.eatcleanapp.ui.quantrivien.AdminActivity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -134,6 +135,7 @@ public class SignInFragment extends Fragment {
                             break;
                         }
                         case "R003":{
+                            DataLocalManager.setUser(userLogin);
                             HomeFragment homeFragment = new HomeFragment();
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("object_user", userLogin);

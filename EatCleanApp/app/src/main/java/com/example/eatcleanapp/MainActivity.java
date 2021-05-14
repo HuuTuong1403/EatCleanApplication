@@ -1,16 +1,11 @@
 package com.example.eatcleanapp;
 
-import android.annotation.SuppressLint;
-import android.app.StatusBarManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Menu;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,8 +14,6 @@ import com.example.eatcleanapp.ui.home.detail.DetailActivity;
 import com.example.eatcleanapp.ui.home.signin.SignInFragment;
 import com.example.eatcleanapp.ui.quantrivien.AdminActivity;
 import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;

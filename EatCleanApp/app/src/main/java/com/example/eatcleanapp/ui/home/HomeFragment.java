@@ -21,6 +21,7 @@ import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.databinding.FragmentHomeBinding;
 import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.home.tabHome.ViewPagerAdapterHome;
+import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -36,21 +37,36 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         initUI();
-        Bundle bundle = getArguments();
-        if(bundle != null){
-            users user = (users) bundle.get("object_user");
-            if(user != null){
-                Toast.makeText(view.getContext(), "ok", Toast.LENGTH_SHORT).show();
-                NavigationView navigationView = (NavigationView)getActivity().findViewById(R.id.nav_view);
-                txv_user_fullname_home.setText(user.getFullName());
-                txv_user_email_home.setText(user.getEmail());
-                Menu menu = navigationView.getMenu();
-                menu.findItem(R.id.nav_signin).setVisible(false);
-                ImageButton btnProfile = (ImageButton)getActivity().findViewById(R.id.btnprofile);
-                btnProfile.setVisibility(View.VISIBLE);
+        users mUser = DataLocalManager.getUser();
+        if(mUser != null){
+            Toast.makeText(view.getContext(), mUser.toString(), Toast.LENGTH_SHORT).show();
+            NavigationView navigationView = (NavigationView)getActivity().findViewById(R.id.nav_view);
+            View headerView                 = navigationView.getHeaderView(0);
+            TextView txv_fullname           = (TextView)headerView.findViewById(R.id.user_fullname_home);
+            TextView txv_email              = (TextView)headerView.findViewById(R.id.user_email_home);
+            txv_fullname.setText(mUser.getFullName());
+            txv_email.setText(mUser.getEmail());
+            Menu menu = navigationView.getMenu();
+            menu.findItem(R.id.nav_signin).setVisible(false);
+            ImageButton btnProfile = (ImageButton)getActivity().findViewById(R.id.btnprofile);
+            btnProfile.setVisibility(View.VISIBLE);
+        }
+        else{
+            Bundle bundle = getArguments();
+            if(bundle != null){
+                users user = (users) bundle.get("object_user");
+                if(user != null){
+                    Toast.makeText(view.getContext(), "ok", Toast.LENGTH_SHORT).show();
+                    NavigationView navigationView = (NavigationView)getActivity().findViewById(R.id.nav_view);
+                    txv_user_fullname_home.setText(user.getFullName());
+                    txv_user_email_home.setText(user.getEmail());
+                    Menu menu = navigationView.getMenu();
+                    menu.findItem(R.id.nav_signin).setVisible(false);
+                    ImageButton btnProfile = (ImageButton)getActivity().findViewById(R.id.btnprofile);
+                    btnProfile.setVisibility(View.VISIBLE);
+                }
             }
         }
-
         return view;
     }
 
