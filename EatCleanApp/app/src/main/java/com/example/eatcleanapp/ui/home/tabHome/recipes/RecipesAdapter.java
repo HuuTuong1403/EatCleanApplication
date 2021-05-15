@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.recipes;
 
@@ -49,6 +50,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
         holder.recipes_name.setText(recipes.getRecipesTitle());
         String s = "Công thức tạo bởi <b>" + recipes.getRecipesAuthor() + "</b>";
         holder.recipes_author.setText(HtmlCompat.fromHtml(s, HtmlCompat.FROM_HTML_MODE_LEGACY));
+
     }
 
     @Override
