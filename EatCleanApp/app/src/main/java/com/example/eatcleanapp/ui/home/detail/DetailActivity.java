@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.eatcleanapp.databinding.ActivityDetailBinding;
+import com.example.eatcleanapp.model.recipes;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +25,7 @@ public class DetailActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityDetailBinding binding;
     private TextView txvDetail;
+    private recipes recipes_detail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +53,14 @@ public class DetailActivity extends AppCompatActivity {
         NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.nav_graph2);
         switch(id){
             case 1: {
-                txvDetail.setText("Tên món ăn");
-                binding.toolbarDetail.setNavigationIcon(R.drawable.back24);
-                navGraph.setStartDestination(R.id.detail_recipes_fragment);
-                break;
+                Bundle bundle = getIntent().getExtras();
+                if(bundle != null){
+                    recipes_detail = (recipes) bundle.get("item");
+                    txvDetail.setText(recipes_detail.getRecipesTitle());
+                    binding.toolbarDetail.setNavigationIcon(R.drawable.back24);
+                    navGraph.setStartDestination(R.id.detail_recipes_fragment);
+                    break;
+                }
             }
             case 2:{
                 txvDetail.setText("Tên blog");
@@ -70,5 +76,9 @@ public class DetailActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_detail);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public recipes getRecipes(){
+        return recipes_detail;
     }
 }

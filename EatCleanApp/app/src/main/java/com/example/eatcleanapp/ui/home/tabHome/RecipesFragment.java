@@ -105,6 +105,9 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.ItemClic
     public void onItemClick(int position) {
         Intent intent = new Intent(view.getContext(), DetailActivity.class);
         intent.putExtra("detail-back", 1);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("item", listRecipes.get(position));
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 }

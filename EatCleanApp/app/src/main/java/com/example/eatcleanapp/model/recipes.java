@@ -1,6 +1,8 @@
 package com.example.eatcleanapp.model;
 
-public class recipes {
+import java.io.Serializable;
+
+public class recipes implements Serializable {
     private String IDRecipes;
     private String RecipesTitle;
     private String RecipesAuthor;
