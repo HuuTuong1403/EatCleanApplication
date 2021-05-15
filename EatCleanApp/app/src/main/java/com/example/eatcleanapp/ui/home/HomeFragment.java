@@ -18,7 +18,6 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.eatcleanapp.R;
-import com.example.eatcleanapp.databinding.FragmentHomeBinding;
 import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.home.tabHome.ViewPagerAdapterHome;
 import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.example.eatcleanapp.model.recipes;
 import com.example.eatcleanapp.ui.home.detail.DetailActivity;
 import com.example.eatcleanapp.ui.home.tabHome.recipes.RecipesAdapter;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,12 +50,12 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.ItemClic
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_recipes, container, false);
         Mapping();
         mRecipesAdapter = new RecipesAdapter(getContext(), this);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);;
         rcvRecipes.setLayoutManager(gridLayoutManager);
 
         GetData(getRecipeLink);
@@ -89,8 +91,7 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.ItemClic
                                 object.getString("Status"),
                                 object.getString("RecipesImages")
                         );
-                        for (recipes recipetemp: listRecipes
-                             ) {
+                        for (recipes recipetemp: listRecipes) {
                             if (recipetemp.getIDRecipes().equals(recipe.getIDRecipes())){
                                 checkExist = 1;
                                 break;
