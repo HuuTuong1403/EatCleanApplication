@@ -72,6 +72,7 @@ public class SignInFragment extends Fragment {
     }
     private List<users> userList = new ArrayList<>();
     private users mUser;
+    
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {

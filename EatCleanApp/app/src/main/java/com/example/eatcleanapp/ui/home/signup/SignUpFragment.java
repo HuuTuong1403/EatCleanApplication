@@ -63,6 +63,7 @@ public class SignUpFragment extends Fragment {
     private String registerUserLink = "https://eatcleanrecipes.000webhostapp.com/registerUser.php";
     private String getUserLink = "https://eatcleanrecipes.000webhostapp.com/getUser.php";
     private  List<users> usersList;
+
     String IDUser;
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container,

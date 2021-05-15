@@ -76,7 +76,8 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.ItemClic
                 for (int i = 0; i < response.length(); i ++){
                     try {
                         JSONObject object = response.getJSONObject(i);
-                        listRecipes.add(new recipes(
+                        int checkExist = 0;
+                        recipes recipe = new recipes(
                                 object.getString("IDRecipes"),
                                 object.getString("RecipesTitle"),
                                 object.getString("RecipesAuthor"),
@@ -84,8 +85,20 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.ItemClic
                                 object.getString("NutritionalIngredients"),
                                 object.getString("Ingredients"),
                                 object.getString("Steps"),
-                                object.getString("Time")
-                        ));
+                                object.getString("Time"),
+                                object.getString("Status"),
+                                object.getString("RecipesImages")
+                        );
+                        for (recipes recipetemp: listRecipes
+                             ) {
+                            if (recipetemp.getIDRecipes().equals(recipe.getIDRecipes())){
+                                checkExist = 1;
+                                break;
+                            }
+                        }
+                        if (checkExist == 0){
+                            listRecipes.add(recipe);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
