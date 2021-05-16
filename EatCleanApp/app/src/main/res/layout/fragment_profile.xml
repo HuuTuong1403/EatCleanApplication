@@ -1,13 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scrollbars="horizontal"
+    android:fillViewport="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.home.profile.ProfileFragment">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Profile" />
+        android:orientation="vertical">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageView_avatar_user"
+            android:layout_marginTop="20dp"
+            android:layout_width="150dp"
+            android:layout_gravity="center"
+            android:layout_height="150dp"
+            app:civ_border_width="5dp"
+            app:civ_border_color="@color/gray"
+            android:src="@drawable/avatar"
+            android:layout_marginBottom="10dp"/>
+        <TextView
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nguyễn Hữu Tường"
+            android:textColor="@color/black"
+            android:fontFamily="@font/robotomonoregular"
+            android:textSize="18sp"
+            android:layout_gravity="center"/>
 
-</FrameLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_add_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:layout_marginEnd="5dp"
+                android:text="Thêm Avatar"
+                android:backgroundTint="@color/bg_nav"
+                android:background="@drawable/custom_button"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_save_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="5dp"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"
+                android:text="Lưu Avatar"
+                android:backgroundTint="@color/bg_nav"
+                android:background="@drawable/custom_button"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thông tin tài khoản"
+            android:textColor="@color/black"
+            android:textAllCaps="true"
+            android:fontFamily="@font/robotomonobold"
+            android:textSize="21sp"
+            android:layout_gravity="center"/>
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+            <TextView
+                android:layout_marginBottom="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:text="Tên đăng nhập: tuongkl01"/>
+            <TextView
+                android:layout_marginBottom="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:text="Email: huutuong1403@gmail.com"/>
+            <TextView
+                android:layout_marginBottom="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:text="Họ và tên: Nguyễn Hữu Tường"/>
+        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_profile_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chỉnh sửa tài khoản"
+            android:layout_gravity="center"
+            android:textSize="16sp"
+            android:paddingLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:paddingRight="15dp"
+            android:textColor="@color/black"
+            android:background="@drawable/custom_button"
+            android:backgroundTint="@color/bg_nav"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_marginTop="15dp"
+            android:id="@+id/btn_profile_changePass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đổi mật khẩu"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center"
+            android:textSize="16sp"
+            android:paddingLeft="45dp"
+            android:paddingRight="45dp"
+            android:textColor="@color/black"
+            android:background="@drawable/custom_button"
+            android:backgroundTint="@color/bg_nav"/>
+
+    </LinearLayout>
+
+</ScrollView>

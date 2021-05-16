@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
@@ -52,22 +53,32 @@ public class SubActivity extends AppCompatActivity {
         NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.nav_graph);
         switch(id){
             case 1: {
-                txvTitle.setText("Đăng ký");
+                setText("Đăng ký");
                 navGraph.setStartDestination(R.id.signup_fragment);
                 break;
             }
             case 2: {
-                txvTitle.setText("Quên mật khẩu");
+                setText("Quên mật khẩu");
                 navGraph.setStartDestination(R.id.forgot_pass_fragment);
                 break;
             }
             case 3: {
-                txvTitle.setText("Thông tin tài khoản");
+                setText("Thông tin tài khoản");
                 navGraph.setStartDestination(R.id.profile_fragment);
                 break;
             }
         }
         navController.setGraph(navGraph);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+    }
+
+    public void setText(String text){
+        txvTitle.setText(text);
     }
 
     @Override
@@ -81,5 +92,13 @@ public class SubActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == this.RESULT_OK){
+            setResult(RESULT_OK, data);
+        }
     }
 }
