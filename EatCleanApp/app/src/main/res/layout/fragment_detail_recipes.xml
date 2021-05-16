@@ -62,7 +62,6 @@
         <com.example.eatcleanapp.ui.home.detail.recipes.tabdetail.CustomViewPager
             android:id="@+id/viewpager_detail_recipes"
             android:layout_width="match_parent"
-            android:layout_marginTop="10dp"
             android:layout_height="match_parent" />
     </LinearLayout>
 

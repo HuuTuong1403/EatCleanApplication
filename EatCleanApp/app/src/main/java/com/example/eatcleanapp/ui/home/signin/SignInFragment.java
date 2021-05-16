@@ -1,22 +1,15 @@
 package com.example.eatcleanapp.ui.home.signin;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.NavGraph;
-import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +19,6 @@ import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 
 import com.example.eatcleanapp.SubActivity;
-import com.example.eatcleanapp.databinding.SignInFragmentBinding;
 import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.home.HomeFragment;
 
@@ -59,24 +51,21 @@ import retrofit2.Callback;
 
 public class SignInFragment extends Fragment {
 
-    //private SignInViewModel mViewModel;
-    private SignInFragmentBinding binding;
     private View view;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
     private TextView txvSignUp, txvForgotPass;
     private TextInputEditText edtEmail, edtPassword;
     private MaterialButton btnSignIn;
-    public static SignInFragment newInstance() {
-        return new SignInFragment();
-    }
     private List<users> userList = new ArrayList<>();
     private users mUser;
+    private MainActivity mMainActivity;
     
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         FacebookSdk.getApplicationContext();
+        mMainActivity = (MainActivity) getActivity();
         callbackManager = CallbackManager.Factory.create();
         view = inflater.inflate(R.layout.sign_in_fragment, container, false);
         loginButton();
@@ -92,7 +81,7 @@ public class SignInFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), SubActivity.class);
                 intent.putExtra("fragment-back", 1);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+                mMainActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
             }
         });
 
@@ -102,7 +91,7 @@ public class SignInFragment extends Fragment {
                 Intent intent = new Intent(view.getContext(), SubActivity.class);
                 intent.putExtra("fragment-back", 2);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+                mMainActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
             }
         });
         btnSignIn.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +99,7 @@ public class SignInFragment extends Fragment {
             public void onClick(View v) {
                 String email = edtEmail.getText().toString().trim();
                 String password = edtPassword.getText().toString().trim();
-                Boolean checkLogin = false;
+                boolean checkLogin = false;
                 users userLogin = null;
                 for (users user: userList
                      ) {
@@ -121,8 +110,7 @@ public class SignInFragment extends Fragment {
 
                     }
                 }
-                if (checkLogin == true){
-
+                if (checkLogin){
                     switch(userLogin.getIDRole()){
                         case "R001":{
                             Intent intent = new Intent(view.getContext(), AdminActivity.class);
@@ -140,9 +128,10 @@ public class SignInFragment extends Fragment {
                             HomeFragment homeFragment = new HomeFragment();
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("object_user", userLogin);
+                            MainActivity.hideKeyboard(mMainActivity);
                             homeFragment.setArguments(bundle);
-                            ((MainActivity)getActivity()).replaceFragment(homeFragment, "Trang chủ");
-                            NavigationView naview = getActivity().findViewById(R.id.nav_view);
+                            mMainActivity.replaceFragment(homeFragment, "Trang chủ");
+                            NavigationView naview = mMainActivity.findViewById(R.id.nav_view);
                             naview.getMenu().findItem(R.id.nav_home).setChecked(true);
                             break;
                         }
@@ -188,8 +177,8 @@ public class SignInFragment extends Fragment {
                 bundle.putInt("isloggin", 1);
                 homeFragment.setArguments(bundle);
 
-                ((MainActivity)getActivity()).replaceFragment(homeFragment, "Trang chủ");
-                NavigationView naview = getActivity().findViewById(R.id.nav_view);
+                mMainActivity.replaceFragment(homeFragment, "Trang chủ");
+                NavigationView naview = mMainActivity.findViewById(R.id.nav_view);
                 naview.getMenu().findItem(R.id.nav_home).setChecked(true);
             }
 
@@ -219,13 +208,6 @@ public class SignInFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        //mViewModel = new ViewModelProvider(this).get(SignInViewModel.class);
-
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
@@ -249,14 +231,15 @@ public class SignInFragment extends Fragment {
     public void GetUsers(){
         APIService.apiService.getUser().enqueue(new Callback<List<users>>() {
             @Override
-            public void onResponse(Call<List<users>> call, retrofit2.Response<List<users>> response) {
+            public void onResponse(@NotNull Call<List<users>> call, @NotNull retrofit2.Response<List<users>> response) {
                 userList = response.body();
             }
 
             @Override
-            public void onFailure(Call<List<users>> call, Throwable t) {
+            public void onFailure(@NotNull Call<List<users>> call, @NotNull Throwable t) {
                 Toast.makeText(view.getContext(), t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 }

@@ -1,14 +1,18 @@
 package com.example.eatcleanapp;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.eatcleanapp.databinding.ActivityMainBinding;
 import com.example.eatcleanapp.ui.home.HomeFragment;
 import com.example.eatcleanapp.ui.home.detail.DetailActivity;
 import com.example.eatcleanapp.ui.home.signin.SignInFragment;
@@ -24,7 +28,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.eatcleanapp.databinding.ActivityMainBinding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         AppBarLayout appBarLayout = (AppBarLayout)findViewById(R.id.app_bar_search);
         AppBarLayout appBarHome = (AppBarLayout)findViewById(R.id.app_home);
-        ImageButton searchBox = (ImageButton)findViewById(R.id.searchbox);
+        ImageButton searchBox = (ImageButton)findViewById(R.id.searchBox);
         searchBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        binding.appBarMain.btnprofile.setOnClickListener(new View.OnClickListener() {
+        binding.appBarMain.btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SubActivity.class);
@@ -123,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if(FRAGMENT_HOME != currentFragment)
                 {
                     replaceFragment(new HomeFragment(), "Trang chủ");
+                    hideKeyboard(this);
                     currentFragment = FRAGMENT_HOME;
                 }
                 break;
@@ -130,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_signin:{
                 if(FRAGMENT_SIGNIN != currentFragment){
                     replaceFragment(new SignInFragment(), "Đăng nhập");
+                    hideKeyboard(this);
                     currentFragment = FRAGMENT_SIGNIN;
                 }
                 break;
@@ -141,9 +146,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             }
             case R.id.nav_settings:{
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-                intent.putExtra("detail-back", 2);
-                startActivity(intent);
                 break;
             }
             default:
@@ -160,5 +162,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.enter_to_right, R.anim.enter_from_right, R.anim.enter_to_right);
         fragmentTransaction.replace(R.id.content_frame, fragment);
         fragmentTransaction.commit();
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager inputManager = (InputMethodManager) activity
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        View currentFocusedView = activity.getCurrentFocus();
+        if (currentFocusedView != null) {
+            inputManager.hideSoftInputFromWindow(currentFocusedView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 }

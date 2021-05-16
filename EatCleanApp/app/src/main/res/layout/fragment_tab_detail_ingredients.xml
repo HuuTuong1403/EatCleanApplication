@@ -9,9 +9,10 @@
         android:id="@+id/txv_detail_ingredients"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:textColor="@color/black"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:textColor="@color/black"
+        android:layout_marginTop="10dp"
         android:textSize="18sp"
         android:text="Tab Ingredients" />
 

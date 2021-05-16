@@ -10,10 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.eatcleanapp.R;
+import com.example.eatcleanapp.SubActivity;
 
 public class ProfileFragment extends Fragment {
 
     private View view;
+    private SubActivity mSubActivity;
 
 
     public static ProfileFragment newInstance() { return new ProfileFragment();}
@@ -26,9 +28,17 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.back24);
+        mSubActivity = (SubActivity) getActivity();
+        mSubActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.back24);
         view = inflater.inflate(R.layout.fragment_profile, container, false);
+        Mapping();
 
         return view;
     }
+
+    private void Mapping() {
+
+    }
+
+
 }
