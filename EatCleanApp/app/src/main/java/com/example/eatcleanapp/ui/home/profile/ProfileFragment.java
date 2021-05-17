@@ -26,10 +26,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.SubActivity;
+import com.example.eatcleanapp.model.users;
+import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -51,8 +54,8 @@ public class ProfileFragment extends Fragment {
     private Button btn_profile_edit, btn_profile_changePass, btn_add_avatar;
     private Toolbar toolbar;
     private CircleImageView imageView_avatar_user;
-
-    public static ProfileFragment newInstance() { return new ProfileFragment();}
+    private users user;
+    private TextView txv_profile_userName, txv_profile_email, txv_profile_fullName, txv_profile_title_fullName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,9 +66,17 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mSubActivity = (SubActivity) getActivity();
-        mSubActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.back24);
+        if (mSubActivity != null) {
+            mSubActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.back24);
+        }
         view = inflater.inflate(R.layout.fragment_profile, container, false);
         Mapping();
+        user = DataLocalManager.getUser();
+
+        txv_profile_userName.setText("Tên đăng nhập: " + user.getUsername());
+        txv_profile_email.setText("Email: " + user.getEmail());
+        txv_profile_fullName.setText("Họ và tên: " + user.getFullName());
+        txv_profile_title_fullName.setText(user.getFullName());
 
         btn_profile_edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,10 +241,14 @@ public class ProfileFragment extends Fragment {
 
     private void Mapping() {
         mSubActivity.setText("Thông tin tài khoản");
-        btn_profile_edit        = (Button)view.findViewById(R.id.btn_profile_edit);
-        btn_profile_changePass  = (Button)view.findViewById(R.id.btn_profile_changePass);
-        btn_add_avatar          = (Button)view.findViewById(R.id.btn_add_avatar);
-        toolbar                 = (Toolbar)mSubActivity.findViewById(R.id.toolbar);
-        imageView_avatar_user   = (CircleImageView)view.findViewById(R.id.imageView_avatar_user);
+        btn_profile_edit            = (Button)view.findViewById(R.id.btn_profile_edit);
+        btn_profile_changePass      = (Button)view.findViewById(R.id.btn_profile_changePass);
+        btn_add_avatar              = (Button)view.findViewById(R.id.btn_add_avatar);
+        toolbar                     = (Toolbar)mSubActivity.findViewById(R.id.toolbar);
+        imageView_avatar_user       = (CircleImageView)view.findViewById(R.id.imageView_avatar_user);
+        txv_profile_userName        = (TextView)view.findViewById(R.id.txv_profile_userName);
+        txv_profile_email           = (TextView)view.findViewById(R.id.txv_profile_email);
+        txv_profile_fullName        = (TextView)view.findViewById(R.id.txv_profile_fullName);
+        txv_profile_title_fullName  = (TextView)view.findViewById(R.id.txv_profile_title_fullName);
     }
 }

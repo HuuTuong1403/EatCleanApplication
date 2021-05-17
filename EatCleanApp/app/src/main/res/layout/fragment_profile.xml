@@ -23,6 +23,7 @@
             android:src="@drawable/avatar"
             android:layout_marginBottom="10dp"/>
         <TextView
+            android:id="@+id/txv_profile_title_fullName"
             android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,7 +52,7 @@
                 android:text="Thêm Avatar"
                 android:backgroundTint="@color/bg_nav"
                 android:background="@drawable/custom_button"
-                android:textColor="@color/black"
+                android:textColor="@color/custom_color_text"
                 android:textSize="15sp" />
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_save_avatar"
@@ -65,76 +66,98 @@
                 android:paddingRight="20dp"
                 android:paddingLeft="20dp"
                 android:text="Lưu Avatar"
+                android:textColor="@color/custom_color_text"
                 android:backgroundTint="@color/bg_nav"
                 android:background="@drawable/custom_button"
-                android:textColor="@color/black"
                 android:textSize="15sp" />
         </LinearLayout>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Thông tin tài khoản"
-            android:textColor="@color/black"
-            android:textAllCaps="true"
-            android:fontFamily="@font/robotomonobold"
-            android:textSize="21sp"
-            android:layout_gravity="center"/>
-        <LinearLayout
-            android:layout_marginTop="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center">
-            <TextView
-                android:layout_marginBottom="12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:text="Tên đăng nhập: tuongkl01"/>
-            <TextView
-                android:layout_marginBottom="12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:text="Email: huutuong1403@gmail.com"/>
-            <TextView
-                android:layout_marginBottom="12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:text="Họ và tên: Nguyễn Hữu Tường"/>
-        </LinearLayout>
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_profile_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chỉnh sửa tài khoản"
-            android:layout_gravity="center"
-            android:textSize="16sp"
-            android:paddingLeft="15dp"
+        <androidx.cardview.widget.CardView
             android:layout_marginTop="10dp"
-            android:paddingRight="15dp"
-            android:textColor="@color/black"
-            android:background="@drawable/custom_button"
-            android:backgroundTint="@color/bg_nav"/>
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_marginTop="15dp"
-            android:id="@+id/btn_profile_changePass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="20dp"
+            android:layout_marginStart="5dp"
+            android:elevation="30dp"
+            app:cardBackgroundColor="#F1F3DF"
+            android:translationZ="10dp"
+            android:layout_marginEnd="5dp">
+            <LinearLayout
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Thông tin tài khoản"
+                    android:textColor="@color/black"
+                    android:textAllCaps="true"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/robotomonobold"
+                    android:textSize="21sp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:id="@+id/txv_profile_userName"
+                    android:layout_marginBottom="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:text="Tên đăng nhập: tuongkl01"/>
+                <TextView
+                    android:id="@+id/txv_profile_email"
+                    android:layout_marginBottom="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:text="Email: huutuong1403@gmail.com"/>
+                <TextView
+                    android:id="@+id/txv_profile_fullName"
+                    android:layout_marginBottom="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:text="Họ và tên: Nguyễn Hữu Tường"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đổi mật khẩu"
-            android:layout_marginBottom="10dp"
             android:layout_gravity="center"
-            android:textSize="16sp"
-            android:paddingLeft="45dp"
-            android:paddingRight="45dp"
-            android:textColor="@color/black"
-            android:background="@drawable/custom_button"
-            android:backgroundTint="@color/bg_nav"/>
-
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="horizontal">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_profile_changePass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đổi mật khẩu"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/custom_color_text"
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/bg_nav"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_profile_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chỉnh sửa tài khoản"
+                android:layout_marginBottom="10dp"
+                android:textSize="16sp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/custom_color_text"
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/bg_nav"/>
+        </LinearLayout>
     </LinearLayout>
-
 </ScrollView>

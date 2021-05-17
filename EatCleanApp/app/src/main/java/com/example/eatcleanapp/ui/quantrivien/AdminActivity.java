@@ -64,9 +64,10 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                 ChangeText(user);
             }
         }
-        navigationView.getMenu().findItem(R.id.menu_home_nav_admin).setChecked(true);
+
         replaceFragment(new HomeAdminFragment(), "Trang chủ Admin");
         currentFragment = FRAGMENT_HOME;
+        navigationView.getMenu().findItem(R.id.menu_home_nav_admin).setChecked(true);
     }
 
     private void ChangeText(users user){

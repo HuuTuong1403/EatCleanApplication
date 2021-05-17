@@ -11,8 +11,9 @@
     android:id="@+id/backgroundSignUp">
 
     <LinearLayout
+        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
         <LinearLayout
             android:layout_marginTop="20dp"
@@ -20,10 +21,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/shadow_signup"
-            android:paddingRight="35dp"
-            android:paddingTop="35dp"
-            android:paddingBottom="35dp"
-            android:paddingLeft="38dp">
+            android:padding="50dp">
 
             <TextView
                 android:layout_marginTop="20dp"

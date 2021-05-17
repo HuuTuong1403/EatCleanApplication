@@ -26,6 +26,9 @@
     <style name="Theme.EatCleanApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="Widget.AppCompat.AutoCompleteTextView" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 
     <style name="Theme.EatCleanApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColor">@color/black</item>
