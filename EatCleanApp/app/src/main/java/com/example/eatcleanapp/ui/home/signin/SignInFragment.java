@@ -60,6 +60,7 @@ public class SignInFragment extends Fragment {
     private List<users> userList = new ArrayList<>();
     private users mUser;
     private MainActivity mMainActivity;
+    private AdminActivity mAdminActivity;
     
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -113,11 +114,13 @@ public class SignInFragment extends Fragment {
                 if (checkLogin){
                     switch(userLogin.getIDRole()){
                         case "R001":{
+                            DataLocalManager.setUser(userLogin);
                             Intent intent = new Intent(view.getContext(), AdminActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("object_user", userLogin);
                             intent.putExtras(bundle);
                             startActivity(intent);
+                            getActivity().finish();
                             break;
                         }
                         case "R002":{

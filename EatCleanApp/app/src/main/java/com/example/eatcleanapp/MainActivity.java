@@ -5,17 +5,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.eatcleanapp.databinding.ActivityMainBinding;
+import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.home.HomeFragment;
 import com.example.eatcleanapp.ui.home.detail.DetailActivity;
 import com.example.eatcleanapp.ui.home.signin.SignInFragment;
+import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;
 import com.example.eatcleanapp.ui.quantrivien.AdminActivity;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
@@ -38,8 +47,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView txvTitle;
     private boolean doubleBackToExitPressedOnce = false;
     private NavigationView navigationView;
+    private users user;
 
-    private static final int FRAGMENT_HOME = 1;
+
+    private static final int FRAGMENT_HOME  = 1;
     private static final int FRAGMENT_SIGNIN = 2;
     private static final int FRAGMENT_FAVORITES = 3;
     private static final int FRAGMENT_SETTING = 4;
@@ -49,6 +60,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user = DataLocalManager.getUser();
+        if(user != null){
+            if(user.getIDRole().equals("R001")){
+                Intent intent = new Intent(MainActivity.this, AdminActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            else {
+                onInit();
+            }
+        }
+        else{
+            onInit();
+        }
+    }
+    private void onInit(){
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         txvTitle = (TextView)findViewById(R.id.txvTitleHome);
@@ -140,9 +167,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             }
             case R.id.nav_favorites:{
-                Intent intent = new Intent(MainActivity.this, AdminActivity.class);
-                startActivity(intent);
-                finish();
                 break;
             }
             case R.id.nav_settings:{
@@ -172,4 +196,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             inputManager.hideSoftInputFromWindow(currentFocusedView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
+
 }

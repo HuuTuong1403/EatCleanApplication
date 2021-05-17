@@ -34,6 +34,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="350dp"
                     android:layout_gravity="center"
+                    app:boxStrokeColor="@color/red"
+                    app:hintTextColor="@color/red"
                     android:layout_height="70dp"
                     app:startIconDrawable="@drawable/ic_person_outline24"
                     android:layout_marginBottom="20dp"
@@ -41,6 +43,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:textSize="20sp"
+                        android:inputType="text"
                         android:hint="@string/username"
                         android:id="@+id/signin_edtEmail"
                         android:layout_height="match_parent"/>
@@ -50,6 +53,8 @@
                     android:layout_width="350dp"
                     android:layout_marginBottom="20dp"
                     android:layout_gravity="center"
+                    app:boxStrokeColor="@color/red"
+                    app:hintTextColor="@color/red"
                     android:layout_height="70dp"
                     app:startIconDrawable="@drawable/ic_lock_24"
                     app:endIconMode="password_toggle"

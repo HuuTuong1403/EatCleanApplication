@@ -8,9 +8,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -19,6 +26,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.recipes;
@@ -34,14 +42,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RecipesFragment extends Fragment implements RecipesAdapter.ItemClickListener{
+public class RecipesFragment extends Fragment implements IClickListener {
 
     private View view;
     private RecyclerView rcvRecipes;
     private RecipesAdapter mRecipesAdapter;
-    private List<recipes> listRecipes;
+    private List<recipes> listRecipes, oldList;
     private String getRecipeLink;
     private RequestQueue requestQueue;
+    private EditText edt_search_recycle;
+    private MainActivity mMainActivity;
 
     public static RecipesFragment newInstance() { return new RecipesFragment(); }
     @Override
@@ -52,22 +62,46 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.ItemClic
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mMainActivity = (MainActivity) getActivity();
         view = inflater.inflate(R.layout.fragment_recipes, container, false);
         Mapping();
         mRecipesAdapter = new RecipesAdapter(getContext(), this);
         StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);;
         rcvRecipes.setLayoutManager(gridLayoutManager);
-
         GetData(getRecipeLink);
         rcvRecipes.setAdapter(mRecipesAdapter);
+
+
+        edt_search_recycle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                    fillText();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         return view;
     }
+
+    private void fillText() {
+        String s = edt_search_recycle.getText().toString();
+        mRecipesAdapter.getFilter().filter(s);
+        listRecipes = mRecipesAdapter.change();
+        Log.e("AAA", "size: " + listRecipes.size() + " string: " + s);
+        MainActivity.hideKeyboard(getActivity());
+    }
+
 
     private void Mapping(){
         requestQueue = Volley.newRequestQueue(view.getContext());
         listRecipes = new ArrayList<>();
+        oldList = new ArrayList<>();
         rcvRecipes = view.findViewById(R.id.list_recipes);
         getRecipeLink = "https://eatcleanrecipes.000webhostapp.com/getRecipes.php";
+        edt_search_recycle = (EditText)mMainActivity.findViewById(R.id.edt_search_recycler);
     }
 
 
@@ -99,12 +133,14 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.ItemClic
                         }
                         if (checkExist == 0){
                             listRecipes.add(recipe);
+                            oldList.add(recipe);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
                 mRecipesAdapter.setData(listRecipes);
+                mRecipesAdapter.setOldData(oldList);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -116,7 +152,7 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.ItemClic
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void clickItem(int position) {
         Intent intent = new Intent(view.getContext(), DetailActivity.class);
         intent.putExtra("detail-back", 1);
         Bundle bundle = new Bundle();

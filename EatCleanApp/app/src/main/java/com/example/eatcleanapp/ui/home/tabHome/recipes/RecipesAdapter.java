@@ -1,9 +1,12 @@
 package com.example.eatcleanapp.ui.home.tabHome.recipes;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,19 +15,22 @@ import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.recipes;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>{
+public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder> implements Filterable {
 
-    private final Context context;
+    private Context context;
     private List<recipes> mListRecipes;
-    private final ItemClickListener mItemClickListener;
+    private List<recipes> mListRecipesOld;
+    private IClickListener iClickListener;
 
-    public RecipesAdapter(Context context, ItemClickListener mItemClickListener) {
-        this.mItemClickListener = mItemClickListener;
+    public RecipesAdapter(Context context, IClickListener iClickListener) {
+        this.iClickListener = iClickListener;
         this.context = context;
     }
 
@@ -33,11 +39,16 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
         notifyDataSetChanged();
     }
 
+    public void setOldData(List<recipes> list){
+        this.mListRecipesOld = list;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public RecipesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_recipes, parent, false);
-        return new RecipesViewHolder(view, mItemClickListener);
+        return new RecipesViewHolder(view);
     }
 
     @Override
@@ -46,7 +57,6 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
         if(recipes == null){
             return;
         }
-        //holder.recipes_image.setImageResource(recipes.get());
         holder.recipes_name.setText(recipes.getRecipesTitle());
         String s = "Công thức tạo bởi <b>" + recipes.getRecipesAuthor() + "</b>";
         holder.recipes_author.setText(HtmlCompat.fromHtml(s, HtmlCompat.FROM_HTML_MODE_LEGACY));
@@ -61,30 +71,64 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
         return 0;
     }
 
-    public static class RecipesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String strSearch = constraint.toString();
+                List<recipes> list = new ArrayList<>();
+                if(strSearch.isEmpty()){
+                    mListRecipes = mListRecipesOld;
+                }
+                else{
+                    for(recipes recipes: mListRecipesOld){
+                        if(recipes.getRecipesTitle().toLowerCase().contains(strSearch.toLowerCase())){
+                            list.add(recipes);
+                        }
+                    }
+                    mListRecipes = list;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mListRecipes;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mListRecipes = (List<recipes>) results.values;
+                //notifyDataSetChanged();
+            }
+        };
+    }
+
+
+
+    public List<recipes> change(){
+        notifyDataSetChanged();
+        return mListRecipes;
+    }
+
+    public class RecipesViewHolder extends RecyclerView.ViewHolder{
 
         private final ImageView recipes_image;
         private final TextView recipes_name;
         private final TextView recipes_author;
-        private final ItemClickListener itemClickListener;
-        public RecipesViewHolder(@NonNull View itemView, ItemClickListener itemClickListener) {
+
+        public RecipesViewHolder(@NonNull View itemView) {
             super(itemView);
 
             recipes_image = (ImageView)itemView.findViewById(R.id.recipes_image);
             recipes_name = (TextView)itemView.findViewById(R.id.recipes_name);
             recipes_author = (TextView)itemView.findViewById(R.id.recipes_author);
-            this.itemClickListener = itemClickListener;
 
-            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    iClickListener.clickItem(getAdapterPosition());
+                }
+            });
         }
 
-        @Override
-        public void onClick(View v) {
-            itemClickListener.onItemClick(getAdapterPosition());
-        }
-    }
-
-    public interface ItemClickListener{
-        void onItemClick(int position);
     }
 }
