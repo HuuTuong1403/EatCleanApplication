@@ -3,11 +3,13 @@ package com.example.eatcleanapp.ui.home.tabHome;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -52,6 +54,10 @@ public class RecipesFragment extends Fragment implements IClickListener {
     private RequestQueue requestQueue;
     private EditText edt_search_recycle;
     private MainActivity mMainActivity;
+    private Toolbar toolbar;
+
+    public RecipesFragment() {
+    }
 
     public static RecipesFragment newInstance() { return new RecipesFragment(); }
     @Override
@@ -83,6 +89,31 @@ public class RecipesFragment extends Fragment implements IClickListener {
             }
         });
 
+        edt_search_recycle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.toString().equals("")){
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            fillText();
+                        }
+                    }, 500);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         return view;
     }
 
@@ -102,10 +133,19 @@ public class RecipesFragment extends Fragment implements IClickListener {
         rcvRecipes = view.findViewById(R.id.list_recipes);
         getRecipeLink = "https://eatcleanrecipes.000webhostapp.com/getRecipes.php";
         edt_search_recycle = (EditText)mMainActivity.findViewById(R.id.edt_search_recycler);
+        toolbar = (Toolbar)mMainActivity.findViewById(R.id.toolbarSearch);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listRecipes = mRecipesAdapter.reset();
+                Log.e("AAA", "size: " + listRecipes.size());
+            }
+        });
     }
 
 
-    private void GetData (String url){
+    public void GetData (String url){
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

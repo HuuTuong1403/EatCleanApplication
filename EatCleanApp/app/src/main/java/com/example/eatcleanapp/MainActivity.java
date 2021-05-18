@@ -5,14 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,8 +16,8 @@ import android.widget.Toast;
 import com.example.eatcleanapp.databinding.ActivityMainBinding;
 import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.home.HomeFragment;
-import com.example.eatcleanapp.ui.home.detail.DetailActivity;
 import com.example.eatcleanapp.ui.home.signin.SignInFragment;
+import com.example.eatcleanapp.ui.home.tabHome.RecipesFragment;
 import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;
 import com.example.eatcleanapp.ui.quantrivien.AdminActivity;
 import com.google.android.material.appbar.AppBarLayout;
@@ -48,7 +42,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean doubleBackToExitPressedOnce = false;
     private NavigationView navigationView;
     private users user;
-
+    private EditText edt_search_home;
+    private AppBarLayout appBarLayout;
+    private AppBarLayout appBarHome;
 
     private static final int FRAGMENT_HOME  = 1;
     private static final int FRAGMENT_SIGNIN = 2;
@@ -89,20 +85,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        AppBarLayout appBarLayout = (AppBarLayout)findViewById(R.id.app_bar_search);
-        AppBarLayout appBarHome = (AppBarLayout)findViewById(R.id.app_home);
+        Mapping();
+
+        appBarLayout = (AppBarLayout)findViewById(R.id.app_bar_search);
+        appBarHome = (AppBarLayout)findViewById(R.id.app_home);
         ImageButton searchBox = (ImageButton)findViewById(R.id.searchBox);
         searchBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 appBarHome.setVisibility(View.INVISIBLE);
                 appBarLayout.setVisibility(View.VISIBLE);
+                edt_search_home.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(edt_search_home, InputMethodManager.SHOW_IMPLICIT);
                 binding.appBarMain.toolbarSearch.setNavigationIcon(R.drawable.back24);
                 binding.appBarMain.toolbarSearch.setNavigationOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         appBarHome.setVisibility(View.VISIBLE);
                         appBarLayout.setVisibility(View.INVISIBLE);
+                        imm.hideSoftInputFromWindow(binding.appBarMain.toolbarSearch.getWindowToken(), 0);
                     }
                 });
             }
@@ -124,24 +126,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
     }
 
+    private void Mapping(){
+        edt_search_home = (EditText)findViewById(R.id.edt_search_recycler);
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
-            drawerLayout.closeDrawer(GravityCompat.START);
+        if(appBarHome.getVisibility() == View.INVISIBLE){
+            appBarHome.setVisibility(View.VISIBLE);
+            appBarLayout.setVisibility(View.INVISIBLE);
         }
         else{
-            if(doubleBackToExitPressedOnce){
-                super.onBackPressed();
+            if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+                drawerLayout.closeDrawer(GravityCompat.START);
             }
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, "Press BACK again to exit", Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
+            else{
+                if(doubleBackToExitPressedOnce){
+                    super.onBackPressed();
                 }
-            }, 2000);
+                this.doubleBackToExitPressedOnce = true;
+                Toast.makeText(this, "Nhấn lần nữa để thoát", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 2000);
+            }
         }
     }
 

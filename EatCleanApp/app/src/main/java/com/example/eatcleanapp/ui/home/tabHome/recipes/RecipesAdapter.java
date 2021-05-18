@@ -102,7 +102,10 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
         };
     }
 
-
+    public List<recipes> reset(){
+        notifyDataSetChanged();
+        return mListRecipesOld;
+    }
 
     public List<recipes> change(){
         notifyDataSetChanged();
