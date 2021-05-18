@@ -3,10 +3,14 @@ package com.example.eatcleanapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -40,11 +44,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActivityMainBinding binding;
     private TextView txvTitle;
     private boolean doubleBackToExitPressedOnce = false;
-    private NavigationView navigationView;
-    private users user;
     private EditText edt_search_home;
     private AppBarLayout appBarLayout;
     private AppBarLayout appBarHome;
+    private ImageButton searchBox;
 
     private static final int FRAGMENT_HOME  = 1;
     private static final int FRAGMENT_SIGNIN = 2;
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        user = DataLocalManager.getUser();
+        users user = DataLocalManager.getUser();
         if(user != null){
             if(user.getIDRole().equals("R001")){
                 Intent intent = new Intent(MainActivity.this, AdminActivity.class);
@@ -78,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = binding.appBarMain.toolbar;
         setSupportActionBar(toolbar);
         DrawerLayout drawer = binding.drawerLayout;
-        navigationView = binding.navView;
+        NavigationView navigationView = binding.navView;
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         appBarLayout = (AppBarLayout)findViewById(R.id.app_bar_search);
         appBarHome = (AppBarLayout)findViewById(R.id.app_home);
-        ImageButton searchBox = (ImageButton)findViewById(R.id.searchBox);
+        searchBox = (ImageButton)findViewById(R.id.searchBox);
         searchBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         appBarHome.setVisibility(View.VISIBLE);
                         appBarLayout.setVisibility(View.INVISIBLE);
                         imm.hideSoftInputFromWindow(binding.appBarMain.toolbarSearch.getWindowToken(), 0);
+                        edt_search_home.setText("");
                     }
                 });
             }
@@ -136,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(appBarHome.getVisibility() == View.INVISIBLE){
             appBarHome.setVisibility(View.VISIBLE);
             appBarLayout.setVisibility(View.INVISIBLE);
+            edt_search_home.setText("");
         }
         else{
             if(drawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -164,16 +169,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_home:{
                 if(FRAGMENT_HOME != currentFragment)
                 {
+                    searchBox.setVisibility(View.VISIBLE);
                     replaceFragment(new HomeFragment(), "Trang chủ");
-                    hideKeyboard(this);
                     currentFragment = FRAGMENT_HOME;
                 }
                 break;
             }
             case R.id.nav_signin:{
                 if(FRAGMENT_SIGNIN != currentFragment){
+                    searchBox.setVisibility(View.INVISIBLE);
                     replaceFragment(new SignInFragment(), "Đăng nhập");
-                    hideKeyboard(this);
                     currentFragment = FRAGMENT_SIGNIN;
                 }
                 break;
@@ -200,13 +205,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.commit();
     }
 
-    public static void hideKeyboard(Activity activity) {
-        InputMethodManager inputManager = (InputMethodManager) activity
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        View currentFocusedView = activity.getCurrentFocus();
-        if (currentFocusedView != null) {
-            inputManager.hideSoftInputFromWindow(currentFocusedView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if(ev.getAction() == MotionEvent.ACTION_DOWN){
+            View v = getCurrentFocus();
+            if(v instanceof EditText){
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if(!outRect.contains((int)ev.getRawX(), (int)ev.getRawY())){
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
         }
+        return super.dispatchTouchEvent(ev);
     }
-
 }

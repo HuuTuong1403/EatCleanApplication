@@ -5,9 +5,11 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.Toast;
@@ -42,8 +44,8 @@ public class SignUpFragment extends Fragment {
     private View view;
     private TextInputEditText edtUsername, edtEmail, edtPassword, edtPasswordAgain, edtFullName;
     private Button btnRegister;
-    private String registerUserLink = "https://eatcleanrecipes.000webhostapp.com/registerUser.php";
-    private String getUserLink = "https://eatcleanrecipes.000webhostapp.com/getUser.php";
+    private final String registerUserLink = "https://eatcleanrecipes.000webhostapp.com/registerUser.php";
+    private final String getUserLink = "https://eatcleanrecipes.000webhostapp.com/getUser.php";
     private  List<users> usersList;
     private ScrollView scrollView;
     private SubActivity mSubActivity;
@@ -62,54 +64,63 @@ public class SignUpFragment extends Fragment {
         usersList = new ArrayList<>();
         GetData();
 
+        Animation animTranslate = mSubActivity.getAnimButton(view);
+        Handler handler = new Handler();
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Random rd = new Random();
+                v.startAnimation(animTranslate);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Random rd = new Random();
 
-                String Username = edtUsername.getText().toString().trim();
-                String Email = edtEmail.getText().toString().trim();
+                        String Username = edtUsername.getText().toString().trim();
+                        String Email = edtEmail.getText().toString().trim();
 
-                boolean checkIDUser = true;
-                while (checkIDUser){
-                    checkIDUser = false;
-                    int x = rd.nextInt((50000-1000 + 1) + 1000);
-                    IDUser = "ID-U-" + x;
-                    for (users user: usersList
-                    ) {
-                        if (IDUser.equals(user.getIDUser())){
-                            checkIDUser = true;
-                            break;
+                        boolean checkIDUser = true;
+                        while (checkIDUser){
+                            checkIDUser = false;
+                            int x = rd.nextInt((50000-1000 + 1) + 1000);
+                            IDUser = "ID-U-" + x;
+                            for (users user: usersList
+                            ) {
+                                if (IDUser.equals(user.getIDUser())){
+                                    checkIDUser = true;
+                                    break;
+                                }
+                            }
                         }
-                    }
-                }
 
-                boolean checkEmail = false;
-                boolean checkUsername = false;
-                for (users user: usersList) {
-                    if (Email.equals(user.getEmail())){
-                        checkEmail = true;
-                    }
-                    if (Username.equals(user.getUsername())){
-                        checkUsername = true;
-                    }
-                }
-                if (!checkEmail){
-                    if (!checkUsername){
-                        if (edtPassword.getText().toString().trim().equals(edtPasswordAgain.getText().toString().trim())){
-                            registerUser(registerUserLink);
+                        boolean checkEmail = false;
+                        boolean checkUsername = false;
+                        for (users user: usersList) {
+                            if (Email.equals(user.getEmail())){
+                                checkEmail = true;
+                            }
+                            if (Username.equals(user.getUsername())){
+                                checkUsername = true;
+                            }
+                        }
+                        if (!checkEmail){
+                            if (!checkUsername){
+                                if (edtPassword.getText().toString().trim().equals(edtPasswordAgain.getText().toString().trim())){
+                                    registerUser(registerUserLink);
+                                }
+                                else{
+                                    Toast.makeText(getActivity(), "Mật khẩu không giống nhau, vui lòng nhập lại", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            else{
+                                Toast.makeText(getActivity(), "Username đã bị trùng, vui lòng nhập email khác", Toast.LENGTH_LONG).show();
+                            }
                         }
                         else{
-                            Toast.makeText(getActivity(), "Mật khẩu không giống nhau, vui lòng nhập lại", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Email đã bị trùng, vui lòng nhập email khác", Toast.LENGTH_LONG).show();
                         }
                     }
-                    else{
-                        Toast.makeText(getActivity(), "Username đã bị trùng, vui lòng nhập email khác", Toast.LENGTH_LONG).show();
-                    }
-                }
-                else{
-                    Toast.makeText(getActivity(), "Email đã bị trùng, vui lòng nhập email khác", Toast.LENGTH_LONG).show();
-                }
+                }, 400);
             }
         });
         return view;

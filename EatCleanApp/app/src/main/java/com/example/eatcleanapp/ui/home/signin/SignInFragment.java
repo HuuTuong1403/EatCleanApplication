@@ -1,15 +1,21 @@
 package com.example.eatcleanapp.ui.home.signin;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +25,7 @@ import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 
 import com.example.eatcleanapp.SubActivity;
+import com.example.eatcleanapp.databinding.ActivityMainBinding;
 import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.home.HomeFragment;
 
@@ -58,9 +65,8 @@ public class SignInFragment extends Fragment {
     private TextInputEditText edtEmail, edtPassword;
     private MaterialButton btnSignIn;
     private List<users> userList = new ArrayList<>();
-    private users mUser;
+    private ImageButton searchBox;
     private MainActivity mMainActivity;
-    private AdminActivity mAdminActivity;
     
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -95,54 +101,64 @@ public class SignInFragment extends Fragment {
                 mMainActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
             }
         });
+
+        Animation anim = AnimationUtils.loadAnimation(view.getContext(), R.anim.anim_scale);
+        Handler handler = new Handler();
+
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = edtEmail.getText().toString().trim();
-                String password = edtPassword.getText().toString().trim();
-                boolean checkLogin = false;
-                users userLogin = null;
-                for (users user: userList
-                     ) {
-                    if ((email.equals(user.getEmail()) || (email.equals(user.getUsername()))) && password.equals(user.getPassword())){
-                        checkLogin = true;
-                        userLogin = user;
-                        break;
+                v.startAnimation(anim);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String email = edtEmail.getText().toString().trim();
+                        String password = edtPassword.getText().toString().trim();
+                        boolean checkLogin = false;
+                        users userLogin = null;
+                        for (users user: userList
+                        ) {
+                            if ((email.equals(user.getEmail()) || (email.equals(user.getUsername()))) && password.equals(user.getPassword())){
+                                checkLogin = true;
+                                userLogin = user;
+                                break;
 
+                            }
+                        }
+                        if (checkLogin){
+                            switch(userLogin.getIDRole()){
+                                case "R001":{
+                                    DataLocalManager.setUser(userLogin);
+                                    Intent intent = new Intent(view.getContext(), AdminActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("object_user", userLogin);
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                    getActivity().finish();
+                                    break;
+                                }
+                                case "R002":{
+                                    break;
+                                }
+                                case "R003":{
+                                    DataLocalManager.setUser(userLogin);
+                                    HomeFragment homeFragment = new HomeFragment();
+                                    Bundle bundle = new Bundle();
+                                    searchBox.setVisibility(View.VISIBLE);
+                                    bundle.putSerializable("object_user", userLogin);
+                                    homeFragment.setArguments(bundle);
+                                    mMainActivity.replaceFragment(homeFragment, "Trang chủ");
+                                    NavigationView naview = mMainActivity.findViewById(R.id.nav_view);
+                                    naview.getMenu().findItem(R.id.nav_home).setChecked(true);
+                                    break;
+                                }
+                            }
+                        }
+                        else{
+                            Toast.makeText(view.getContext(), "Thông tin đăng nhập không đúng", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-                if (checkLogin){
-                    switch(userLogin.getIDRole()){
-                        case "R001":{
-                            DataLocalManager.setUser(userLogin);
-                            Intent intent = new Intent(view.getContext(), AdminActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("object_user", userLogin);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                            getActivity().finish();
-                            break;
-                        }
-                        case "R002":{
-                            break;
-                        }
-                        case "R003":{
-                            DataLocalManager.setUser(userLogin);
-                            HomeFragment homeFragment = new HomeFragment();
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("object_user", userLogin);
-                            MainActivity.hideKeyboard(mMainActivity);
-                            homeFragment.setArguments(bundle);
-                            mMainActivity.replaceFragment(homeFragment, "Trang chủ");
-                            NavigationView naview = mMainActivity.findViewById(R.id.nav_view);
-                            naview.getMenu().findItem(R.id.nav_home).setChecked(true);
-                            break;
-                        }
-                    }
-                }
-                else{
-                    Toast.makeText(view.getContext(), "Thông tin đăng nhập không đúng", Toast.LENGTH_SHORT).show();
-                }
+                }, 400);
             }
         });
         return view;
@@ -166,8 +182,9 @@ public class SignInFragment extends Fragment {
 
             }
         });
-
     }
+
+
 
     private void setLogin_Button() {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -223,6 +240,7 @@ public class SignInFragment extends Fragment {
         edtEmail = (TextInputEditText) view.findViewById(R.id.signin_edtEmail);
         edtPassword = (TextInputEditText) view.findViewById(R.id.signin_edtPassword);
         btnSignIn = (MaterialButton) view.findViewById(R.id.signin_btnSignIn);
+        searchBox = (ImageButton)mMainActivity.findViewById(R.id.searchBox);
     }
 
     @Override
@@ -244,5 +262,4 @@ public class SignInFragment extends Fragment {
             }
         });
     }
-
 }

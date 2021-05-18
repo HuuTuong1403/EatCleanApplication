@@ -1,5 +1,6 @@
 package com.example.eatcleanapp.ui.home.tabHome;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -104,7 +106,7 @@ public class RecipesFragment extends Fragment implements IClickListener {
                         public void run() {
                             fillText();
                         }
-                    }, 500);
+                    }, 400);
                 }
             }
 
@@ -121,8 +123,9 @@ public class RecipesFragment extends Fragment implements IClickListener {
         String s = edt_search_recycle.getText().toString();
         mRecipesAdapter.getFilter().filter(s);
         listRecipes = mRecipesAdapter.change();
+        InputMethodManager in = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(edt_search_recycle.getWindowToken(), 0);
         Log.e("AAA", "size: " + listRecipes.size() + " string: " + s);
-        MainActivity.hideKeyboard(getActivity());
     }
 
 
@@ -133,15 +136,6 @@ public class RecipesFragment extends Fragment implements IClickListener {
         rcvRecipes = view.findViewById(R.id.list_recipes);
         getRecipeLink = "https://eatcleanrecipes.000webhostapp.com/getRecipes.php";
         edt_search_recycle = (EditText)mMainActivity.findViewById(R.id.edt_search_recycler);
-        toolbar = (Toolbar)mMainActivity.findViewById(R.id.toolbarSearch);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listRecipes = mRecipesAdapter.reset();
-                Log.e("AAA", "size: " + listRecipes.size());
-            }
-        });
     }
 
 

@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
@@ -25,6 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,17 +81,32 @@ public class ProfileFragment extends Fragment {
         txv_profile_fullName.setText("Họ và tên: " + user.getFullName());
         txv_profile_title_fullName.setText(user.getFullName());
 
+        Animation animButton = mSubActivity.getAnimButton(view);
+        Handler handler = new Handler();
+
         btn_profile_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavHostFragment.findNavController(ProfileFragment.this).navigate(R.id.action_profile_fragment_to_profile_edit_fragment);
+                v.startAnimation(animButton);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        NavHostFragment.findNavController(ProfileFragment.this).navigate(R.id.action_profile_fragment_to_profile_edit_fragment);
+                    }
+                }, 400);
             }
         });
 
         btn_profile_changePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavHostFragment.findNavController(ProfileFragment.this).navigate(R.id.action_profile_fragment_to_profile_changePass_fragment);
+                v.startAnimation(animButton);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        NavHostFragment.findNavController(ProfileFragment.this).navigate(R.id.action_profile_fragment_to_profile_changePass_fragment);
+                    }
+                }, 400);
             }
         });
 
@@ -102,13 +120,19 @@ public class ProfileFragment extends Fragment {
         btn_add_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mSubActivity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && mSubActivity.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
-                    openDialogChooseImage();
-                }
-                else
-                {
-                    openRequest();
-                }
+                v.startAnimation(animButton);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(mSubActivity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && mSubActivity.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+                            openDialogChooseImage();
+                        }
+                        else
+                        {
+                            openRequest();
+                        }
+                    }
+                }, 400);
             }
         });
         return view;
@@ -119,7 +143,7 @@ public class ProfileFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode){
             case 0:
-                if(resultCode == mSubActivity.RESULT_OK){
+                if(resultCode ==    mSubActivity.RESULT_OK){
                     Bitmap bmp = (Bitmap) data.getExtras().get("data");
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);

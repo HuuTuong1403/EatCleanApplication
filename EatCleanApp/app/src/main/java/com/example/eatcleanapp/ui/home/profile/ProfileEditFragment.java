@@ -7,10 +7,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,11 +49,22 @@ public class ProfileEditFragment extends Fragment {
         profileEdit_layout_email.setHint(user.getEmail());
         profileEdit_layout_fullName.setHint(user.getFullName());
 
+        //Animate and Delay
+        Animation animButton = mSubActivity.getAnimButton(view);
+        Handler handler = new Handler();
+
         profileEdt_btn_cancelChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                profileEdit_edt_email.setText("");
-                profileEdit_edt_fullName.setText("");
+                v.startAnimation(animButton);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        profileEdit_edt_email.setText("");
+                        profileEdit_edt_fullName.setText("");
+                    }
+                }, 400);
+
             }
         });
 
