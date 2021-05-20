@@ -1,15 +1,27 @@
 package com.example.eatcleanapp.ui.home.tabHome;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -18,12 +30,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.recipes;
 import com.example.eatcleanapp.ui.home.detail.DetailActivity;
 import com.example.eatcleanapp.ui.home.tabHome.recipes.RecipesAdapter;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,14 +46,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RecipesFragment extends Fragment implements RecipesAdapter.ItemClickListener{
+public class RecipesFragment extends Fragment implements IClickListener {
 
     private View view;
     private RecyclerView rcvRecipes;
     private RecipesAdapter mRecipesAdapter;
-    private List<recipes> listRecipes;
+    private List<recipes> listRecipes, oldList;
     private String getRecipeLink;
     private RequestQueue requestQueue;
+    private EditText edt_search_recycle;
+    private MainActivity mMainActivity;
+    private Toolbar toolbar;
+
+    public RecipesFragment() {
+    }
 
     public static RecipesFragment newInstance() { return new RecipesFragment(); }
     @Override
@@ -48,28 +68,78 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.ItemClic
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mMainActivity = (MainActivity) getActivity();
         view = inflater.inflate(R.layout.fragment_recipes, container, false);
         Mapping();
         mRecipesAdapter = new RecipesAdapter(getContext(), this);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);;
         rcvRecipes.setLayoutManager(gridLayoutManager);
-
         GetData(getRecipeLink);
         rcvRecipes.setAdapter(mRecipesAdapter);
+
+
+        edt_search_recycle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                    fillText();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        edt_search_recycle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.toString().equals("")){
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            fillText();
+                        }
+                    }, 400);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         return view;
     }
+
+    private void fillText() {
+        String s = edt_search_recycle.getText().toString();
+        mRecipesAdapter.getFilter().filter(s);
+        listRecipes = mRecipesAdapter.change();
+        InputMethodManager in = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(edt_search_recycle.getWindowToken(), 0);
+        Log.e("AAA", "size: " + listRecipes.size() + " string: " + s);
+    }
+
 
     private void Mapping(){
         requestQueue = Volley.newRequestQueue(view.getContext());
         listRecipes = new ArrayList<>();
+        oldList = new ArrayList<>();
         rcvRecipes = view.findViewById(R.id.list_recipes);
         getRecipeLink = "https://eatcleanrecipes.000webhostapp.com/getRecipes.php";
+        edt_search_recycle = (EditText)mMainActivity.findViewById(R.id.edt_search_recycler);
     }
 
 
-    private void GetData (String url){
+    public void GetData (String url){
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -89,8 +159,7 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.ItemClic
                                 object.getString("Status"),
                                 object.getString("RecipesImages")
                         );
-                        for (recipes recipetemp: listRecipes
-                             ) {
+                        for (recipes recipetemp: listRecipes) {
                             if (recipetemp.getIDRecipes().equals(recipe.getIDRecipes())){
                                 checkExist = 1;
                                 break;
@@ -98,12 +167,14 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.ItemClic
                         }
                         if (checkExist == 0){
                             listRecipes.add(recipe);
+                            oldList.add(recipe);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
                 mRecipesAdapter.setData(listRecipes);
+                mRecipesAdapter.setOldData(oldList);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -115,7 +186,7 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.ItemClic
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void clickItem(int position) {
         Intent intent = new Intent(view.getContext(), DetailActivity.class);
         intent.putExtra("detail-back", 1);
         Bundle bundle = new Bundle();

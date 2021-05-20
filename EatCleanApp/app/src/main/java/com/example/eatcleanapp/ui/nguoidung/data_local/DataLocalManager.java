@@ -7,9 +7,12 @@ import com.google.gson.Gson;
 
 public class DataLocalManager {
 
+    //Singleton
     private static final String PRE_OBJECT_USER = "PRE_OBJECT_USER";
     private static DataLocalManager instance;
     private UserSharedPreferences userSharedPreferences;
+
+    private DataLocalManager() { }
 
     public static void init(Context context){
         instance = new DataLocalManager();

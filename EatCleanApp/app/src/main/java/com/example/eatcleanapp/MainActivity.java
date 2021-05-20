@@ -1,17 +1,28 @@
 package com.example.eatcleanapp;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.eatcleanapp.databinding.ActivityMainBinding;
+import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.home.HomeFragment;
-import com.example.eatcleanapp.ui.home.detail.DetailActivity;
 import com.example.eatcleanapp.ui.home.signin.SignInFragment;
+import com.example.eatcleanapp.ui.home.tabHome.RecipesFragment;
+import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;
 import com.example.eatcleanapp.ui.quantrivien.AdminActivity;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
@@ -24,7 +35,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.eatcleanapp.databinding.ActivityMainBinding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,9 +44,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActivityMainBinding binding;
     private TextView txvTitle;
     private boolean doubleBackToExitPressedOnce = false;
-    private NavigationView navigationView;
+    private EditText edt_search_home;
+    private AppBarLayout appBarLayout;
+    private AppBarLayout appBarHome;
+    private ImageButton searchBox;
 
-    private static final int FRAGMENT_HOME = 1;
+    private static final int FRAGMENT_HOME  = 1;
     private static final int FRAGMENT_SIGNIN = 2;
     private static final int FRAGMENT_FAVORITES = 3;
     private static final int FRAGMENT_SETTING = 4;
@@ -46,45 +59,68 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        users user = DataLocalManager.getUser();
+        if(user != null){
+            if(user.getIDRole().equals("R001")){
+                Intent intent = new Intent(MainActivity.this, AdminActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            else {
+                onInit();
+            }
+        }
+        else{
+            onInit();
+        }
+    }
+    private void onInit(){
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         txvTitle = (TextView)findViewById(R.id.txvTitleHome);
         Toolbar toolbar = binding.appBarMain.toolbar;
         setSupportActionBar(toolbar);
         DrawerLayout drawer = binding.drawerLayout;
-        navigationView = binding.navView;
+        NavigationView navigationView = binding.navView;
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        AppBarLayout appBarLayout = (AppBarLayout)findViewById(R.id.app_bar_search);
-        AppBarLayout appBarHome = (AppBarLayout)findViewById(R.id.app_home);
-        ImageButton searchBox = (ImageButton)findViewById(R.id.searchbox);
+        Mapping();
+
+        appBarLayout = (AppBarLayout)findViewById(R.id.app_bar_search);
+        appBarHome = (AppBarLayout)findViewById(R.id.app_home);
+        searchBox = (ImageButton)findViewById(R.id.searchBox);
         searchBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 appBarHome.setVisibility(View.INVISIBLE);
                 appBarLayout.setVisibility(View.VISIBLE);
+                edt_search_home.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(edt_search_home, InputMethodManager.SHOW_IMPLICIT);
                 binding.appBarMain.toolbarSearch.setNavigationIcon(R.drawable.back24);
                 binding.appBarMain.toolbarSearch.setNavigationOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         appBarHome.setVisibility(View.VISIBLE);
                         appBarLayout.setVisibility(View.INVISIBLE);
+                        imm.hideSoftInputFromWindow(binding.appBarMain.toolbarSearch.getWindowToken(), 0);
+                        edt_search_home.setText("");
                     }
                 });
             }
         });
 
-        binding.appBarMain.btnprofile.setOnClickListener(new View.OnClickListener() {
+        binding.appBarMain.btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SubActivity.class);
                 intent.putExtra("fragment-back", 3);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
             }
         });
 
@@ -94,24 +130,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
     }
 
+    private void Mapping(){
+        edt_search_home = (EditText)findViewById(R.id.edt_search_recycler);
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
-            drawerLayout.closeDrawer(GravityCompat.START);
+        if(appBarHome.getVisibility() == View.INVISIBLE){
+            appBarHome.setVisibility(View.VISIBLE);
+            appBarLayout.setVisibility(View.INVISIBLE);
+            edt_search_home.setText("");
         }
         else{
-            if(doubleBackToExitPressedOnce){
-                super.onBackPressed();
+            if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+                drawerLayout.closeDrawer(GravityCompat.START);
             }
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, "Press BACK again to exit", Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
+            else{
+                if(doubleBackToExitPressedOnce){
+                    super.onBackPressed();
                 }
-            }, 2000);
+                this.doubleBackToExitPressedOnce = true;
+                Toast.makeText(this, "Nhấn lần nữa để thoát", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 2000);
+            }
         }
     }
 
@@ -122,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_home:{
                 if(FRAGMENT_HOME != currentFragment)
                 {
+                    searchBox.setVisibility(View.VISIBLE);
                     replaceFragment(new HomeFragment(), "Trang chủ");
                     currentFragment = FRAGMENT_HOME;
                 }
@@ -129,21 +177,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             case R.id.nav_signin:{
                 if(FRAGMENT_SIGNIN != currentFragment){
+                    searchBox.setVisibility(View.INVISIBLE);
                     replaceFragment(new SignInFragment(), "Đăng nhập");
                     currentFragment = FRAGMENT_SIGNIN;
                 }
                 break;
             }
             case R.id.nav_favorites:{
-                Intent intent = new Intent(MainActivity.this, AdminActivity.class);
-                startActivity(intent);
-                finish();
                 break;
             }
             case R.id.nav_settings:{
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-                intent.putExtra("detail-back", 2);
-                startActivity(intent);
                 break;
             }
             default:
@@ -160,5 +203,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.enter_to_right, R.anim.enter_from_right, R.anim.enter_to_right);
         fragmentTransaction.replace(R.id.content_frame, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if(ev.getAction() == MotionEvent.ACTION_DOWN){
+            View v = getCurrentFocus();
+            if(v instanceof EditText){
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if(!outRect.contains((int)ev.getRawX(), (int)ev.getRawY())){
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

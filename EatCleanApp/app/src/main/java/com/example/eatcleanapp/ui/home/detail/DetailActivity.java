@@ -3,6 +3,7 @@ package com.example.eatcleanapp.ui.home.detail;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.databinding.ActivityDetailBinding;
 import com.example.eatcleanapp.model.recipes;
 import com.google.android.material.snackbar.Snackbar;
@@ -10,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.navigation.NavController;
