@@ -22,4 +22,12 @@ public class UserSharedPreferences {
         SharedPreferences sharedPreferences = context.getSharedPreferences(USER_SHAREDPREFERENCES, Context.MODE_PRIVATE);
         return sharedPreferences.getString(key, "");
     }
+
+    public void deleteValue(String key){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(USER_SHAREDPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+    }
 }

@@ -78,13 +78,18 @@ public class RecipesFragment extends Fragment implements IClickListener {
         rcvRecipes.setLayoutManager(gridLayoutManager);
         GetData(getRecipeLink);
         rcvRecipes.setAdapter(mRecipesAdapter);
-
+        Handler handler = new Handler();
 
         edt_search_recycle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH){
-                    fillText();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            fillText();
+                        }
+                    }, 400);
                     return true;
                 }
                 return false;
@@ -100,7 +105,6 @@ public class RecipesFragment extends Fragment implements IClickListener {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.toString().equals("")){
-                    Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -123,8 +127,6 @@ public class RecipesFragment extends Fragment implements IClickListener {
         String s = edt_search_recycle.getText().toString();
         mRecipesAdapter.getFilter().filter(s);
         listRecipes = mRecipesAdapter.change();
-        InputMethodManager in = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        in.hideSoftInputFromWindow(edt_search_recycle.getWindowToken(), 0);
         Log.e("AAA", "size: " + listRecipes.size() + " string: " + s);
     }
 
