@@ -17,7 +17,7 @@ public interface APIService {
              .setDateFormat("yyyy-MM-dd HH:mm:ss")
              .create();
      APIService apiService = new Retrofit.Builder()
-             .baseUrl("https://eatcleanrecipes.000webhostapp.com/")
+             .baseUrl("https://msteatclean.000webhostapp.com/")
              .addConverterFactory(GsonConverterFactory.create(gson))
              .build()
              .create(APIService.class);

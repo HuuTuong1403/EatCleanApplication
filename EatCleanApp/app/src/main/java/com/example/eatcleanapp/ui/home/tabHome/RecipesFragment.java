@@ -134,7 +134,7 @@ public class RecipesFragment extends Fragment implements IClickListener {
         listRecipes = new ArrayList<>();
         oldList = new ArrayList<>();
         rcvRecipes = view.findViewById(R.id.list_recipes);
-        getRecipeLink = "https://eatcleanrecipes.000webhostapp.com/getRecipes.php";
+        getRecipeLink = "https://msteatclean.000webhostapp.com/getRecipes.php";
         edt_search_recycle = (EditText)mMainActivity.findViewById(R.id.edt_search_recycler);
     }
 

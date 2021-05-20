@@ -44,8 +44,8 @@ public class SignUpFragment extends Fragment {
     private View view;
     private TextInputEditText edtUsername, edtEmail, edtPassword, edtPasswordAgain, edtFullName;
     private Button btnRegister;
-    private final String registerUserLink = "https://eatcleanrecipes.000webhostapp.com/registerUser.php";
-    private final String getUserLink = "https://eatcleanrecipes.000webhostapp.com/getUser.php";
+    private final String registerUserLink = "https://msteatclean.000webhostapp.com/registerUser.php";
+    private final String getUserLink = "https://msteatclean.000webhostapp.com/getUser.php";
     private  List<users> usersList;
     private ScrollView scrollView;
     private SubActivity mSubActivity;
