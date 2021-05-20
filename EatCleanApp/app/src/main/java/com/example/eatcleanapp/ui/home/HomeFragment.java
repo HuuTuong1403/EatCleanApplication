@@ -1,5 +1,6 @@
 package com.example.eatcleanapp.ui.home;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +30,7 @@ public class HomeFragment extends Fragment {
     private BottomNavigationView bottomNavigationView;
     private TextView txv_user_fullName_home, txv_user_email_home;
     private View view;
+    private ImageButton searchBox;
     private MainActivity mMainActivity;
 
     public View onCreateView(@NotNull LayoutInflater inflater,

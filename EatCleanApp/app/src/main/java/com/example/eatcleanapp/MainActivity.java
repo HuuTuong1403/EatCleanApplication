@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.eatcleanapp.databinding.ActivityMainBinding;
 import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.home.HomeFragment;
+import com.example.eatcleanapp.ui.home.setting.SettingHomeFragment;
 import com.example.eatcleanapp.ui.home.signin.SignInFragment;
 import com.example.eatcleanapp.ui.home.tabHome.RecipesFragment;
 import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;
@@ -187,6 +188,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             }
             case R.id.nav_settings:{
+                if(FRAGMENT_SETTING != currentFragment){
+                    searchBox.setVisibility(View.INVISIBLE);
+                    replaceFragment(new SettingHomeFragment(), "Cài đặt");
+                    currentFragment = FRAGMENT_SETTING;
+                }
                 break;
             }
             default:
@@ -220,5 +226,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    public int getCurrentFragment() {
+        return currentFragment;
+    }
+
+    public void setCurrentFragment(int currentFragment) {
+        this.currentFragment = currentFragment;
     }
 }

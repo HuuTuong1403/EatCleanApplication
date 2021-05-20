@@ -38,4 +38,7 @@ public class DataLocalManager {
         users mUser = gson.fromJson(strJsonUser, users.class);
         return mUser;
     }
+    public static void deleteUser(){
+        DataLocalManager.getInstance().userSharedPreferences.deleteValue(PRE_OBJECT_USER);
+    }
 }
