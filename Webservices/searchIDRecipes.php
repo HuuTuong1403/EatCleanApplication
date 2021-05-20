@@ -1,9 +1,9 @@
 <?php
 	require "dbConfig.php";
 
-	//$IDRecipes = $_GET['IDRecipes']; F001
+	$IDRecipes = $_GET['IDRecipes']; 
 
-	$IDRecipes = "F001";
+	//$IDRecipes = "F001";
 
 	class Recipes{
 		function __construct($IDRecipes, $RecipesAuthor, $RecipesTitle, $RecipesContent, $NutritionalIngredients, $Ingredients, $Steps, $Time,$IDRecipesImages, $RecipesImages){
