@@ -54,8 +54,6 @@ public class SettingHomeFragment extends Fragment {
                     v.startAnimation(animButtom);
                     DataLocalManager.deleteUser();
                     settingLogOut();
-                    setting_home_txv_show_isLogIn.setText("Bạn đã đăng xuất khỏi hệ thống");
-                    setting_home_btn_isLogIn.setText("Đăng nhập");
                 }
             });
         }
@@ -65,6 +63,7 @@ public class SettingHomeFragment extends Fragment {
             setting_home_btn_isLogIn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    v.startAnimation(animButtom);
                     mMainActivity.replaceFragment(new SignInFragment(), "Đăng nhập");
                     menu.findItem(R.id.nav_signin).setChecked(true);
                     mMainActivity.setCurrentFragment(2);
@@ -74,6 +73,7 @@ public class SettingHomeFragment extends Fragment {
         return view;
     }
 
+    //Setting when User LogOut
     private void settingLogOut(){
         View headerView                 = navigationView.getHeaderView(0);
         TextView txv_fullName           = (TextView)headerView.findViewById(R.id.user_fullname_home);
@@ -83,7 +83,13 @@ public class SettingHomeFragment extends Fragment {
         menu.findItem(R.id.nav_signin).setVisible(true);
         ImageButton btnProfile = (ImageButton)mMainActivity.findViewById(R.id.btnProfile);
         btnProfile.setVisibility(View.INVISIBLE);
+        setting_home_txv_show_isLogIn.setText("Bạn đã đăng xuất khỏi hệ thống");
+        setting_home_btn_isLogIn.setText("Đăng nhập");
+        mMainActivity.replaceFragment(new HomeFragment(), "Trang chủ");
+        mMainActivity.setCurrentFragment(1);
+        menu.findItem(R.id.nav_home).setChecked(true);
     }
+
     private void Mapping() {
         setting_home_txv_show_isLogIn   = (TextView)view.findViewById(R.id.setting_home_txv_show_isLogIn);
         setting_home_btn_isLogIn        = (Button)view.findViewById(R.id.setting_home_btn_isLogIn);
@@ -91,6 +97,4 @@ public class SettingHomeFragment extends Fragment {
         navigationView                  = (NavigationView)mMainActivity.findViewById(R.id.nav_view);
         menu                            = navigationView.getMenu();
     }
-
-
 }

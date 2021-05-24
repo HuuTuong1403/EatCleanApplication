@@ -148,6 +148,7 @@ public class SignInFragment extends Fragment {
                                     bundle.putSerializable("object_user", userLogin);
                                     homeFragment.setArguments(bundle);
                                     mMainActivity.replaceFragment(homeFragment, "Trang chủ");
+                                    mMainActivity.setCurrentFragment(1);
                                     NavigationView naview = mMainActivity.findViewById(R.id.nav_view);
                                     naview.getMenu().findItem(R.id.nav_home).setChecked(true);
                                     break;
