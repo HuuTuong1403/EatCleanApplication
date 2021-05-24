@@ -1,5 +1,6 @@
 package com.example.eatcleanapp.ui.home.setting;
 
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -52,8 +53,13 @@ public class SettingHomeFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     v.startAnimation(animButtom);
-                    DataLocalManager.deleteUser();
-                    settingLogOut();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            DataLocalManager.deleteUser();
+                            settingLogOut();
+                        }
+                    }, 400);
                 }
             });
         }
@@ -64,9 +70,14 @@ public class SettingHomeFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     v.startAnimation(animButtom);
-                    mMainActivity.replaceFragment(new SignInFragment(), "Đăng nhập");
-                    menu.findItem(R.id.nav_signin).setChecked(true);
-                    mMainActivity.setCurrentFragment(2);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mMainActivity.replaceFragment(new SignInFragment(), "Đăng nhập");
+                            menu.findItem(R.id.nav_signin).setChecked(true);
+                            mMainActivity.setCurrentFragment(2);
+                        }
+                    },400);
                 }
             });
         }
@@ -78,8 +89,11 @@ public class SettingHomeFragment extends Fragment {
         View headerView                 = navigationView.getHeaderView(0);
         TextView txv_fullName           = (TextView)headerView.findViewById(R.id.user_fullname_home);
         TextView txv_email              = (TextView)headerView.findViewById(R.id.user_email_home);
+        ImageButton img_search          = (ImageButton)mMainActivity.findViewById(R.id.searchBox);
+        img_search.setVisibility(View.VISIBLE);
         txv_fullName.setText("Eat Clean Application");
         txv_email.setText("eatcleanCompany@gmail.com");
+
         menu.findItem(R.id.nav_signin).setVisible(true);
         ImageButton btnProfile = (ImageButton)mMainActivity.findViewById(R.id.btnProfile);
         btnProfile.setVisibility(View.INVISIBLE);

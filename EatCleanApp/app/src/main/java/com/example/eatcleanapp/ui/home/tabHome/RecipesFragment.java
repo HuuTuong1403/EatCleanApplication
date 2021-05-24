@@ -34,6 +34,7 @@ import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.recipes;
+import com.example.eatcleanapp.ui.home.LoadingDialog;
 import com.example.eatcleanapp.ui.home.detail.DetailActivity;
 import com.example.eatcleanapp.ui.home.tabHome.recipes.RecipesAdapter;
 
@@ -57,6 +58,7 @@ public class RecipesFragment extends Fragment implements IClickListener {
     private EditText edt_search_recycle;
     private MainActivity mMainActivity;
     private Toolbar toolbar;
+    LoadingDialog loadingDialog;
 
     public RecipesFragment() {
     }
@@ -72,10 +74,12 @@ public class RecipesFragment extends Fragment implements IClickListener {
                              Bundle savedInstanceState) {
         mMainActivity = (MainActivity) getActivity();
         view = inflater.inflate(R.layout.fragment_recipes, container, false);
+        loadingDialog = new LoadingDialog(mMainActivity);
         Mapping();
         mRecipesAdapter = new RecipesAdapter(getContext(), this);
         StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);;
         rcvRecipes.setLayoutManager(gridLayoutManager);
+        loadingDialog.startLoadingDialog();
         GetData(getRecipeLink);
         rcvRecipes.setAdapter(mRecipesAdapter);
         Handler handler = new Handler();
@@ -177,6 +181,7 @@ public class RecipesFragment extends Fragment implements IClickListener {
                 }
                 mRecipesAdapter.setData(listRecipes);
                 mRecipesAdapter.setOldData(oldList);
+                loadingDialog.dismissDialog();
             }
         }, new Response.ErrorListener() {
             @Override

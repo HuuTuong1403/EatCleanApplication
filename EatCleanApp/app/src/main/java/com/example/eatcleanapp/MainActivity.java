@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.eatcleanapp.databinding.ActivityMainBinding;
 import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.home.HomeFragment;
+import com.example.eatcleanapp.ui.home.favorites.FavoritesFragment;
 import com.example.eatcleanapp.ui.home.setting.SettingHomeFragment;
 import com.example.eatcleanapp.ui.home.signin.SignInFragment;
 import com.example.eatcleanapp.ui.home.tabHome.RecipesFragment;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AppBarLayout appBarLayout;
     private AppBarLayout appBarHome;
     private ImageButton searchBox;
+    private users user;
 
     private static final int FRAGMENT_HOME  = 1;
     private static final int FRAGMENT_SIGNIN = 2;
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        users user = DataLocalManager.getUser();
+        user = DataLocalManager.getUser();
         if(user != null){
             if(user.getIDRole().equals("R001")){
                 Intent intent = new Intent(MainActivity.this, AdminActivity.class);
@@ -185,6 +187,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             }
             case R.id.nav_favorites:{
+                if(FRAGMENT_FAVORITES != currentFragment){
+                    searchBox.setVisibility(View.INVISIBLE);
+                    if(user != null){
+                        replaceFragment(new FavoritesFragment(), user.getFullName());
+                    }
+                    else{
+                        replaceFragment(new FavoritesFragment(), "Yêu thích");
+                    }
+
+                    currentFragment = FRAGMENT_FAVORITES;
+                }
                 break;
             }
             case R.id.nav_settings:{

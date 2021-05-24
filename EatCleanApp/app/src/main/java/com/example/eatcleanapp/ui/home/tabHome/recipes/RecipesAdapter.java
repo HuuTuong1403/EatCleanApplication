@@ -73,7 +73,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
         holder.recipes_name.setText(recipes.getRecipesTitle());
         String s = "Công thức tạo bởi <b>" + recipes.getRecipesAuthor() + "</b>";
         holder.recipes_author.setText(HtmlCompat.fromHtml(s, HtmlCompat.FROM_HTML_MODE_LEGACY));
-        Glide.with(context).load(recipes.getImage()).into(holder.recipes_image);
+        Glide.with(context).load(recipes.getImage()).placeholder(R.drawable.gray).into(holder.recipes_image);
     }
 
     @Override
