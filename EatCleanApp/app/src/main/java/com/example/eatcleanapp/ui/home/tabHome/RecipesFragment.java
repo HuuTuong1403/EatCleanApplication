@@ -58,16 +58,7 @@ public class RecipesFragment extends Fragment implements IClickListener {
     private EditText edt_search_recycle;
     private MainActivity mMainActivity;
     private Toolbar toolbar;
-    LoadingDialog loadingDialog;
-
-    public RecipesFragment() {
-    }
-
-    public static RecipesFragment newInstance() { return new RecipesFragment(); }
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private LoadingDialog loadingDialog;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
