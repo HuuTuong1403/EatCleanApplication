@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AppBarLayout appBarHome;
     private ImageButton searchBox;
     private users user;
+    private NavigationView navigationView;
 
     private static final int FRAGMENT_HOME  = 1;
     private static final int FRAGMENT_SIGNIN = 2;
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = binding.appBarMain.toolbar;
         setSupportActionBar(toolbar);
         DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
+        navigationView = binding.navView;
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -189,13 +190,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_favorites:{
                 if(FRAGMENT_FAVORITES != currentFragment){
                     searchBox.setVisibility(View.INVISIBLE);
-                    if(user != null){
-                        replaceFragment(new FavoritesFragment(), user.getFullName());
-                    }
-                    else{
-                        replaceFragment(new FavoritesFragment(), "Yêu thích");
-                    }
-
+                    replaceFragment(new FavoritesFragment(), "Yêu thích");
                     currentFragment = FRAGMENT_FAVORITES;
                 }
                 break;
@@ -248,4 +243,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void setCurrentFragment(int currentFragment) {
         this.currentFragment = currentFragment;
     }
+
+    public void settingSignIn(){
+        searchBox.setVisibility(View.INVISIBLE);
+        replaceFragment(new SignInFragment(), "Đăng nhập");
+        navigationView.getMenu().findItem(R.id.nav_signin).setChecked(true);
+    }
+
 }

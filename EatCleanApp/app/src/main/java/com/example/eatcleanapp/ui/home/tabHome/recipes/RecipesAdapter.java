@@ -31,9 +31,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.IClickListener;
+import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.recipes;
 import com.example.eatcleanapp.model.users;
+import com.example.eatcleanapp.ui.home.signin.SignInFragment;
 import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;
 
 import java.util.ArrayList;
@@ -152,6 +154,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
 
             Animation animScale = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.anim_scale_favorite);
             Handler handler = new Handler();
+            users user = DataLocalManager.getUser();
             recipes_favorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -160,68 +163,71 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                         @Override
                         public void run() {
                             int position = getAdapterPosition();
-                            if(!check){
-                                Dialog dialog = new Dialog(v.getContext());
-                                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                dialog.setContentView(R.layout.dialog_request_favorite_recipes);
-                                Window window = dialog.getWindow();
-                                if(window == null){
-                                    return;
+                            if(user != null){
+                                if(!check){
+                                    Dialog dialog = new Dialog(v.getContext());
+                                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                    dialog.setContentView(R.layout.dialog_request_favorite_recipes);
+                                    Window window = dialog.getWindow();
+                                    if(window == null){
+                                        return;
+                                    }
+                                    window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    WindowManager.LayoutParams windowAtributes = window.getAttributes();
+                                    windowAtributes.gravity = Gravity.CENTER;
+                                    window.setAttributes(windowAtributes);
+
+                                    Button btn_accept = (Button)dialog.findViewById(R.id.dialog_request_favorite_recipes_btn_accept);
+                                    Button btn_cancel = (Button)dialog.findViewById(R.id.dialog_request_favorite_recipes_btn_cancel);
+                                    TextView txv_title = (TextView)dialog.findViewById(R.id.dialog_request_favorite_recipes_txv_title);
+
+                                    String title = "Bạn có muốn thêm món <b>" + mListRecipes.get(position).getRecipesTitle() + "</b> vào danh sách yêu thích của mình không?";
+                                    txv_title.setText(HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_LEGACY));
+                                    Animation animTranslate = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.anim_scale);
+                                    btn_accept.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            v.startAnimation(animTranslate);
+                                            handler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    recipes_favorite.setImageDrawable(v.getResources().getDrawable(R.drawable.favorite_red));
+                                                    check = true;
+
+                                                    String IDRecipe = mListRecipes.get(position).getIDRecipes();
+                                                    String IDUser = user.getIDUser();
+                                                    addRecipes(IDRecipe,IDUser);
+                                                    dialog.dismiss();
+                                                }
+                                            }, 400);
+                                        }
+                                    });
+
+                                    btn_cancel.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            v.startAnimation(animTranslate);
+                                            handler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    dialog.dismiss();
+                                                    check = false;
+                                                }
+                                            }, 400);
+                                        }
+                                    });
+                                    dialog.setCancelable(true);
+                                    dialog.show();
                                 }
-                                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                WindowManager.LayoutParams windowAtributes = window.getAttributes();
-                                windowAtributes.gravity = Gravity.CENTER;
-                                window.setAttributes(windowAtributes);
-
-                                Button btn_accept = (Button)dialog.findViewById(R.id.dialog_request_favorite_recipes_btn_accept);
-                                Button btn_cancel = (Button)dialog.findViewById(R.id.dialog_request_favorite_recipes_btn_cancel);
-                                TextView txv_title = (TextView)dialog.findViewById(R.id.dialog_request_favorite_recipes_txv_title);
-
-                                String title = "Bạn có muốn thêm món <b>" + mListRecipes.get(position).getRecipesTitle() + "</b> vào danh sách yêu thích của mình không?";
-                                txv_title.setText(HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_LEGACY));
-                                Animation animTranslate = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.anim_scale);
-
-
-                                btn_accept.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        v.startAnimation(animTranslate);
-                                        handler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                recipes_favorite.setImageDrawable(v.getResources().getDrawable(R.drawable.favorite_red));
-                                                check = true;
-                                                users user = DataLocalManager.getUser();
-                                                String IDRecipe = mListRecipes.get(position).getIDRecipes();
-                                                String IDUser = user.getIDUser();
-                                                addRecipes(IDRecipe,IDUser );
-                                                dialog.dismiss();
-                                            }
-                                        }, 400);
-                                    }
-                                });
-
-                                btn_cancel.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        v.startAnimation(animTranslate);
-                                        handler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                dialog.dismiss();
-                                                check = false;
-                                            }
-                                        }, 400);
-                                    }
-                                });
-                                dialog.setCancelable(true);
-                                dialog.show();
+                                else
+                                {
+                                    recipes_favorite.setImageDrawable(v.getResources().getDrawable(R.drawable.favorite_black));
+                                    check = !check;
+                                }
                             }
-                            else
-                            {
-                                recipes_favorite.setImageDrawable(v.getResources().getDrawable(R.drawable.favorite_black));
-                                check = !check;
+                            else{
+                                ((MainActivity)context).settingSignIn();
                             }
                         }
                     }, 400);
@@ -242,7 +248,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
         APIService.apiService.addFavoriteRecipes(IDUser, IDRecipe).enqueue(new Callback<POST>() {
             @Override
             public void onResponse(Call<POST> call, Response<POST> response) {
-                Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Bạn đã thêm món này vào mục yêu thích", Toast.LENGTH_SHORT).show();
             }
 
             @Override
