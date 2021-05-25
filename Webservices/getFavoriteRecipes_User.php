@@ -2,10 +2,9 @@
 	
 	require "dbConfig.php";
 
-	//$IDUser = $_GET['IDUser']; 
-	$IDUser = "ID-U-11864"; 
+	$IDUser = $_GET['IDUser']; 
 
-	$query = "SELECT * FROM (favoriterecipes INNER JOIN recipes ON recipes.IDRecipes = favoriterecipes.IDRecipes) 
+	$query = "SELECT * FROM favoriterecipes INNER JOIN recipes ON recipes.IDRecipes = favoriterecipes.IDRecipes
 						WHERE favoriterecipes.IDUser = '$IDUser' ";
 
 	$data = mysqli_query($connect, $query);
