@@ -27,6 +27,7 @@ public interface APIService {
 
      @GET("getUser.php")
      Call<List<users>> getUser();
+
      @POST("addFavoriteRecipes.php")
      @FormUrlEncoded
      Call<POST> addFavoriteRecipes (@Field("IDUser") String IDUser,

@@ -73,9 +73,7 @@ public class SettingHomeFragment extends Fragment {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            mMainActivity.replaceFragment(new SignInFragment(), "Đăng nhập");
-                            menu.findItem(R.id.nav_signin).setChecked(true);
-                            mMainActivity.setCurrentFragment(2);
+                            mMainActivity.settingSignIn();
                         }
                     },400);
                 }
