@@ -24,16 +24,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.recipes;
+import com.example.eatcleanapp.model.users;
+import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.POST;
 
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder> implements Filterable {
 
@@ -173,6 +182,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                                 txv_title.setText(HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_LEGACY));
                                 Animation animTranslate = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.anim_scale);
 
+
                                 btn_accept.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -182,6 +192,10 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                                             public void run() {
                                                 recipes_favorite.setImageDrawable(v.getResources().getDrawable(R.drawable.favorite_red));
                                                 check = true;
+                                                users user = DataLocalManager.getUser();
+                                                String IDRecipe = mListRecipes.get(position).getIDRecipes();
+                                                String IDUser = user.getIDUser();
+                                                addRecipes(IDRecipe,IDUser );
                                                 dialog.dismiss();
                                             }
                                         }, 400);
@@ -222,5 +236,19 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
             });
         }
 
+    }
+
+    private void addRecipes(String IDRecipe, String IDUser){
+        APIService.apiService.addFavoriteRecipes(IDUser, IDRecipe).enqueue(new Callback<POST>() {
+            @Override
+            public void onResponse(Call<POST> call, Response<POST> response) {
+                Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<POST> call, Throwable t) {
+                Toast.makeText(context, t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
