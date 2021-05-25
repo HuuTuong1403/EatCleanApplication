@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -17,10 +18,10 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
@@ -40,6 +41,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class FavoritesFragment extends Fragment implements IClickListener {
 
     private View view;
@@ -51,7 +56,6 @@ public class FavoritesFragment extends Fragment implements IClickListener {
     private RecyclerView rcv_Favorites_Recipes;
     private RecipesAdapter mRecipesAdapter;
     private List<recipes> listFavoritesRecipes;
-    private RequestQueue requestQueue;
     private String getRecipeLink;
     private LoadingDialog loadingDialog;
 
@@ -63,9 +67,9 @@ public class FavoritesFragment extends Fragment implements IClickListener {
         if(userIsLogin != null){
             view = inflater.inflate(R.layout.fragment_favorites, container, false);
             Mapping();
-            CreateViewRycler();
+            CreateViewRecycler();
             loadingDialog.startLoadingDialog();
-            GetData(getRecipeLink);
+            GetData();
             rcv_Favorites_Recipes.setAdapter(mRecipesAdapter);
             Handler handler = new Handler();
         }
@@ -85,8 +89,8 @@ public class FavoritesFragment extends Fragment implements IClickListener {
         return view;
     }
 
-    private void CreateViewRycler(){
-        mRecipesAdapter = new RecipesAdapter(getContext(), this);
+    private void CreateViewRecycler(){
+        mRecipesAdapter = new RecipesAdapter(getContext(), this, true);
         StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);;
         rcv_Favorites_Recipes.setLayoutManager(gridLayoutManager);
     }
@@ -96,55 +100,25 @@ public class FavoritesFragment extends Fragment implements IClickListener {
         favorite_txv_signIn_signUp = (TextView)view.findViewById(R.id.favorite_txv_signIn_signUp);
         menu                            = navigationView.getMenu();
         rcv_Favorites_Recipes           = (RecyclerView)view.findViewById(R.id.rcv_favoritesList_User);
-        getRecipeLink = "https://msteatclean.000webhostapp.com/getRecipes.php";
-        requestQueue = Volley.newRequestQueue(view.getContext());
         listFavoritesRecipes = new ArrayList<>();
         loadingDialog = new LoadingDialog(mMainActivity);
     }
 
-    public void GetData (String url){
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+    public void GetData (){
+        APIService.apiService.getFavorites_User(userIsLogin.getIDUser()).enqueue(new Callback<List<recipes>>() {
             @Override
-            public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i ++){
-                    try {
-                        JSONObject object = response.getJSONObject(i);
-                        int checkExist = 0;
-                        recipes recipe = new recipes(
-                                object.getString("IDRecipes"),
-                                object.getString("RecipesTitle"),
-                                object.getString("RecipesAuthor"),
-                                object.getString("RecipesContent"),
-                                object.getString("NutritionalIngredients"),
-                                object.getString("Ingredients"),
-                                object.getString("Steps"),
-                                object.getString("Time"),
-                                object.getString("Status"),
-                                object.getString("RecipesImages")
-                        );
-                        for (recipes recipetemp: listFavoritesRecipes) {
-                            if (recipetemp.getIDRecipes().equals(recipe.getIDRecipes())){
-                                checkExist = 1;
-                                break;
-                            }
-                        }
-                        if (checkExist == 0){
-                            listFavoritesRecipes.add(recipe);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
+            public void onResponse(Call<List<recipes>> call, Response<List<recipes>> response) {
+                listFavoritesRecipes = response.body();
+                Log.d("AAA", response.body().toString());
                 mRecipesAdapter.setData(listFavoritesRecipes);
                 loadingDialog.dismissDialog();
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_LONG).show();
+            public void onFailure(Call<List<recipes>> call, Throwable t) {
+                Toast.makeText(mMainActivity, "Call Api Error", Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(jsonArrayRequest);
     }
 
     @Override

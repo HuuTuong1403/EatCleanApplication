@@ -52,10 +52,12 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
     private List<recipes> mListRecipes;
     private List<recipes> mListRecipesOld;
     private final IClickListener iClickListener;
+    private boolean checkIsFavorite;
 
-    public RecipesAdapter(Context context, IClickListener iClickListener) {
+    public RecipesAdapter(Context context, IClickListener iClickListener, boolean checkIsFavorite) {
         this.iClickListener = iClickListener;
         this.context = context;
+        this.checkIsFavorite = checkIsFavorite;
     }
 
     public void setData(List<recipes> list){
@@ -121,7 +123,6 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 mListRecipes = (List<recipes>) results.values;
-                //notifyDataSetChanged();
             }
         };
     }
@@ -144,6 +145,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
         private final ImageButton recipes_favorite;
         private boolean check = false;
 
+
         public RecipesViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -155,84 +157,102 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
             Animation animScale = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.anim_scale_favorite);
             Handler handler = new Handler();
             users user = DataLocalManager.getUser();
-            recipes_favorite.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    v.startAnimation(animScale);
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            int position = getAdapterPosition();
-                            if(user != null){
-                                if(!check){
-                                    Dialog dialog = new Dialog(v.getContext());
-                                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                    dialog.setContentView(R.layout.dialog_request_favorite_recipes);
-                                    Window window = dialog.getWindow();
-                                    if(window == null){
-                                        return;
+
+            if(!checkIsFavorite){
+                recipes_favorite.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        v.startAnimation(animScale);
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                int position = getAdapterPosition();
+                                if(user != null){
+                                    if(!check){
+                                        Dialog dialog = new Dialog(v.getContext());
+                                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                        dialog.setContentView(R.layout.dialog_request_favorite_recipes);
+                                        Window window = dialog.getWindow();
+                                        if(window == null){
+                                            return;
+                                        }
+                                        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                                        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        WindowManager.LayoutParams windowAtributes = window.getAttributes();
+                                        windowAtributes.gravity = Gravity.CENTER;
+                                        window.setAttributes(windowAtributes);
+
+                                        Button btn_accept = (Button)dialog.findViewById(R.id.dialog_request_favorite_recipes_btn_accept);
+                                        Button btn_cancel = (Button)dialog.findViewById(R.id.dialog_request_favorite_recipes_btn_cancel);
+                                        TextView txv_title = (TextView)dialog.findViewById(R.id.dialog_request_favorite_recipes_txv_title);
+
+                                        String title = "Bạn có muốn thêm món <b>" + mListRecipes.get(position).getRecipesTitle() + "</b> vào danh sách yêu thích của mình không?";
+                                        txv_title.setText(HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_LEGACY));
+                                        Animation animTranslate = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.anim_scale);
+                                        btn_accept.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                v.startAnimation(animTranslate);
+                                                handler.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        recipes_favorite.setImageDrawable(v.getResources().getDrawable(R.drawable.favorite_red));
+                                                        check = true;
+                                                        String IDRecipe = mListRecipes.get(position).getIDRecipes();
+                                                        String IDUser = user.getIDUser();
+                                                        addRecipes(IDRecipe,IDUser);
+                                                        dialog.dismiss();
+                                                    }
+                                                }, 400);
+                                            }
+                                        });
+
+                                        btn_cancel.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                v.startAnimation(animTranslate);
+                                                handler.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        dialog.dismiss();
+                                                        check = false;
+                                                    }
+                                                }, 400);
+                                            }
+                                        });
+                                        dialog.setCancelable(true);
+                                        dialog.show();
                                     }
-                                    window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                    WindowManager.LayoutParams windowAtributes = window.getAttributes();
-                                    windowAtributes.gravity = Gravity.CENTER;
-                                    window.setAttributes(windowAtributes);
-
-                                    Button btn_accept = (Button)dialog.findViewById(R.id.dialog_request_favorite_recipes_btn_accept);
-                                    Button btn_cancel = (Button)dialog.findViewById(R.id.dialog_request_favorite_recipes_btn_cancel);
-                                    TextView txv_title = (TextView)dialog.findViewById(R.id.dialog_request_favorite_recipes_txv_title);
-
-                                    String title = "Bạn có muốn thêm món <b>" + mListRecipes.get(position).getRecipesTitle() + "</b> vào danh sách yêu thích của mình không?";
-                                    txv_title.setText(HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_LEGACY));
-                                    Animation animTranslate = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.anim_scale);
-                                    btn_accept.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            v.startAnimation(animTranslate);
-                                            handler.postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    recipes_favorite.setImageDrawable(v.getResources().getDrawable(R.drawable.favorite_red));
-                                                    check = true;
-
-                                                    String IDRecipe = mListRecipes.get(position).getIDRecipes();
-                                                    String IDUser = user.getIDUser();
-                                                    addRecipes(IDRecipe,IDUser);
-                                                    dialog.dismiss();
-                                                }
-                                            }, 400);
-                                        }
-                                    });
-
-                                    btn_cancel.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            v.startAnimation(animTranslate);
-                                            handler.postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    dialog.dismiss();
-                                                    check = false;
-                                                }
-                                            }, 400);
-                                        }
-                                    });
-                                    dialog.setCancelable(true);
-                                    dialog.show();
+                                    else
+                                    {
+                                        recipes_favorite.setImageDrawable(v.getResources().getDrawable(R.drawable.favorite_black));
+                                        check = !check;
+                                    }
                                 }
-                                else
-                                {
-                                    recipes_favorite.setImageDrawable(v.getResources().getDrawable(R.drawable.favorite_black));
-                                    check = !check;
+                                else{
+                                    ((MainActivity)context).settingSignIn();
                                 }
                             }
-                            else{
-                                ((MainActivity)context).settingSignIn();
+                        }, 400);
+                    }
+                });
+            }
+            else{
+                recipes_favorite.setImageDrawable(itemView.getResources().getDrawable(R.drawable.favorite_red));
+                recipes_favorite.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        v.startAnimation(animScale);
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
                             }
-                        }
-                    }, 400);
-                }
-            });
+                        }, 400);
+                    }
+                });
+            }
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -253,7 +273,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
 
             @Override
             public void onFailure(Call<POST> call, Throwable t) {
-                Toast.makeText(context, t.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Đã có lỗi xảy ra trong quá trình thêm", Toast.LENGTH_SHORT).show();
             }
         });
     }

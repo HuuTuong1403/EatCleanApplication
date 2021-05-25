@@ -57,7 +57,6 @@ public class RecipesFragment extends Fragment implements IClickListener {
     private RequestQueue requestQueue;
     private EditText edt_search_recycle;
     private MainActivity mMainActivity;
-    private Toolbar toolbar;
     private LoadingDialog loadingDialog;
 
     @Override
@@ -67,7 +66,7 @@ public class RecipesFragment extends Fragment implements IClickListener {
         view = inflater.inflate(R.layout.fragment_recipes, container, false);
         loadingDialog = new LoadingDialog(mMainActivity);
         Mapping();
-        mRecipesAdapter = new RecipesAdapter(getContext(), this);
+        mRecipesAdapter = new RecipesAdapter(getContext(), this, false);
         StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);;
         rcvRecipes.setLayoutManager(gridLayoutManager);
         loadingDialog.startLoadingDialog();
