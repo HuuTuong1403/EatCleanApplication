@@ -20,10 +20,10 @@
 
 	if (mysqli_query($connect, $query_add)){
 			//Thành công
-			echo "success";
+			echo "Bạn thêm vào mục yêu thích thành công";
 	}else{
 			//lỗi
-			echo "error";
+			echo "Bạn thêm vào mục yêu thích không thành công";
 	}
 	
 ?>	
