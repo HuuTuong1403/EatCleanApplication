@@ -1,6 +1,7 @@
 package com.example.eatcleanapp.API;
 
 
+import com.example.eatcleanapp.model.favoriterecipes;
 import com.example.eatcleanapp.model.recipes;
 import com.example.eatcleanapp.model.users;
 import com.google.gson.Gson;
@@ -20,6 +21,7 @@ import retrofit2.http.Query;
 public interface APIService {
      Gson gson = new GsonBuilder()
              .setDateFormat("yyyy-MM-dd HH:mm:ss")
+             .setLenient()
              .create();
      APIService apiService = new Retrofit.Builder()
              .baseUrl("https://msteatclean.000webhostapp.com/")
@@ -30,10 +32,10 @@ public interface APIService {
      @GET("getUser.php")
      Call<List<users>> getUser();
 
-     @POST("addFavoriteRecipes.php")
      @FormUrlEncoded
-     Call<POST> addFavoriteRecipes (@Field("IDUser") String IDUser,
-                                    @Field("IDRecipes") String IDRecipes);
+     @POST("addFavoriteRecipes.php")
+     Call<favoriterecipes> addFavoriteRecipes (@Field("IDUser") String IDUser,
+                                               @Field("IDRecipes") String IDRecipes);
 
      @GET("getFavoriteRecipes_User.php")
      Call<List<recipes>> getFavorites_User(@Query("IDUser") String IDUser);

@@ -33,6 +33,7 @@ import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
+import com.example.eatcleanapp.model.favoriterecipes;
 import com.example.eatcleanapp.model.recipes;
 import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.home.signin.SignInFragment;
@@ -246,7 +247,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-
+                                recipes_favorite.setImageDrawable(itemView.getResources().getDrawable(R.drawable.favorite_black));
                             }
                         }, 400);
                     }
@@ -265,14 +266,14 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
     }
 
     private void addRecipes(String IDRecipe, String IDUser){
-        APIService.apiService.addFavoriteRecipes(IDUser, IDRecipe).enqueue(new Callback<POST>() {
+        APIService.apiService.addFavoriteRecipes(IDUser, IDRecipe).enqueue(new Callback<favoriterecipes>() {
             @Override
-            public void onResponse(Call<POST> call, Response<POST> response) {
+            public void onResponse(Call<favoriterecipes> call, Response<favoriterecipes> response) {
                 Toast.makeText(context, "Bạn đã thêm món này vào mục yêu thích", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onFailure(Call<POST> call, Throwable t) {
+            public void onFailure(Call<favoriterecipes> call, Throwable t) {
                 Toast.makeText(context, "Đã có lỗi xảy ra trong quá trình thêm", Toast.LENGTH_SHORT).show();
             }
         });
