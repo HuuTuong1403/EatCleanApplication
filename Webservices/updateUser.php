@@ -5,21 +5,25 @@
 	$Email = $_POST['Email'];
 	$Password = $_POST['Password'];
 	$FullName = $_POST['FullName'];
-	$NutritionalIngredients = $_POST['NutritionalIngredients']; 
 	$Image = $_POST['Image'];
 	$Username = $_POST['Username'];
 
 	$query = " UPDATE users SET IDUser = '$IDUser', Email = '$Email', 
-								Password = '$Password' , FullName = '$FullName' ,
-								NutritionalIngredients = '$NutritionalIngredients' ,
+								Password = '$Password' , FullName = '$FullName',
 								Image = '$Image' , Username = '$Username' 
 							WHERE  IDUser = '$IDUser' ";
 							
+	$response = array();
 	if (mysqli_query($connect, $query)){
 		//Thành công
-		echo "success";
+		$response = array(
+            'message' => 'Thành công'
+        );
 	}else{
 		//lỗi
-		echo "error";
+		$response = array(
+            'message' => 'Thất bại'
+        );
 	}
+	echo json_encode($response);
 ?>
