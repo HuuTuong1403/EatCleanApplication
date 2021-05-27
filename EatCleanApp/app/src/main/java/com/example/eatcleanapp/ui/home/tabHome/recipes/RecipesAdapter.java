@@ -46,6 +46,8 @@ import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.home.signin.SignInFragment;
 import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -251,11 +253,13 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                 recipes_favorite.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        int position = getAdapterPosition();
                         v.startAnimation(animScale);
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 recipes_favorite.setImageDrawable(itemView.getResources().getDrawable(R.drawable.favorite_black));
+                                deleteFavoritesRecipes(user.getIDUser(), mListRecipes.get(position).getIDRecipes());
                             }
                         }, 400);
                     }
@@ -271,6 +275,20 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
             });
         }
 
+    }
+
+    private void deleteFavoritesRecipes(String IDUser, String IDRecipe){
+        APIService.apiService.deleteFavoriteRecipes(IDUser, IDRecipe).enqueue(new Callback<favoriterecipes>() {
+            @Override
+            public void onResponse(Call<favoriterecipes> call, retrofit2.Response<favoriterecipes> response) {
+                Toast.makeText(context, "Bạn đã hủy yêu thích món ăn thành công", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<favoriterecipes> call, Throwable t) {
+                Toast.makeText(context, "Đã xảy ra lỗi trong quá trình hủy yêu thích", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void addRecipes(String IDRecipe, String IDUser){

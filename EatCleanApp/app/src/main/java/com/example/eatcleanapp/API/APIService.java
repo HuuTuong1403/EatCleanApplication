@@ -12,6 +12,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -19,12 +20,13 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface APIService {
+     public static final String URL = "https://msteatclean.000webhostapp.com/";
      Gson gson = new GsonBuilder()
-             .setDateFormat("yyyy-MM-dd HH:mm:ss")
+             .setDateFormat("yyyy MM dd HH:mm:ss")
              .setLenient()
              .create();
      APIService apiService = new Retrofit.Builder()
-             .baseUrl("https://msteatclean.000webhostapp.com/")
+             .baseUrl(URL)
              .addConverterFactory(GsonConverterFactory.create(gson))
              .build()
              .create(APIService.class);
@@ -39,4 +41,8 @@ public interface APIService {
 
      @GET("getFavoriteRecipes_User.php")
      Call<List<recipes>> getFavorites_User(@Query("IDUser") String IDUser);
+
+     @GET("deleteFavoriteRecipes.php")
+     Call<favoriterecipes> deleteFavoriteRecipes(@Query("IDUser") String IDUser,
+                                                 @Query("IDRecipes") String IDRecipes);
 }
