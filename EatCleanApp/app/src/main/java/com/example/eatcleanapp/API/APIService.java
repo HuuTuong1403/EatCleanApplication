@@ -53,4 +53,9 @@ public interface APIService {
                            @Field("FullName") String FullName);
      @GET("getUserByUsername.php")
      Call<users> getUserByUsername(@Query("Username") String Username);
+
+     @POST("changePass.php")
+     @FormUrlEncoded
+     Call<users> changePass(@Query("IDUser") String IDUser,
+                            @Field("Password") String Password);
 }

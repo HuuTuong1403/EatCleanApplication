@@ -14,9 +14,17 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.SubActivity;
+import com.example.eatcleanapp.model.users;
+import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileChangePassFragment extends Fragment {
 
@@ -25,6 +33,7 @@ public class ProfileChangePassFragment extends Fragment {
     private Toolbar toolbar;
     private EditText profileChangePass_edt_oldPassword, profileChangePass_edt_newPassword, profileChangePass_edt_newPasswordAgain;
     private Button profile_changePass_btn_changePass, profile_changePass_btn_cancel;
+    private users user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,6 +44,46 @@ public class ProfileChangePassFragment extends Fragment {
 
         Animation animButton = mSubActivity.getAnimButton(view);
         Handler handler = new Handler();
+        user = DataLocalManager.getUser();
+        profile_changePass_btn_changePass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.startAnimation(animButton);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(profileChangePass_edt_oldPassword.getText().toString().isEmpty() || profileChangePass_edt_newPassword.getText().toString().isEmpty() || profileChangePass_edt_newPasswordAgain.getText().toString().isEmpty()){
+                            Toast.makeText(mSubActivity, "Trường thông tin không được trống", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        else{
+                            String oldPass = profileChangePass_edt_oldPassword.getText().toString();
+                            String newPass = profileChangePass_edt_newPassword.getText().toString();
+                            String newPassAgain = profileChangePass_edt_newPasswordAgain.getText().toString();
+                            if(oldPass.equals(user.getPassword())){
+                                if(newPass.equals(oldPass)){
+                                    Toast.makeText(mSubActivity, "Mật khẩu mới phải khác mật khẩu cũ", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    if(newPassAgain.equals(newPass)){
+                                        changePass(user.getIDUser(), newPass);
+                                        profileChangePass_edt_oldPassword.setText("");
+                                        profileChangePass_edt_newPassword.setText("");
+                                        profileChangePass_edt_newPasswordAgain.setText("");
+                                    }
+                                    else{
+                                        Toast.makeText(mSubActivity, "Mật khẩu nhập lại không giống", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+                            else{
+                                Toast.makeText(mSubActivity, "Mật khẩu cũ không chính xác", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                }, 400);
+            }
+        });
 
         profile_changePass_btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +109,36 @@ public class ProfileChangePassFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void getUserByUsername(String Username){
+        APIService.apiService.getUserByUsername(Username).enqueue(new Callback<users>() {
+            @Override
+            public void onResponse(Call<users> call, Response<users> response) {
+                DataLocalManager.setUser(response.body());
+                user = DataLocalManager.getUser();
+            }
+
+            @Override
+            public void onFailure(Call<users> call, Throwable t) {
+                Toast.makeText(mSubActivity, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void changePass(String IDUser, String Password){
+        APIService.apiService.changePass(IDUser, Password).enqueue(new Callback<users>() {
+            @Override
+            public void onResponse(Call<users> call, Response<users> response) {
+                getUserByUsername(user.getUsername());
+                Toast.makeText(mSubActivity, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<users> call, Throwable t) {
+                Toast.makeText(mSubActivity, "Đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void Mapping() {

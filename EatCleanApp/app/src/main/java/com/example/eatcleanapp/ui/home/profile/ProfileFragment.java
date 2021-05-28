@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -110,6 +111,7 @@ public class ProfileFragment extends Fragment {
                 }, 400);
             }
         });
+
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
