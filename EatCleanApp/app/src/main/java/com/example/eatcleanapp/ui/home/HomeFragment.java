@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.users;
@@ -59,8 +61,10 @@ public class HomeFragment extends Fragment {
         View headerView                 = navigationView.getHeaderView(0);
         TextView txv_fullName           = (TextView)headerView.findViewById(R.id.user_fullname_home);
         TextView txv_email              = (TextView)headerView.findViewById(R.id.user_email_home);
+        ImageView user_avatar_home      = (ImageView)headerView.findViewById(R.id.user_avatar_home);
         txv_fullName.setText(mUser.getFullName());
         txv_email.setText(mUser.getEmail());
+        Glide.with(view).load(mUser.getImage()).placeholder(R.drawable.gray).into(user_avatar_home);
         Menu menu = navigationView.getMenu();
         menu.findItem(R.id.nav_signin).setVisible(false);
         ImageButton btnProfile = (ImageButton)mMainActivity.findViewById(R.id.btnProfile);
