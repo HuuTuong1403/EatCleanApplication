@@ -45,4 +45,12 @@ public interface APIService {
      @GET("deleteFavoriteRecipes.php")
      Call<favoriterecipes> deleteFavoriteRecipes(@Query("IDUser") String IDUser,
                                                  @Query("IDRecipes") String IDRecipes);
+
+     @POST("updateUser.php")
+     @FormUrlEncoded
+     Call<users> updateUser(@Query("IDUser") String IDUser,
+                           @Field("Email") String Email,
+                           @Field("FullName") String FullName);
+     @GET("getUserByUsername.php")
+     Call<users> getUserByUsername(@Query("Username") String Username);
 }

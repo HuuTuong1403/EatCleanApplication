@@ -122,7 +122,6 @@ public class SignInFragment extends Fragment {
                                 checkLogin = true;
                                 userLogin = user;
                                 break;
-
                             }
                         }
                         if (checkLogin){

@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.SubActivity;
 import com.example.eatcleanapp.model.users;
@@ -113,6 +114,8 @@ public class ProfileFragment extends Fragment {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mSubActivity, MainActivity.class);
+                startActivity(intent);
                 mSubActivity.finish();
             }
         });
@@ -226,9 +229,9 @@ public class ProfileFragment extends Fragment {
         }
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        WindowManager.LayoutParams windowAtributes = window.getAttributes();
-        windowAtributes.gravity = Gravity.CENTER;
-        window.setAttributes(windowAtributes);
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
 
         Button btn_chooseImage_Camera = (Button)dialog.findViewById(R.id.btn_chooseImage_Camera);
         Button btn_chooseImage_Media = (Button)dialog.findViewById(R.id.btn_chooseImage_Media);
@@ -275,4 +278,6 @@ public class ProfileFragment extends Fragment {
         txv_profile_fullName        = (TextView)view.findViewById(R.id.txv_profile_fullName);
         txv_profile_title_fullName  = (TextView)view.findViewById(R.id.txv_profile_title_fullName);
     }
+
+
 }
