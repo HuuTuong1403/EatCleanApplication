@@ -3,8 +3,6 @@
 
 	$IDUser = $_POST['IDUser'];
 	$IDRecipes	= $_POST['IDRecipes'];
-	//$IDUser = "ID-U-11864";
-	//$IDRecipes = "F008";
 	$Description = "";
 
 	class users{
@@ -17,13 +15,17 @@
 
 	$query_add = " INSERT INTO favoriterecipes VALUES ('$IDRecipes','$IDUser', '$Description') ";
 
-
+    $response = array();
 	if (mysqli_query($connect, $query_add)){
 			//Thành công
-			echo "Bạn thêm vào mục yêu thích thành công";
+		$response = array(
+		    'message' => 'Bạn thêm món ăn vào mục yêu thích thành công'
+	    );
 	}else{
 			//lỗi
-			echo "Bạn thêm vào mục yêu thích không thành công";
+		$response = array(
+            'message' => 'Bạn thêm món ăn vào mục yêu thích không thành công'
+        );
 	}
-	
+	echo json_encode($response);
 ?>	

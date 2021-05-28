@@ -31,7 +31,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -55,6 +54,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.http.POST;
 
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder> implements Filterable {
@@ -209,9 +209,9 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                                                     public void run() {
                                                         recipes_favorite.setImageDrawable(v.getResources().getDrawable(R.drawable.favorite_red));
                                                         check = true;
-                                                        String IDRecipe = mListRecipes.get(position).getIDRecipes();
+                                                        String IDRecipes = mListRecipes.get(position).getIDRecipes();
                                                         String IDUser = user.getIDUser();
-                                                        addRecipes(IDRecipe,IDUser);
+                                                        addRecipes(IDUser, IDRecipes);
                                                         dialog.dismiss();
                                                     }
                                                 }, 400);
@@ -291,28 +291,17 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
         });
     }
 
-    private void addRecipes(String IDRecipe, String IDUser){
-        String url = "https://msteatclean.000webhostapp.com/addFavoriteRecipes.php";
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+    private void addRecipes(String IDUser, String IDRecipes){
+        APIService.apiService.addFavoriteRecipes(IDUser, IDRecipes).enqueue(new Callback<favoriterecipes>() {
             @Override
-            public void onResponse(String response) {
-                Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<favoriterecipes> call, Response<favoriterecipes> response) {
+                Toast.makeText(context, "Bạn thêm món ăn vào mục yêu thích thành công", Toast.LENGTH_SHORT).show();
+            }
 
-            }
-        }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Đã có lỗi xảy ra trong quá trình thêm", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<favoriterecipes> call, Throwable t) {
+                Toast.makeText(context, "Bạn thêm món ăn vào mục yêu thích không thành công", Toast.LENGTH_SHORT).show();
             }
-        }){
-            protected Map<String, String> getParams () throws AuthFailureError {
-                Map<String,String> params = new HashMap<>();
-                params.put("IDRecipes", IDRecipe);
-                params.put("IDUser", IDUser);
-                return  params;
-            }
-        };
-        requestQueue.add(stringRequest);
+        });
     }
 }
