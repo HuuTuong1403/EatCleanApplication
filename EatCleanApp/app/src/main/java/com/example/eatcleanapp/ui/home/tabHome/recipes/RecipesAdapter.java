@@ -64,7 +64,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
     private List<recipes> mListRecipesOld;
     private final IClickListener iClickListener;
     private boolean checkIsFavorite;
-
+    private List<recipes> listFavoriteRecipes;
     public RecipesAdapter(Context context, IClickListener iClickListener, boolean checkIsFavorite) {
         this.iClickListener = iClickListener;
         this.context = context;
@@ -168,7 +168,9 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
             Animation animScale = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.anim_scale_favorite);
             Handler handler = new Handler();
             users user = DataLocalManager.getUser();
-
+            if (user != null){
+                showFavoriteRecipes (user.getIDRole());
+            }
             if(!checkIsFavorite){
                 recipes_favorite.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -301,6 +303,21 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
             @Override
             public void onFailure(Call<favoriterecipes> call, Throwable t) {
                 Toast.makeText(context, "Bạn thêm món ăn vào mục yêu thích không thành công", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private void showFavoriteRecipes(String IDUser){
+        APIService.apiService.getFavorites_User(IDUser).enqueue(new Callback<List<recipes>>() {
+            @Override
+            public void onResponse(Call<List<recipes>> call, Response<List<recipes>> response) {
+                listFavoriteRecipes = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<List<recipes>> call, Throwable t) {
+                Toast.makeText(context, "Call Api Error", Toast.LENGTH_SHORT).show();
             }
         });
     }
