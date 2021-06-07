@@ -25,6 +25,7 @@ import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
+import com.example.eatcleanapp.model.recipeimages;
 import com.example.eatcleanapp.model.recipes;
 import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.home.LoadingDialog;
@@ -58,7 +59,7 @@ public class FavoritesFragment extends Fragment implements IClickListener {
     private List<recipes> listFavoritesRecipes;
     private String getRecipeLink;
     private LoadingDialog loadingDialog;
-
+    private List<recipeimages> listRecipeImage;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class FavoritesFragment extends Fragment implements IClickListener {
             CreateViewRecycler();
             loadingDialog.startLoadingDialog();
             GetData();
+            GetImage();
             rcv_Favorites_Recipes.setAdapter(mRecipesAdapter);
             Handler handler = new Handler();
         }
@@ -120,7 +122,29 @@ public class FavoritesFragment extends Fragment implements IClickListener {
             }
         });
     }
+    public void GetImage(){
+        APIService.apiService.getImageRecipe().enqueue((new Callback<List<recipeimages>>() {
+            @Override
+            public void onResponse(Call<List<recipeimages>> call, Response<List<recipeimages>> response) {
+                listRecipeImage = response.body();
+                for (int i = 0; i < listFavoritesRecipes.size(); i ++){
+                    for(int j = 0; j < listRecipeImage.size(); j ++){
+                        if ( listFavoritesRecipes.get(i).getIDRecipes().equals(listRecipeImage.get(j).getIDRecipes()) ){
+                            listFavoritesRecipes.get(i).setImage(listRecipeImage.get(i).getRecipesImages());
+                            break;
+                        }
+                    }
+                }
+                List<recipes> test = listFavoritesRecipes;
+                mRecipesAdapter.setData(listFavoritesRecipes);
+            }
 
+            @Override
+            public void onFailure(Call<List<recipeimages>> call, Throwable t) {
+                Toast.makeText(mMainActivity, "Call Api Error", Toast.LENGTH_SHORT).show();
+            }
+        }));
+    }
     @Override
     public void clickItem(int position) {
         Intent intent = new Intent(view.getContext(), DetailActivity.class);

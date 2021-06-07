@@ -2,6 +2,7 @@ package com.example.eatcleanapp.API;
 
 
 import com.example.eatcleanapp.model.favoriterecipes;
+import com.example.eatcleanapp.model.recipeimages;
 import com.example.eatcleanapp.model.recipes;
 import com.example.eatcleanapp.model.users;
 import com.google.gson.Gson;
@@ -36,6 +37,9 @@ public interface APIService {
 
      @GET("getUser.php")
      Call<List<users>> getUser();
+
+     @GET("getRecipeImages.php")
+     Call<List<recipeimages>> getImageRecipe();
 
      @FormUrlEncoded
      @POST("addFavoriteRecipes.php")
