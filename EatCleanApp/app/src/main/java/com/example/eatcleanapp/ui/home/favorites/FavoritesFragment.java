@@ -57,7 +57,6 @@ public class FavoritesFragment extends Fragment implements IClickListener {
     private RecyclerView rcv_Favorites_Recipes;
     private RecipesAdapter mRecipesAdapter;
     private List<recipes> listFavoritesRecipes;
-    private String getRecipeLink;
     private LoadingDialog loadingDialog;
     private List<recipeimages> listRecipeImage;
     @Override
@@ -71,7 +70,6 @@ public class FavoritesFragment extends Fragment implements IClickListener {
             CreateViewRecycler();
             loadingDialog.startLoadingDialog();
             GetData();
-            GetImage();
             rcv_Favorites_Recipes.setAdapter(mRecipesAdapter);
             Handler handler = new Handler();
         }
@@ -113,6 +111,7 @@ public class FavoritesFragment extends Fragment implements IClickListener {
                 listFavoritesRecipes = response.body();
                 Log.d("AAA", response.body().toString());
                 mRecipesAdapter.setData(listFavoritesRecipes);
+                GetImage();
                 loadingDialog.dismissDialog();
             }
 
@@ -130,12 +129,11 @@ public class FavoritesFragment extends Fragment implements IClickListener {
                 for (int i = 0; i < listFavoritesRecipes.size(); i ++){
                     for(int j = 0; j < listRecipeImage.size(); j ++){
                         if ( listFavoritesRecipes.get(i).getIDRecipes().equals(listRecipeImage.get(j).getIDRecipes()) ){
-                            listFavoritesRecipes.get(i).setImage(listRecipeImage.get(i).getRecipesImages());
+                            listFavoritesRecipes.get(i).setImage(listRecipeImage.get(j).getRecipesImages());
                             break;
                         }
                     }
                 }
-                List<recipes> test = listFavoritesRecipes;
                 mRecipesAdapter.setData(listFavoritesRecipes);
             }
 

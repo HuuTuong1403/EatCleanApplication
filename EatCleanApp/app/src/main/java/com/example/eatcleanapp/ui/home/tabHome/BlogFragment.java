@@ -52,7 +52,6 @@ public class BlogFragment extends Fragment implements IClickListener {
         CreateRecyclerView();
         loadingDialog.startLoadingDialog();
         GetData();
-        GetImage();
         rcvBlogs.setAdapter(mBlogsAdapter);
         Handler handler = new Handler();
 
@@ -71,6 +70,7 @@ public class BlogFragment extends Fragment implements IClickListener {
             public void onResponse(Call<List<blogs>> call, Response<List<blogs>> response) {
                 listBlogs = response.body();
                 mBlogsAdapter.setData(listBlogs);
+                GetImage();
                 loadingDialog.dismissDialog();
             }
 
@@ -89,11 +89,13 @@ public class BlogFragment extends Fragment implements IClickListener {
                 for(int i = 0; i < listBlogs.size(); i++){
                     for(int j = 0; j < listBlogsImage.size(); j++){
                         if(listBlogs.get(i).getIDBlog().equals(listBlogsImage.get(j).getIDBlog())){
-                            listBlogs.get(i).setImage(listBlogsImage.get(i).getBlogImages());
+                            listBlogs.get(i).setImage(listBlogsImage.get(j).getBlogImages());
                             break;
                         }
                     }
                 }
+                List<blogs> test = listBlogs;
+                mBlogsAdapter.setData(listBlogs);
             }
 
             @Override
