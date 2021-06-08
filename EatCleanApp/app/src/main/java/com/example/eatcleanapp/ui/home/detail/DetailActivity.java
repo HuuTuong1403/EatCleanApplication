@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.databinding.ActivityDetailBinding;
+import com.example.eatcleanapp.model.blogs;
 import com.example.eatcleanapp.model.recipes;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -28,6 +29,7 @@ public class DetailActivity extends AppCompatActivity {
     private ActivityDetailBinding binding;
     private TextView txvDetail;
     private recipes recipes_detail;
+    private blogs blogs_detail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,16 +63,22 @@ public class DetailActivity extends AppCompatActivity {
                     txvDetail.setText(recipes_detail.getRecipesTitle());
                     binding.toolbarDetail.setNavigationIcon(R.drawable.back24);
                     navGraph.setStartDestination(R.id.detail_recipes_fragment);
+                    navController.setGraph(navGraph);
                     break;
                 }
             }
             case 2:{
-                txvDetail.setText("Tên blog");
-                navGraph.setStartDestination(R.id.detail_blogs_fragment);
-                break;
+                Bundle bundle = getIntent().getExtras();
+                if(bundle != null){
+                    blogs_detail = (blogs) bundle.get("item");
+                    txvDetail.setText("Chi tiết blog");
+                    binding.toolbarDetail.setNavigationIcon(R.drawable.back24);
+                    navGraph.setStartDestination(R.id.detail_blogs_fragment);
+                    navController.setGraph(navGraph);
+                    break;
+                }
             }
         }
-        navController.setGraph(navGraph);
     }
 
     @Override
@@ -83,4 +91,6 @@ public class DetailActivity extends AppCompatActivity {
     public recipes getRecipes(){
         return recipes_detail;
     }
+
+    public blogs getBlogs(){ return blogs_detail; }
 }

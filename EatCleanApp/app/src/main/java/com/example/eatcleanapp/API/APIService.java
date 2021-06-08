@@ -1,6 +1,8 @@
 package com.example.eatcleanapp.API;
 
 
+import com.example.eatcleanapp.model.blogimages;
+import com.example.eatcleanapp.model.blogs;
 import com.example.eatcleanapp.model.favoriterecipes;
 import com.example.eatcleanapp.model.recipeimages;
 import com.example.eatcleanapp.model.recipes;
@@ -40,6 +42,28 @@ public interface APIService {
 
      @GET("getRecipeImages.php")
      Call<List<recipeimages>> getImageRecipe();
+
+     @GET("getBlogImages.php")
+     Call<List<blogimages>> getImageBlog();
+
+     @GET("getBlogs.php")
+     Call<List<blogs>> getBlogs();
+
+     @GET("getRecipes.php")
+     Call<List<recipes>> getRecipes();
+
+
+     @POST("addRecipes.php")
+     @FormUrlEncoded
+     Call<recipes> addRecipeCtv (@Field("IDRecipes") String IDRecipes,
+                                 @Field("RecipesTitle") String RecipesTitle,
+                                 @Field("RecipesAuthor") String RecipesAuthor,
+                                 @Field("RecipesContent") String RecipesContent,
+                                 @Field("NutritionalIngredients") String NutritionalIngredients,
+                                 @Field("Ingredients") String Ingredients,
+                                 @Field("Steps") String Steps,
+                                 @Field("Time") String Time,
+                                 @Field("Status") String Status);
 
      @FormUrlEncoded
      @POST("addFavoriteRecipes.php")

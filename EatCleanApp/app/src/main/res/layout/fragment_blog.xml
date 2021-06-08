@@ -3,12 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/red"
     tools:context=".ui.home.tabHome.BlogFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_blogs"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="BLOG" />
-
+        android:layout_height="match_parent" />
 </FrameLayout>

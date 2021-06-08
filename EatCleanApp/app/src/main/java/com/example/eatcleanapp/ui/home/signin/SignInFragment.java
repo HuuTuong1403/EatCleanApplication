@@ -137,6 +137,17 @@ public class SignInFragment extends Fragment {
                                     break;
                                 }
                                 case "R002":{
+                                    DataLocalManager.setUser(userLogin);
+                                    Bundle bundle = new Bundle();
+                                    HomeFragment homeFragment = new HomeFragment();
+                                    searchBox.setVisibility(View.VISIBLE);
+                                    bundle.putSerializable("object_user", userLogin);
+                                    homeFragment.setArguments(bundle);
+                                    mMainActivity.replaceFragment(homeFragment, "Trang chủ");
+                                    mMainActivity.setCurrentFragment(1);
+                                    NavigationView naview = mMainActivity.findViewById(R.id.nav_view);
+                                    naview.getMenu().findItem(R.id.nav_home).setChecked(true);
+                                    naview.getMenu().findItem(R.id.nav_ctv).setVisible(true);
                                     break;
                                 }
                                 case "R003":{

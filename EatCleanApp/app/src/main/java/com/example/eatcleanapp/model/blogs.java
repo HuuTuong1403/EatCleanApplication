@@ -1,21 +1,24 @@
 package com.example.eatcleanapp.model;
 
-public class blogs {
+import java.io.Serializable;
+
+public class blogs implements Serializable {
     private String IDBlog;
     private String BlogTitle;
-    private String 	BlogAuthor;
-    private String 	BlogContent;
+    private String BlogAuthor;
+    private String BlogContent;
     private String Time;
     private String Status;
+    private String Image;
 
-    public blogs(String IDBlog, String blogTitle, String blogAuthor,
-                 String blogContent, String time, String status) {
+    public blogs(String IDBlog, String blogTitle, String blogAuthor, String blogContent, String time, String status, String image) {
         this.IDBlog = IDBlog;
         BlogTitle = blogTitle;
         BlogAuthor = blogAuthor;
         BlogContent = blogContent;
         Time = time;
         Status = status;
+        Image = image;
     }
 
     public String getIDBlog() {
@@ -48,6 +51,14 @@ public class blogs {
 
     public void setBlogContent(String blogContent) {
         BlogContent = blogContent;
+    }
+
+    public String getImage() {
+        return Image;
+    }
+
+    public void setImage(String image) {
+        Image = image;
     }
 
     public String getTime() {

@@ -61,9 +61,14 @@ public class DetailRecipesFragment extends Fragment{
 
         //Get data
         recipes_detail = mDetailActivity.getRecipes();
-        Glide.with(view).load(recipes_detail.getImage()).into(image_detail_recipes);
-        txv_show_title_recipes.setText(recipes_detail.getRecipesTitle());
-        txv_show_content_recipes.setText(recipes_detail.getRecipesContent());
+        if(recipes_detail != null){
+            Glide.with(view).load(recipes_detail.getImage()).into(image_detail_recipes);
+            txv_show_title_recipes.setText(recipes_detail.getRecipesTitle());
+            txv_show_content_recipes.setText(recipes_detail.getRecipesContent());
+        }
+        else{
+            return;
+        }
 
         //ViewPager
         detailViewPagerAdapter = new DetailViewPagerAdapter(getActivity().getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
