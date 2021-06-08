@@ -1,6 +1,7 @@
 package com.example.eatcleanapp.ui.congtacvien.tabCTV;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -66,6 +68,7 @@ public class AddRecipeFragment extends Fragment {
     private List<recipes> listRecipes;
     private users user;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -94,7 +97,31 @@ public class AddRecipeFragment extends Fragment {
             }
         });
 
+        edt_addRecipe_recipeSteps.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                setScrollEditText(view, motionEvent);
+                return false;
+            }
+        });
+        edt_addRecipe_recipeIngredients.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                setScrollEditText(view, motionEvent);
+                return false;
+            }
+        });
+
         return view;
+    }
+
+    private void setScrollEditText(View view, MotionEvent motionEvent){
+        view.getParent().requestDisallowInterceptTouchEvent(true);
+        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK){
+            case MotionEvent.ACTION_UP:
+                view.getParent().requestDisallowInterceptTouchEvent(false);
+                break;
+        }
     }
     
     private void sendApproval(){
