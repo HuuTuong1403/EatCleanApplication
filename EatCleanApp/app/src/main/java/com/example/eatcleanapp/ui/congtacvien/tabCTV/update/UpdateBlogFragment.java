@@ -34,7 +34,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.R;
-import com.example.eatcleanapp.model.recipes;
+import com.example.eatcleanapp.model.blogs;
 import com.example.eatcleanapp.ui.home.detail.DetailActivity;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -52,14 +52,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UpdateRecipeFragment extends Fragment {
+public class UpdateBlogFragment extends Fragment {
 
     private View view;
-    private recipes recipe;
     private DetailActivity detailActivity;
-    private ImageView imgV_updateRecipe_uploadImage;
-    private EditText edt_updateRecipe_recipeTitle, edt_updateRecipe_recipeContent, edt_updateRecipe_recipeNutritional, edt_updateRecipe_recipeIngredients, edt_updateRecipe_recipeSteps, edt_updateRecipe_recipeTime;
-    private Button btn_updateRecipe_sendApproval;
+    private ImageView imgV_updateBlog_uploadImage;
+    private EditText edt_updateBlog_blogTitle, edt_updateBlog_blogContent;
+    private Button btn_updateBlog_sendApproval;
+    private blogs blog;
     private Uri mUri;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -67,10 +67,11 @@ public class UpdateRecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         detailActivity = (DetailActivity) getActivity();
-        view = inflater.inflate(R.layout.fragment_update_recipe, container, false);
+        view = inflater.inflate(R.layout.fragment_update_blog, container, false);
         Mapping();
         setData();
-        imgV_updateRecipe_uploadImage.setOnClickListener(new View.OnClickListener() {
+
+        imgV_updateBlog_uploadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(detailActivity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && detailActivity.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
@@ -83,31 +84,62 @@ public class UpdateRecipeFragment extends Fragment {
             }
         });
 
-        btn_updateRecipe_sendApproval.setOnClickListener(new View.OnClickListener() {
+        btn_updateBlog_sendApproval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendUpdate();
             }
         });
 
-
-        edt_updateRecipe_recipeSteps.setOnTouchListener(new View.OnTouchListener() {
+        edt_updateBlog_blogContent.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 setScrollEditText(view, motionEvent);
                 return false;
             }
         });
-        edt_updateRecipe_recipeIngredients.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                setScrollEditText(view, motionEvent);
-                return false;
-            }
-        });
-
 
         return view;
+    }
+
+    private void setData(){
+        blog = detailActivity.getBlogs();
+        if(blog == null){
+            return;
+        }
+        else{
+            Glide.with(view).load(blog.getImage()).placeholder(R.drawable.gray).into(imgV_updateBlog_uploadImage);
+            edt_updateBlog_blogTitle.setText(blog.getBlogTitle());
+            edt_updateBlog_blogContent.setText(blog.getBlogContent());
+        }
+    }
+
+    private void sendUpdate() {
+        if(edt_updateBlog_blogTitle.getText().toString().isEmpty() || edt_updateBlog_blogContent.getText().toString().isEmpty()){
+            Toast.makeText(detailActivity, "Các trường nhập liệu không được trống", Toast.LENGTH_LONG).show();
+        }
+        else{
+            String BlogTitle    = edt_updateBlog_blogTitle.getText().toString();
+            String BlogAuthor   = blog.getBlogAuthor();
+            String BlogContent  = edt_updateBlog_blogContent.getText().toString();
+            String Status       = "waitingforapproval";
+
+            updateBlogCtv(blog.getIDBlog(), BlogTitle, BlogAuthor, BlogContent, Status);
+        }
+    }
+
+    private void updateBlogCtv(String idBlog, String blogTitle, String blogAuthor, String blogContent, String status) {
+        APIService.apiService.updateBlogCtv(idBlog, blogTitle, blogAuthor, blogContent, status).enqueue(new Callback<blogs>() {
+            @Override
+            public void onResponse(Call<blogs> call, Response<blogs> response) {
+                Toast.makeText(detailActivity, "Gửi chỉnh sửa blog thành công! Vui lòng chờ quản trị phê duyệt", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<blogs> call, Throwable t) {
+                Toast.makeText(detailActivity, "Chỉnh sửa blog thất bại", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setScrollEditText(View view, MotionEvent motionEvent){
@@ -119,69 +151,13 @@ public class UpdateRecipeFragment extends Fragment {
         }
     }
 
-    private void sendUpdate() {
-        if (edt_updateRecipe_recipeTitle.getText().toString().isEmpty() ||
-                edt_updateRecipe_recipeContent.getText().toString().isEmpty() ||
-                edt_updateRecipe_recipeNutritional.getText().toString().isEmpty() ||
-                edt_updateRecipe_recipeIngredients.getText().toString().isEmpty() ||
-                edt_updateRecipe_recipeSteps.getText().toString().isEmpty() ||
-                edt_updateRecipe_recipeTime.getText().toString().isEmpty()) {
-            Toast.makeText(detailActivity, "Các trường nhập liệu không được trống", Toast.LENGTH_LONG).show();
-        }
-        else{
-            String recipeTitle          = edt_updateRecipe_recipeTitle.getText().toString();
-            String recipeAuthor         = recipe.getRecipesAuthor();
-            String recipeContent        = edt_updateRecipe_recipeContent.getText().toString();
-            String recipeNutritional    = edt_updateRecipe_recipeNutritional.getText().toString();
-            String recipeIngredient     = edt_updateRecipe_recipeIngredients.getText().toString();
-            String recipeStep           = edt_updateRecipe_recipeSteps.getText().toString();
-            String recipeTime           = edt_updateRecipe_recipeTime.getText().toString();
-            String recipeStatus         = "waittingforapproval";
-
-            updateRecipeCtv(recipe.getIDRecipes(), recipeTitle, recipeAuthor, recipeContent, recipeNutritional, recipeIngredient, recipeStep, recipeTime, recipeStatus);
-        }
-    }
-
-    private void updateRecipeCtv(String id, String title, String author, String content, String nuTri, String ingredient, String step, String time, String status) {
-        APIService.apiService.updateRecipeCtv(id, title, author, content, nuTri, ingredient, step, time, status).enqueue(new Callback<recipes>() {
-            @Override
-            public void onResponse(Call<recipes> call, Response<recipes> response) {
-                Toast.makeText(detailActivity, "Chỉnh sửa món ăn thành công! Vui lòng chờ quản trị phê duyệt", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<recipes> call, Throwable t) {
-                Toast.makeText(detailActivity, "Chỉnh sửa món ăn thất bại", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     private void Mapping() {
-        imgV_updateRecipe_uploadImage       = (ImageView)view.findViewById(R.id.imgV_updateRecipe_uploadImage);
-        edt_updateRecipe_recipeTitle        = (EditText)view.findViewById(R.id.edt_updateRecipe_recipeTitle);
-        edt_updateRecipe_recipeContent      = (EditText)view.findViewById(R.id.edt_updateRecipe_recipeContent);
-        edt_updateRecipe_recipeNutritional  = (EditText)view.findViewById(R.id.edt_updateRecipe_recipeNutritional);
-        edt_updateRecipe_recipeIngredients  = (EditText)view.findViewById(R.id.edt_updateRecipe_recipeIngredients);
-        edt_updateRecipe_recipeSteps        = (EditText)view.findViewById(R.id.edt_updateRecipe_recipeSteps);
-        edt_updateRecipe_recipeTime         = (EditText)view.findViewById(R.id.edt_updateRecipe_recipeTime);
-        btn_updateRecipe_sendApproval       = (Button)view.findViewById(R.id.btn_updateRecipe_sendApproval);
+        imgV_updateBlog_uploadImage = (ImageView)view.findViewById(R.id.imgV_updateBlog_uploadImage);
+        edt_updateBlog_blogTitle    = (EditText)view.findViewById(R.id.edt_updateBlog_blogTitle);
+        edt_updateBlog_blogContent  = (EditText)view.findViewById(R.id.edt_updateBlog_blogContent);
+        btn_updateBlog_sendApproval = (Button)view.findViewById(R.id.btn_updateBlog_sendApproval);
     }
 
-    private void setData(){
-        recipe = detailActivity.getRecipes();
-        if(recipe == null){
-            return;
-        }
-        else{
-            Glide.with(view).load(recipe.getImage()).placeholder(R.drawable.gray).into(imgV_updateRecipe_uploadImage);
-            edt_updateRecipe_recipeTitle.setText(recipe.getRecipesTitle());
-            edt_updateRecipe_recipeContent.setText(recipe.getRecipesContent());
-            edt_updateRecipe_recipeNutritional.setText(recipe.getNutritionalIngredients());
-            edt_updateRecipe_recipeIngredients.setText(recipe.getIngredients());
-            edt_updateRecipe_recipeSteps.setText(recipe.getSteps());
-            edt_updateRecipe_recipeTime.setText(recipe.getTime());
-        }
-    }
     private void openRequest(){
         Dialog dialog = new Dialog(view.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -291,7 +267,7 @@ public class UpdateRecipeFragment extends Fragment {
                     byte[] byteArray = stream.toByteArray();
                     Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0,
                             byteArray.length);
-                    imgV_updateRecipe_uploadImage.setImageBitmap(bitmap);
+                    imgV_updateBlog_uploadImage.setImageBitmap(bitmap);
                     mUri = getImageUri(view.getContext(), bmp);
                     break;
                 }
@@ -302,7 +278,7 @@ public class UpdateRecipeFragment extends Fragment {
                     String paths = pickImage.getPath();
                     File imageFile = new File(paths);
                     Log.e("AAA", "" + imageFile);
-                    imgV_updateRecipe_uploadImage.setImageURI(pickImage);
+                    imgV_updateBlog_uploadImage.setImageURI(pickImage);
                     break;
                 }
         }
@@ -314,5 +290,6 @@ public class UpdateRecipeFragment extends Fragment {
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, String.valueOf(System.currentTimeMillis()), null);
         return Uri.parse(path);
     }
+
 
 }

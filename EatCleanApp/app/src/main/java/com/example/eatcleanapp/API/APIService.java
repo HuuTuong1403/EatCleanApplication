@@ -64,6 +64,14 @@ public interface APIService {
      @GET("getBlogs.php")
      Call<List<blogs>> getBlogs();
 
+     @FormUrlEncoded
+     @POST("updateBlog.php")
+     Call<blogs> updateBlogCtv(@Query("IDBlog") String IDBlog,
+                               @Field("BlogTitle") String BlogTitle,
+                               @Field("BlogAuthor") String BlogAuthor,
+                               @Field("BlogContent") String BlogContent,
+                               @Field("Status") String Status);
+
      @POST("addBlog.php")
      @FormUrlEncoded
      Call<blogs> addBlogCtv(@Field("IDBlog") String IDBlog,

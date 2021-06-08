@@ -53,7 +53,6 @@ public class BlogFragment extends Fragment implements IClickListener {
         loadingDialog.startLoadingDialog();
         GetData();
         rcvBlogs.setAdapter(mBlogsAdapter);
-        Handler handler = new Handler();
 
         return view;
     }

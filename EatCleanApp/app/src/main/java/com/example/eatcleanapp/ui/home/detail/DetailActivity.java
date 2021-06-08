@@ -95,6 +95,17 @@ public class DetailActivity extends AppCompatActivity {
                     break;
                 }
             }
+            case 4:{
+                Bundle bundle = getIntent().getExtras();
+                if(bundle != null){
+                    blogs_detail = (blogs) bundle.get("item");
+                    txvDetail.setText("Chỉnh sửa blog");
+                    binding.toolbarDetail.setNavigationIcon(R.drawable.back24);
+                    navGraph.setStartDestination(R.id.update_blogs_fragment);
+                    navController.setGraph(navGraph);
+                    break;
+                }
+            }
         }
     }
 
