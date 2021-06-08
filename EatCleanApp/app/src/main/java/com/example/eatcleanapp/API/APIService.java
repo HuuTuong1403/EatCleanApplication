@@ -43,6 +43,21 @@ public interface APIService {
      @GET("getRecipeImages.php")
      Call<List<recipeimages>> getImageRecipe();
 
+     @GET("getRecipesNoImg.php")
+     Call<List<recipes>> getRecipesNoImage();
+
+     @POST("updateRecipe.php")
+     @FormUrlEncoded
+     Call<recipes> updateRecipeCtv(@Query("IDRecipes") String IDRecipes,
+                                   @Field("RecipesTitle") String RecipesTitle,
+                                   @Field("RecipesAuthor") String RecipesAuthor,
+                                   @Field("RecipesContent") String RecipesContent,
+                                   @Field("NutritionalIngredients") String NutritionalIngredients,
+                                   @Field("Ingredients") String Ingredients,
+                                   @Field("Steps") String Steps,
+                                   @Field("Time") String Time,
+                                   @Field("Status") String Status);
+
      @GET("getBlogImages.php")
      Call<List<blogimages>> getImageBlog();
 
