@@ -1,12 +1,12 @@
 <?php
 	require "dbConfig.php";
 
-	$IDRecipes = $_GET['IDRecipes'];
+	$IDBlog = $_GET['IDBlog'];
 	
 	$Status = "approval";
 
-	$query = " UPDATE recipes SET Status = '$Status'
-							WHERE IDRecipes = '$IDRecipes' ";
+	$query = " UPDATE blogs SET Status = '$Status'
+							WHERE IDBlog = '$IDBlog' ";
 							
 	$response = array();
 	if (mysqli_query($connect, $query)){
