@@ -3,7 +3,7 @@
 
 	$IDRecipes = $_GET['IDRecipes'];
 	
-	$Status = "approval";
+	$Status = "denied";
 
 	$query = " UPDATE recipes SET Status = '$Status'
 							WHERE IDRecipes = '$IDRecipes' ";
