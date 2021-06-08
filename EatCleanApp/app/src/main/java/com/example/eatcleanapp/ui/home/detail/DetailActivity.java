@@ -1,6 +1,8 @@
 package com.example.eatcleanapp.ui.home.detail;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
@@ -9,9 +11,13 @@ import com.example.eatcleanapp.model.blogs;
 import com.example.eatcleanapp.model.recipes;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -78,6 +84,17 @@ public class DetailActivity extends AppCompatActivity {
                     break;
                 }
             }
+            case 3:{
+                Bundle bundle = getIntent().getExtras();
+                if(bundle != null){
+                    recipes_detail = (recipes) bundle.get("item");
+                    txvDetail.setText(recipes_detail.getRecipesTitle());
+                    binding.toolbarDetail.setNavigationIcon(R.drawable.back24);
+                    navGraph.setStartDestination(R.id.update_recipes_fragment);
+                    navController.setGraph(navGraph);
+                    break;
+                }
+            }
         }
     }
 
@@ -93,4 +110,29 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public blogs getBlogs(){ return blogs_detail; }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == this.RESULT_OK){
+            setResult(RESULT_OK, data);
+        }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if(ev.getAction() == MotionEvent.ACTION_DOWN){
+            View v = getCurrentFocus();
+            if(v instanceof EditText){
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if(!outRect.contains((int)ev.getRawX(), (int)ev.getRawY())){
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 }
