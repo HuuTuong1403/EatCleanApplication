@@ -151,6 +151,7 @@ public class AddRecipeFragment extends Fragment {
                 edt_addRecipe_recipeIngredients.setText("");
                 edt_addRecipe_recipeSteps.setText("");
                 edt_addRecipe_recipeTime.setText("");
+                imgV_addRecipe_uploadImage.setImageResource(R.drawable.up);
             }
 
             @Override
