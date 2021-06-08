@@ -98,7 +98,12 @@ public class AddRecipeFragment extends Fragment {
     }
     
     private void sendApproval(){
-        if (edt_addRecipe_recipeTitle.getText().toString().isEmpty() || edt_addRecipe_recipeContent.getText().toString().isEmpty() || edt_addRecipe_recipeNutritional.getText().toString().isEmpty() || edt_addRecipe_recipeIngredients.getText().toString().isEmpty() || edt_addRecipe_recipeSteps.getText().toString().isEmpty() || edt_addRecipe_recipeTime.getText().toString().isEmpty()) {
+        if (edt_addRecipe_recipeTitle.getText().toString().isEmpty() ||
+                edt_addRecipe_recipeContent.getText().toString().isEmpty() ||
+                edt_addRecipe_recipeNutritional.getText().toString().isEmpty() ||
+                edt_addRecipe_recipeIngredients.getText().toString().isEmpty() ||
+                edt_addRecipe_recipeSteps.getText().toString().isEmpty() ||
+                edt_addRecipe_recipeTime.getText().toString().isEmpty()) {
             Toast.makeText(mMainActivity, "Các trường nhập liệu không được trống", Toast.LENGTH_LONG).show();
         }
         else{
@@ -127,7 +132,7 @@ public class AddRecipeFragment extends Fragment {
                 String recipeIngredient     = edt_addRecipe_recipeIngredients.getText().toString();
                 String recipeStep           = edt_addRecipe_recipeSteps.getText().toString();
                 String recipeTime           = edt_addRecipe_recipeTime.getText().toString();
-                String recipeStatus         = "denied";
+                String recipeStatus         = "waittingforapproval";
 
                 addRecipeCtv(IDRecipe, recipeTitle, recipeAuthor, recipeContent, recipeNutritional, recipeIngredient, recipeStep, recipeTime, recipeStatus);
             }
