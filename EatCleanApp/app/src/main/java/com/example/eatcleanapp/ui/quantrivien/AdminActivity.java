@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -41,6 +42,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
     private ActivityAdminBinding binding;
     private TextView txvTitleAdmin;
     private static final int FRAGMENT_HOME = 1;
+    private boolean doubleBackToExitPressedOnce = false;
     private int currentFragment = FRAGMENT_HOME;
     private ImageButton btnProfile_Admin;
     private NavigationView navigationView;
@@ -114,11 +116,22 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = binding.drawerAdmin;
-        if(drawer.isDrawerOpen(GravityCompat.START)){
-            drawer.closeDrawer(GravityCompat.START);
-        }else {
-            super.onBackPressed();
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_admin);
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else{
+            if(doubleBackToExitPressedOnce){
+                super.onBackPressed();
+            }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Nhấn lần nữa để thoát", Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
         }
     }
 
