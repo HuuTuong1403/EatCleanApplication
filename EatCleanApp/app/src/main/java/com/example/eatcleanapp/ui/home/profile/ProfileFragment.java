@@ -76,11 +76,6 @@ public class ProfileFragment extends Fragment {
     private LoadingDialog loadingDialog;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mSubActivity = (SubActivity) getActivity();
