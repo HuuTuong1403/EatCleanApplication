@@ -7,11 +7,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -23,9 +18,11 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.SubActivity;
 import com.example.eatcleanapp.databinding.ActivityAdminBinding;
@@ -34,8 +31,6 @@ import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;
 import com.example.eatcleanapp.ui.quantrivien.home.HomeAdminFragment;
 import com.google.android.material.navigation.NavigationView;
-
-import org.jetbrains.annotations.NotNull;
 
 public class AdminActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -70,7 +65,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
 
         user = DataLocalManager.getUser();
         if(user != null){
-
+            ChangeText(user);
         }
         else{
             Bundle bundleReceive = getIntent().getExtras();
@@ -101,7 +96,6 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
         txvTitleAdmin = (TextView)findViewById(R.id.txvTitleAdmin);
         txvTitleAdmin.setText("Trang của Admin");
         btnProfile_Admin = (ImageButton)findViewById(R.id.btnProfile_Admin);
-
     }
 
     private void ChangeText(users user){
@@ -109,10 +103,11 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
         View headerView                 = navigationView.getHeaderView(0);
         TextView txv_fullname           = (TextView)headerView.findViewById(R.id.user_fullname_admin);
         TextView txv_email              = (TextView)headerView.findViewById(R.id.user_email_admin);
+        ImageView user_image_admin      = (ImageView)headerView.findViewById(R.id.user_image_admin);
         txv_fullname.setText(user.getFullName());
         txv_email.setText(user.getEmail());
+        Glide.with(this).load(user.getImage()).placeholder(R.drawable.gray).into(user_image_admin);
     }
-
 
     @Override
     public void onBackPressed() {

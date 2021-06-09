@@ -12,6 +12,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -83,6 +85,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         mSubActivity = (SubActivity) getActivity();
         if (mSubActivity != null) {
+            mSubActivity.setText("Thông tin tài khoản");
             mSubActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.back24);
         }
         view = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -141,11 +144,10 @@ public class ProfileFragment extends Fragment {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if(mSubActivity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && mSubActivity.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+                        if(mSubActivity.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && mSubActivity.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
                             openDialogChooseImage();
                         }
-                        else
-                        {
+                        else {
                             openRequest();
                         }
                     }
@@ -172,9 +174,23 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(mSubActivity, MainActivity.class);
+                startActivity(intent);
+                mSubActivity.finish();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
     private void UploadAvatar(String IDUser){
         String strRealPath = RealPathUtil.getRealPath(view.getContext(), mUri);
-        Log.e("AAA", strRealPath);
         File file = new File(strRealPath);
         RequestBody requestBodyAvatar = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part multipartBodyAvatar = MultipartBody.Part.createFormData("fileToUpload", file.getName(), requestBodyAvatar);
@@ -208,18 +224,17 @@ public class ProfileFragment extends Fragment {
                             byteArray.length);
                     imageView_avatar_user.setImageBitmap(bitmap);
                     mUri = getImageUri(view.getContext(), bmp);
-                    break;
                 }
+                break;
             case 1:
                 if(resultCode == mSubActivity.RESULT_OK){
                     Uri pickImage = data.getData();
                     mUri = pickImage;
                     String paths = pickImage.getPath();
                     File imageFile = new File(paths);
-                    Log.e("AAA", "" + imageFile);
                     imageView_avatar_user.setImageURI(pickImage);
-                    break;
                 }
+                break;
         }
     }
 
@@ -230,19 +245,26 @@ public class ProfileFragment extends Fragment {
         return Uri.parse(path);
     }
 
-    private void openRequest(){
+    private Dialog createDialog(int layout){
         Dialog dialog = new Dialog(view.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.layout_dialog_request);
+        dialog.setContentView(layout);
         Window window = dialog.getWindow();
         if(window == null){
-            return;
+            return null;
         }
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        WindowManager.LayoutParams windowAtributes = window.getAttributes();
-        windowAtributes.gravity = Gravity.CENTER;
-        window.setAttributes(windowAtributes);
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        return dialog;
+    }
+
+    private void openRequest(){
+        Dialog dialog = createDialog(R.layout.layout_dialog_request);
+        if(dialog == null)
+            return;
         Button btnAccept = (Button)dialog.findViewById(R.id.btn_accept_request);
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -280,19 +302,11 @@ public class ProfileFragment extends Fragment {
         dialog.show();
     }
 
+
     private void openDialogChooseImage(){
-        Dialog dialog = new Dialog(view.getContext());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.layout_choose_image);
-        Window window = dialog.getWindow();
-        if(window == null){
+        Dialog dialog = createDialog(R.layout.layout_choose_image);
+        if(dialog == null)
             return;
-        }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        WindowManager.LayoutParams windowAttributes = window.getAttributes();
-        windowAttributes.gravity = Gravity.CENTER;
-        window.setAttributes(windowAttributes);
 
         Button btn_chooseImage_Camera = (Button)dialog.findViewById(R.id.btn_chooseImage_Camera);
         Button btn_chooseImage_Media = (Button)dialog.findViewById(R.id.btn_chooseImage_Media);
@@ -303,12 +317,6 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 dialog.dismiss();
                 Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                /*File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES), "AvatarFolder");
-                mediaStorageDir.mkdirs();
-                mUri = Uri.fromFile(new File(mediaStorageDir.getPath() + File.separator +
-                        "avatar.jpg"));
-                takePhoto.putExtra(MediaStore.EXTRA_OUTPUT, mUri);*/
                 startActivityForResult(takePhoto, 0);
             }
         });
@@ -334,7 +342,6 @@ public class ProfileFragment extends Fragment {
     }
 
     private void Mapping() {
-        mSubActivity.setText("Thông tin tài khoản");
         btn_profile_edit            = (Button)view.findViewById(R.id.btn_profile_edit);
         btn_profile_changePass      = (Button)view.findViewById(R.id.btn_profile_changePass);
         btn_add_avatar              = (Button)view.findViewById(R.id.btn_add_avatar);
@@ -347,6 +354,4 @@ public class ProfileFragment extends Fragment {
         txv_profile_title_fullName  = (TextView)view.findViewById(R.id.txv_profile_title_fullName);
         loadingDialog = new LoadingDialog(mSubActivity);
     }
-
-
 }
