@@ -150,4 +150,13 @@ public interface APIService {
 
      @GET("denyRecipe.php")
      Call<recipes> denyRecipe(@Query("IDRecipes") String IDRecipes);
+
+     @GET("getBlogWaitingforApproval.php")
+     Call<List<blogs>> getBlogWaitingApproval();
+
+     @GET("approvalBlog.php")
+     Call<blogs> approveBlog(@Query("IDBlog") String IDBlog);
+
+     @GET("denyBlog.php")
+     Call<blogs> denyBlog(@Query("IDBlog") String IDBlog);
 }
