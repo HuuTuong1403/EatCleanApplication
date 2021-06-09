@@ -3,6 +3,7 @@ package com.example.eatcleanapp.API;
 
 import com.example.eatcleanapp.model.blogimages;
 import com.example.eatcleanapp.model.blogs;
+import com.example.eatcleanapp.model.comments;
 import com.example.eatcleanapp.model.favoriterecipes;
 import com.example.eatcleanapp.model.recipeimages;
 import com.example.eatcleanapp.model.recipes;
@@ -126,4 +127,18 @@ public interface APIService {
      @POST("uploadAvatar.php")
      Call<users> uploadImage(@Query("IDUser") String IDUser,
                              @Part MultipartBody.Part fileToUpload);
+
+
+     @FormUrlEncoded
+     @POST("addComment.php")
+     Call<comments> addComment(@Field("IDUser") String IDUser,
+                               @Field("IDRecipes") String IDRecipes,
+                               @Field("IDComment") String IDComment,
+                               @Field("Comment") String Comment);
+
+     @GET("deleteComment.php")
+     Call<comments> deleteComment(@Query("IDComment") String IDComment);
+
+     @GET("getCommentIDRecipes.php")
+     Call<List<comments>> getCommentByRecipe(@Query("IDRecipes") String IDRecipes);
 }

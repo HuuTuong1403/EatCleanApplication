@@ -91,6 +91,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else{
             onInit();
+            Intent intent = getIntent();
+            int id = intent.getIntExtra("call-back", 0);
+            if(id == 1){
+                replaceFragment(new SignInFragment(), "Đăng nhập");
+                currentFragment = FRAGMENT_SIGNIN;
+                searchBox.setVisibility(View.INVISIBLE);
+                navigationView.getMenu().findItem(R.id.nav_signin).setChecked(true);
+
+            }
         }
     }
     private void onInit(){
