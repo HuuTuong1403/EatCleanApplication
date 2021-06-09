@@ -64,6 +64,7 @@ public class ApprovalRecipeAdapter extends RecyclerView.Adapter<ApprovalRecipeAd
         Glide.with(context).load(recipe.getImage()).placeholder(R.drawable.gray).into(holder.imgV_approvalRecipe);
         holder.txv_approvalRecipe_Title.setText(recipe.getRecipesTitle());
         holder.txv_approvalRecipe_Author.setText(recipe.getRecipesAuthor());
+
         bottomNavigationView = adminActivity.findViewById(R.id.bottom_menu_admin);
         holder.btn_approvalRecipe_Approval.setOnClickListener(new View.OnClickListener() {
             @Override
