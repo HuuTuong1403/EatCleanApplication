@@ -20,6 +20,7 @@ import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.recipeimages;
 import com.example.eatcleanapp.model.recipes;
+import com.example.eatcleanapp.ui.home.LoadingDialog;
 import com.example.eatcleanapp.ui.home.detail.DetailActivity;
 
 import java.util.ArrayList;
@@ -37,14 +38,17 @@ public class ListAddRecipeFragment extends Fragment implements IClickListener {
     private List<recipes> listRecipes;
     private MainActivity mMainActivity;
     private List<recipeimages> listRecipeImage;
+    private LoadingDialog loadingDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mMainActivity = (MainActivity) getActivity();
         view = inflater.inflate(R.layout.fragment_list_add_recipe, container, false);
+        loadingDialog = new LoadingDialog(mMainActivity);
         Mapping();
         CreateRecyclerView();
+        loadingDialog.startLoadingDialog();
         GetData();
         rcvUpdateRecipe.setAdapter(updateRecipeAdapter);
         return view;
@@ -80,10 +84,12 @@ public class ListAddRecipeFragment extends Fragment implements IClickListener {
                 listRecipes = response.body();
                 updateRecipeAdapter.setData(listRecipes);
                 GetImage();
+                loadingDialog.dismissDialog();
             }
 
             @Override
             public void onFailure(Call<List<recipes>> call, Throwable t) {
+                loadingDialog.dismissDialog();
                 Toast.makeText(mMainActivity, "Call Api Error", Toast.LENGTH_SHORT).show();
             }
         });

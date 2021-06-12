@@ -147,6 +147,11 @@ public class SignUpFragment extends Fragment {
             public void onResponse(String response) {
                 if (response.trim().equals("success")){
                     Toast.makeText(getActivity(), "Đăng ký thành công", Toast.LENGTH_LONG).show();
+                    edtUsername.setText("");
+                    edtEmail.setText("");
+                    edtPassword.setText("");
+                    edtPasswordAgain.setText("");
+                    edtFullName.setText("");
                 }
                 else{
                     Toast.makeText(getActivity(), "Đăng ký thất bại", Toast.LENGTH_LONG).show();
@@ -164,7 +169,7 @@ public class SignUpFragment extends Fragment {
                 params.put("Email", edtEmail.getText().toString().trim());
                 params.put("Password", edtPassword.getText().toString().trim());
                 params.put("FullName", edtFullName.getText().toString().trim());
-                params.put("Image", "");
+                params.put("Image", "https://msteatclean.000webhostapp.com/uploads/noavatar.png");
                 params.put("LoginFB", "0");
                 params.put("IDRole", "R003");
                 params.put("Username", edtUsername.getText().toString().trim());
