@@ -23,6 +23,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
+import com.example.eatcleanapp.MD5.MD5Hash;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.SubActivity;
 import com.example.eatcleanapp.model.users;
@@ -157,6 +158,7 @@ public class SignUpFragment extends Fragment {
         scrollView = (ScrollView)view.findViewById(R.id.backgroundSignUp);
     }
     private void registerUser(String url){
+        String password = MD5Hash.MD5(edtPassword.getText().toString().trim());
         RequestQueue requestQueue = Volley.newRequestQueue(mSubActivity.getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -178,7 +180,7 @@ public class SignUpFragment extends Fragment {
                     CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                             .setActivity(getActivity())
                             .setTitle("Đăng ký thất bại")
-                            .setMessage("Có lỗi xảy ra trong quá trình đặng ký")
+                            .setMessage("Có lỗi xảy ra trong quá trình đăng ký")
                             .Build();
                     customAlertActivity.showErrorDialog();
                 }
@@ -198,7 +200,7 @@ public class SignUpFragment extends Fragment {
                 Map<String,String> params = new HashMap<>();
                 params.put("IDUser", IDUser);
                 params.put("Email", edtEmail.getText().toString().trim());
-                params.put("Password", edtPassword.getText().toString().trim());
+                params.put("Password", password );
                 params.put("FullName", edtFullName.getText().toString().trim());
                 params.put("Image", "https://msteatclean.000webhostapp.com/uploads/noavatar.png");
                 params.put("LoginFB", "0");

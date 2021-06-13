@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
+import com.example.eatcleanapp.MD5.MD5Hash;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 
@@ -111,7 +112,7 @@ public class SignInFragment extends Fragment {
                     @Override
                     public void run() {
                         String email = edtEmail.getText().toString().trim();
-                        String password = edtPassword.getText().toString().trim();
+                        String password = MD5Hash.MD5(edtPassword.getText().toString().trim());
                         boolean checkLogin = false;
                         users userLogin = null;
                         for (users user: userList
