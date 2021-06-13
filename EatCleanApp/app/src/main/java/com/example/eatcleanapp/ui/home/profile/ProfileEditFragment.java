@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.SubActivity;
 import com.example.eatcleanapp.model.users;
@@ -177,12 +178,22 @@ public class ProfileEditFragment extends Fragment {
             @Override
             public void onResponse(Call<users> call, Response<users> response) {
                 getUserByUsername(user.getUsername());
-                Toast.makeText(mSubActivity, "Thay đổi thông tin thành công", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mSubActivity)
+                        .setTitle("Đổi thông tin thành công")
+                        .setMessage("Thay đổi thông tin thành công")
+                        .Build();
+                customAlertActivity.showSuccessDialog();
             }
 
             @Override
             public void onFailure(Call<users> call, Throwable t) {
-                Toast.makeText(mSubActivity, "Thay đổi thông tin thất bại", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mSubActivity)
+                        .setTitle("Đổi thông tin thất bại")
+                        .setMessage("Thay đổi thông tin thất bại")
+                        .Build();
+                customAlertActivity.showErrorDialog();
             }
         });
     }

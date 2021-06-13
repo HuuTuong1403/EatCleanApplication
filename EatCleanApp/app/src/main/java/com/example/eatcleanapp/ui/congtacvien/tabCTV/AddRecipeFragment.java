@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.recipes;
@@ -131,11 +132,21 @@ public class AddRecipeFragment extends Fragment {
                 edt_addRecipe_recipeIngredients.getText().toString().isEmpty() ||
                 edt_addRecipe_recipeSteps.getText().toString().isEmpty() ||
                 edt_addRecipe_recipeTime.getText().toString().isEmpty()) {
-            Toast.makeText(mMainActivity, "Các trường nhập liệu không được trống", Toast.LENGTH_LONG).show();
+            CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                    .setActivity(mMainActivity)
+                    .setTitle("Thêm công thức món ăn thất bại")
+                    .setMessage("Các trường nhập liệu không được trống")
+                    .Build();
+            customAlertActivity.showErrorDialog();
         }
         else{
             if(mUri == null){
-                Toast.makeText(mMainActivity, "Vui lòng tải hỉnh ảnh món ăn", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thêm công thức món ăn thất bại")
+                        .setMessage("Vui lòng tải hình ảnh món ăn lên")
+                        .Build();
+                customAlertActivity.showErrorDialog();
             }
             else{
                 Random rd = new Random();
@@ -171,7 +182,12 @@ public class AddRecipeFragment extends Fragment {
         APIService.apiService.addRecipeCtv(id, title, author, content, nuTri, ingredient, step, time, status).enqueue(new Callback<recipes>() {
             @Override
             public void onResponse(Call<recipes> call, Response<recipes> response) {
-                Toast.makeText(mMainActivity, "Gửi phê duyệt món ăn thành công", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thêm công thức món ăn thành công")
+                        .setMessage("Gửi phê duyệt công thức món ăn thành công")
+                        .Build();
+                customAlertActivity.showSuccessDialog();
                 edt_addRecipe_recipeTitle.setText("");
                 edt_addRecipe_recipeContent.setText("");
                 edt_addRecipe_recipeNutritional.setText("");
@@ -183,7 +199,12 @@ public class AddRecipeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<recipes> call, Throwable t) {
-                Toast.makeText(mMainActivity, "Gửi phê duyệt món ăn thất bại", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thêm công thức món ăn thất bại")
+                        .setMessage("Gửi phê duyệt công thức món ăn thất bại")
+                        .Build();
+                customAlertActivity.showErrorDialog();
             }
         });
     }

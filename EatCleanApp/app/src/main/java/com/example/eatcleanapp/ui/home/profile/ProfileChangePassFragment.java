@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.SubActivity;
 import com.example.eatcleanapp.model.users;
@@ -53,7 +54,12 @@ public class ProfileChangePassFragment extends Fragment {
                     @Override
                     public void run() {
                         if(profileChangePass_edt_oldPassword.getText().toString().isEmpty() || profileChangePass_edt_newPassword.getText().toString().isEmpty() || profileChangePass_edt_newPasswordAgain.getText().toString().isEmpty()){
-                            Toast.makeText(mSubActivity, "Trường thông tin không được trống", Toast.LENGTH_SHORT).show();
+                            CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                    .setActivity(mSubActivity)
+                                    .setTitle("Đổi mật khẩu thất bại")
+                                    .setMessage("Các trường thông tin không được trống")
+                                    .Build();
+                            customAlertActivity.showErrorDialog();
                             return;
                         }
                         else{
@@ -62,7 +68,12 @@ public class ProfileChangePassFragment extends Fragment {
                             String newPassAgain = profileChangePass_edt_newPasswordAgain.getText().toString();
                             if(oldPass.equals(user.getPassword())){
                                 if(newPass.equals(oldPass)){
-                                    Toast.makeText(mSubActivity, "Mật khẩu mới phải khác mật khẩu cũ", Toast.LENGTH_SHORT).show();
+                                    CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                            .setActivity(mSubActivity)
+                                            .setTitle("Đổi mật khẩu thất bại")
+                                            .setMessage("Mật khẩu mới phải khác mật khẩu cũ")
+                                            .Build();
+                                    customAlertActivity.showErrorDialog();
                                 }
                                 else{
                                     if(newPassAgain.equals(newPass)){
@@ -72,12 +83,22 @@ public class ProfileChangePassFragment extends Fragment {
                                         profileChangePass_edt_newPasswordAgain.setText("");
                                     }
                                     else{
-                                        Toast.makeText(mSubActivity, "Mật khẩu nhập lại không giống", Toast.LENGTH_SHORT).show();
+                                        CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                                .setActivity(mSubActivity)
+                                                .setTitle("Đổi mật khẩu thất bại")
+                                                .setMessage("Mật khẩu nhập lại không khớp")
+                                                .Build();
+                                        customAlertActivity.showErrorDialog();
                                     }
                                 }
                             }
                             else{
-                                Toast.makeText(mSubActivity, "Mật khẩu cũ không chính xác", Toast.LENGTH_SHORT).show();
+                                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                        .setActivity(mSubActivity)
+                                        .setTitle("Đổi mật khẩu thất bại")
+                                        .setMessage("Mật khẩu cũ không chính xác")
+                                        .Build();
+                                customAlertActivity.showErrorDialog();
                             }
                         }
                     }
@@ -131,7 +152,12 @@ public class ProfileChangePassFragment extends Fragment {
             @Override
             public void onResponse(Call<users> call, Response<users> response) {
                 getUserByUsername(user.getUsername());
-                Toast.makeText(mSubActivity, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mSubActivity)
+                        .setTitle("Đổi mật khẩu thành công")
+                        .setMessage("Đổi mật khẩu thành công")
+                        .Build();
+                customAlertActivity.showSuccessDialog();
             }
 
             @Override

@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.blogs;
 import com.example.eatcleanapp.ui.home.detail.DetailActivity;
@@ -116,7 +117,12 @@ public class UpdateBlogFragment extends Fragment {
 
     private void sendUpdate() {
         if(edt_updateBlog_blogTitle.getText().toString().isEmpty() || edt_updateBlog_blogContent.getText().toString().isEmpty()){
-            Toast.makeText(detailActivity, "Các trường nhập liệu không được trống", Toast.LENGTH_LONG).show();
+            CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                    .setActivity(detailActivity)
+                    .setTitle("Chỉnh sửa blog thất bại")
+                    .setMessage("Các trường thông tin không được để trống")
+                    .Build();
+            customAlertActivity.showErrorDialog();
         }
         else{
             String BlogTitle    = edt_updateBlog_blogTitle.getText().toString();
@@ -132,12 +138,22 @@ public class UpdateBlogFragment extends Fragment {
         APIService.apiService.updateBlogCtv(idBlog, blogTitle, blogAuthor, blogContent, status).enqueue(new Callback<blogs>() {
             @Override
             public void onResponse(Call<blogs> call, Response<blogs> response) {
-                Toast.makeText(detailActivity, "Gửi chỉnh sửa blog thành công! Vui lòng chờ quản trị phê duyệt", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(detailActivity)
+                        .setTitle("Chỉnh sửa blog thất bại")
+                        .setMessage("Gửi phê duyệt blog thành công, vui lòng chờ quản trị viên phê duyệt")
+                        .Build();
+                customAlertActivity.showSuccessDialog();
             }
 
             @Override
             public void onFailure(Call<blogs> call, Throwable t) {
-                Toast.makeText(detailActivity, "Chỉnh sửa blog thất bại", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(detailActivity)
+                        .setTitle("Chỉnh sửa blog thất bại")
+                        .setMessage("Chỉnh sửa blog thất bại")
+                        .Build();
+                customAlertActivity.showErrorDialog();
             }
         });
     }

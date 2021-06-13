@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.recipes;
 import com.example.eatcleanapp.ui.home.detail.DetailActivity;
@@ -126,7 +127,12 @@ public class UpdateRecipeFragment extends Fragment {
                 edt_updateRecipe_recipeIngredients.getText().toString().isEmpty() ||
                 edt_updateRecipe_recipeSteps.getText().toString().isEmpty() ||
                 edt_updateRecipe_recipeTime.getText().toString().isEmpty()) {
-            Toast.makeText(detailActivity, "Các trường nhập liệu không được trống", Toast.LENGTH_LONG).show();
+            CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                    .setActivity(detailActivity)
+                    .setTitle("Chỉnh sửa công thức món ăn thất bại")
+                    .setMessage("Các trường thông tin không được để trống")
+                    .Build();
+            customAlertActivity.showErrorDialog();
         }
         else{
             String recipeTitle          = edt_updateRecipe_recipeTitle.getText().toString();
@@ -146,12 +152,22 @@ public class UpdateRecipeFragment extends Fragment {
         APIService.apiService.updateRecipeCtv(id, title, author, content, nuTri, ingredient, step, time, status).enqueue(new Callback<recipes>() {
             @Override
             public void onResponse(Call<recipes> call, Response<recipes> response) {
-                Toast.makeText(detailActivity, "Chỉnh sửa món ăn thành công! Vui lòng chờ quản trị phê duyệt", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(detailActivity)
+                        .setTitle("Chỉnh sửa công thức món ăn thành công")
+                        .setMessage("Chỉnh sửa công thức món ăn thành công, vui lòng đợi quản trị viên phê duyêht")
+                        .Build();
+                customAlertActivity.showErrorDialog();
             }
 
             @Override
             public void onFailure(Call<recipes> call, Throwable t) {
-                Toast.makeText(detailActivity, "Chỉnh sửa món ăn thất bại", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(detailActivity)
+                        .setTitle("Chỉnh sửa công thức món ăn thất bại")
+                        .setMessage("Chỉnh sửa công thức món ăn thất bại")
+                        .Build();
+                customAlertActivity.showErrorDialog();
             }
         });
     }

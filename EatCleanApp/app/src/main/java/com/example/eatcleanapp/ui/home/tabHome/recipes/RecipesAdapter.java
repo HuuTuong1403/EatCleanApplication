@@ -36,6 +36,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;

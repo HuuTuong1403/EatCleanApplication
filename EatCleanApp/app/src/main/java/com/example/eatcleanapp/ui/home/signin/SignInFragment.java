@@ -1,6 +1,5 @@
 package com.example.eatcleanapp.ui.home.signin;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -14,18 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 
 import com.example.eatcleanapp.SubActivity;
-import com.example.eatcleanapp.databinding.ActivityMainBinding;
 import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.home.HomeFragment;
 
@@ -167,8 +165,14 @@ public class SignInFragment extends Fragment {
                             }
                         }
                         else{
-                            Toast.makeText(view.getContext(), "Thông tin đăng nhập không đúng", Toast.LENGTH_SHORT).show();
+                            CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                    .setActivity(getActivity())
+                                    .setTitle("Đăng nhập thất bại")
+                                    .setMessage("Thông tin đăng nhập không đúng")
+                                    .Build();
+                            customAlertActivity.showErrorDialog();
                         }
+
                     }
                 }, 400);
             }

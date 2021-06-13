@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
@@ -113,7 +114,12 @@ public class TabDetailCommentFragment extends Fragment implements IClickListener
 
             @Override
             public void onFailure(Call<comments> call, Throwable t) {
-                Toast.makeText(detailActivity, "Thêm bình luận thất bại", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(detailActivity)
+                        .setTitle("Thất bại")
+                        .setMessage("Thêm bình luận thất bại")
+                        .Build();
+                customAlertActivity.showErrorDialog();
             }
         });
     }
@@ -231,7 +237,12 @@ public class TabDetailCommentFragment extends Fragment implements IClickListener
                 dialog.show();
             }
             else{
-                Toast.makeText(detailActivity, "Không thể xóa comment của người khác", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(detailActivity)
+                        .setTitle("Lỗi")
+                        .setMessage("Không thể xóa comment của người khác")
+                        .Build();
+                customAlertActivity.showSuccessDialog();
             }
         }
     }
@@ -245,7 +256,12 @@ public class TabDetailCommentFragment extends Fragment implements IClickListener
 
             @Override
             public void onFailure(Call<comments> call, Throwable t) {
-                Toast.makeText(detailActivity, "Không thể xóa comment", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(detailActivity)
+                        .setTitle("Lỗi")
+                        .setMessage("Không thể xóa comment")
+                        .Build();
+                customAlertActivity.showSuccessDialog();
             }
         });
     }

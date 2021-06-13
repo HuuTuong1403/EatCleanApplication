@@ -22,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.SubActivity;
 import com.example.eatcleanapp.model.users;
@@ -109,15 +110,30 @@ public class SignUpFragment extends Fragment {
                                     registerUser(registerUserLink);
                                 }
                                 else{
-                                    Toast.makeText(getActivity(), "Mật khẩu không giống nhau, vui lòng nhập lại", Toast.LENGTH_LONG).show();
+                                    CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                            .setActivity(getActivity())
+                                            .setTitle("Đăng ký thất bại")
+                                            .setMessage("Mật khẩu không khớp")
+                                            .Build();
+                                    customAlertActivity.showErrorDialog();
                                 }
                             }
                             else{
-                                Toast.makeText(getActivity(), "Username đã bị trùng, vui lòng nhập email khác", Toast.LENGTH_LONG).show();
+                                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                        .setActivity(getActivity())
+                                        .setTitle("Đăng ký thất bại")
+                                        .setMessage("Username bị trùng, vui lòng nhập username khác")
+                                        .Build();
+                                customAlertActivity.showErrorDialog();
                             }
                         }
                         else{
-                            Toast.makeText(getActivity(), "Email đã bị trùng, vui lòng nhập email khác", Toast.LENGTH_LONG).show();
+                            CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                    .setActivity(getActivity())
+                                    .setTitle("Đăng ký thất bại")
+                                    .setMessage("Email bị trùng, vui lòng nhập email khác")
+                                    .Build();
+                            customAlertActivity.showErrorDialog();
                         }
                     }
                 }, 400);
@@ -146,7 +162,12 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 if (response.trim().equals("success")){
-                    Toast.makeText(getActivity(), "Đăng ký thành công", Toast.LENGTH_LONG).show();
+                    CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                            .setActivity(getActivity())
+                            .setTitle("Đăng ký thành công")
+                            .setMessage("Đăng ký thành công")
+                            .Build();
+                    customAlertActivity.showSuccessDialog();
                     edtUsername.setText("");
                     edtEmail.setText("");
                     edtPassword.setText("");
@@ -154,13 +175,23 @@ public class SignUpFragment extends Fragment {
                     edtFullName.setText("");
                 }
                 else{
-                    Toast.makeText(getActivity(), "Đăng ký thất bại", Toast.LENGTH_LONG).show();
+                    CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                            .setActivity(getActivity())
+                            .setTitle("Đăng ký thất bại")
+                            .setMessage("Có lỗi xảy ra trong quá trình đặng ký")
+                            .Build();
+                    customAlertActivity.showErrorDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), "Bạn đã bị lỗi" + error.toString(), Toast.LENGTH_LONG).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(getActivity())
+                        .setTitle("Đăng ký thất bại")
+                        .setMessage("Lỗi: " + error.toString())
+                        .Build();
+                customAlertActivity.showErrorDialog();
             }
         }){
             protected Map<String, String> getParams () throws AuthFailureError{

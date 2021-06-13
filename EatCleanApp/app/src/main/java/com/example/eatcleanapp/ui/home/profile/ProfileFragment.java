@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.RealPathUtil;
@@ -194,13 +195,23 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onResponse(Call<users> call, Response<users> response) {
                 loadingDialog.dismissDialog();
-                Toast.makeText(mSubActivity, "Lưu hình ảnh thành công", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mSubActivity)
+                        .setTitle("Upload avartar thành công")
+                        .setMessage("Lưu hình ảnh thành công")
+                        .Build();
+                customAlertActivity.showSuccessDialog();
             }
 
             @Override
             public void onFailure(Call<users> call, Throwable t) {
                 loadingDialog.dismissDialog();
-                Toast.makeText(mSubActivity, "Đã xảy ra lỗi khi thực hiện", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mSubActivity)
+                        .setTitle("Upload avartar thất bại")
+                        .setMessage("Lưu hình ảnh thất bại")
+                        .Build();
+                customAlertActivity.showSuccessDialog();
             }
         });
     }

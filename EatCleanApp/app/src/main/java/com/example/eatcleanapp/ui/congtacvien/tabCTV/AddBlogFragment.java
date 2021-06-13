@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.blogs;
@@ -101,11 +102,21 @@ public class AddBlogFragment extends Fragment {
 
     private void sendApproval() {
         if(edt_addBlog_blogTitle.getText().toString().isEmpty() || edt_addBlog_blogContent.getText().toString().isEmpty()){
-            Toast.makeText(mMainActivity, "Các trường nhập liệu không được trống", Toast.LENGTH_LONG).show();
+            CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                    .setActivity(mMainActivity)
+                    .setTitle("Thêm blog thất bại")
+                    .setMessage("Các trường nhập liệu không được trống")
+                    .Build();
+            customAlertActivity.showErrorDialog();
         }
         else{
             if(mUri == null) {
-                Toast.makeText(mMainActivity, "Vui lòng tải hỉnh ảnh món ăn", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thêm blog thất bại")
+                        .setMessage("Vui lòng tải hình ảnh blog lên")
+                        .Build();
+                customAlertActivity.showErrorDialog();
             }
             else{
                 Random rd = new Random();
@@ -140,7 +151,12 @@ public class AddBlogFragment extends Fragment {
         APIService.apiService.addBlogCtv(id, title, author, content, time, status).enqueue(new Callback<blogs>() {
             @Override
             public void onResponse(Call<blogs> call, Response<blogs> response) {
-                Toast.makeText(mMainActivity, "Gửi phê duyệt blog thành công", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thêm blog thành công")
+                        .setMessage("Gửi phê duyệt blog thành công")
+                        .Build();
+                customAlertActivity.showSuccessDialog();
                 edt_addBlog_blogTitle.setText("");
                 edt_addBlog_blogContent.setText("");
                 imgV_addBlog_uploadImage.setImageResource(R.drawable.up);
@@ -148,7 +164,12 @@ public class AddBlogFragment extends Fragment {
 
             @Override
             public void onFailure(Call<blogs> call, Throwable t) {
-                Toast.makeText(mMainActivity, "Gửi phê blog ăn thất bại", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thêm blog thất bại")
+                        .setMessage("Gửi phê duyệt blog thất bại")
+                        .Build();
+                customAlertActivity.showErrorDialog();
             }
         });
     }
