@@ -62,6 +62,9 @@ public class CustomAlertActivity {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         WindowManager.LayoutParams windowAtributes = window.getAttributes();
         windowAtributes.gravity = Gravity.TOP;
+        if(window != null){
+            alertDialog.getWindow().getAttributes().windowAnimations = R.style.SlidingAnim;
+        }
         window.setAttributes(windowAtributes);
 
         Handler handler = new Handler();

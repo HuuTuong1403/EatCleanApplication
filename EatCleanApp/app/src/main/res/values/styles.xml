@@ -5,4 +5,7 @@
             @android:style/Animation.Dialog
         </item>
     </style>
+    <style name="SlidingAnim">
+        <item name="android:windowExitAnimation">@anim/slide_out_right</item>
+    </style>
 </resources>
