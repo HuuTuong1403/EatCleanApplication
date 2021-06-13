@@ -1,12 +1,18 @@
 package com.example.eatcleanapp.CustomAlert;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.text.CaseMap;
+import android.os.Handler;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,65 +26,74 @@ public class CustomAlertActivity {
 
     private Activity activity;
     private String Title;
-    private String Messgae;
+    private String Message;
+    private String Type;
 
     public CustomAlertActivity(Builder builder) {
         this.activity = builder.activity;
         this.Title = builder.Title;
-        this.Messgae = builder.Messgae;
+        this.Message = builder.Message;
+        this.Type = builder.Type;
     }
 
     public void showSuccessDialog(){
-        AlertDialog.Builder builder =
-                new AlertDialog.Builder
-                        (activity, R.style.AlertDialogTheme);
-        View view = LayoutInflater.from(activity).inflate(
-                R.layout.layout_success_dialog,
-                (ConstraintLayout) activity.findViewById (R.id.layoutDialogContainer)
-        );
-        builder.setView(view);
-        ((TextView) view.findViewById(R.id.textTitle))
-                .setText(Title);
-        ((TextView) view.findViewById(R.id.textMessage))
-                .setText(Messgae);
-        ((Button) view.findViewById(R.id.buttonAction))
-                .setText("OK");
-        ((ImageView) view.findViewById(R.id.imageIcon))
-                .setImageResource(R.drawable.done);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.SlidingDialogAnim);
+        View view;
+        if(Type.equals("success")){
+            view = LayoutInflater.from(activity).inflate(R.layout.layout_success_dialog, (LinearLayout) activity.findViewById (R.id.layoutDialogContainer));
+            builder.setView(view);
+            ((TextView) view.findViewById(R.id.textTitle)).setText(Title);
+            ((TextView) view.findViewById(R.id.textMessage)).setText(Message);
+            ((ImageView) view.findViewById(R.id.imageIcon)).setImageResource(R.drawable.check_success);
+        }
+        else{
+            view = LayoutInflater.from(activity).inflate(R.layout.layout_error_dialog, (LinearLayout) activity.findViewById (R.id.layoutDialogContainer));
+            builder.setView(view);
+            ((TextView) view.findViewById(R.id.textTitle)).setText(Title);
+            ((TextView) view.findViewById(R.id.textMessage)).setText(Message);
+            ((ImageView) view.findViewById(R.id.imageIcon)).setImageResource(R.drawable.cancel_error);
+        }
+
         final AlertDialog alertDialog = builder.create();
-        view.findViewById(R.id.buttonAction).setOnClickListener(new View.OnClickListener() {
+        Window window = alertDialog.getWindow();
+        if(window == null){
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams windowAtributes = window.getAttributes();
+        windowAtributes.gravity = Gravity.TOP;
+        window.setAttributes(windowAtributes);
+        if (alertDialog.getWindow() != null){
+            alertDialog.getWindow().getAttributes().windowAnimations = R.style.SlidingDialogAnim;
+        }
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
-            public void onClick(View view) {
+            public void run() {
                 alertDialog.dismiss();
             }
-        });
-        if (alertDialog.getWindow() != null){
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-        }
+        }, 1600);
         alertDialog.show();
     }
+
     public void showErrorDialog(){
-        AlertDialog.Builder builder =
-                new AlertDialog.Builder
-                        (activity, R.style.AlertDialogTheme);
-        View view = LayoutInflater.from(activity).inflate(
-                R.layout.layout_error_dialog,
-                (ConstraintLayout) activity.findViewById (R.id.layoutDialogContainer)
-        );
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.SlidingDialogAnim);
+        View view = LayoutInflater.from(activity).inflate(R.layout.layout_error_dialog, (LinearLayout) activity.findViewById (R.id.layoutDialogContainer));
         builder.setView(view);
-        ((TextView) view.findViewById(R.id.textTitle))
-                .setText(Title);
-        ((TextView) view.findViewById(R.id.textMessage))
-                .setText(Messgae);
-        ((Button) view.findViewById(R.id.buttonAction))
-                .setText("Thoát");
+        ((TextView) view.findViewById(R.id.textTitle)).setText(Title);
+        ((TextView) view.findViewById(R.id.textMessage)).setText(Message);
         final AlertDialog alertDialog = builder.create();
-        view.findViewById(R.id.buttonAction).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-            }
-        });
+        Window window = alertDialog.getWindow();
+        if(window == null){
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        WindowManager.LayoutParams windowAtributes = window.getAttributes();
+        windowAtributes.gravity = Gravity.BOTTOM;
+        window.setAttributes(windowAtributes);
+
         if (alertDialog.getWindow() != null){
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
         }
@@ -87,16 +102,21 @@ public class CustomAlertActivity {
     public static class Builder {
         private Activity activity;
         private String Title;
-        private String Messgae;
+        private String Message;
+        private String Type;
 
-        public Builder(){
+        public Builder(){ };
 
-        };
-
-        public Builder(Activity activity, String title, String messgae) {
+        public Builder(Activity activity, String title, String message, String type) {
             this.activity = activity;
             Title = title;
-            Messgae = messgae;
+            Message = message;
+            Type = type;
+        }
+
+        public Builder setType(String type) {
+            this.Type = type;
+            return this;
         }
 
         public Builder setActivity (Activity activity){
@@ -109,7 +129,7 @@ public class CustomAlertActivity {
             return this;
         }
         public Builder setMessage (String message){
-            this.Messgae = message;
+            this.Message = message;
             return this;
         }
 

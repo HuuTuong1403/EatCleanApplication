@@ -170,8 +170,9 @@ public class SignInFragment extends Fragment {
                                     .setActivity(getActivity())
                                     .setTitle("Đăng nhập thất bại")
                                     .setMessage("Thông tin đăng nhập không đúng")
+                                    .setType("error")
                                     .Build();
-                            customAlertActivity.showErrorDialog();
+                            customAlertActivity.showSuccessDialog();
                         }
 
                     }
