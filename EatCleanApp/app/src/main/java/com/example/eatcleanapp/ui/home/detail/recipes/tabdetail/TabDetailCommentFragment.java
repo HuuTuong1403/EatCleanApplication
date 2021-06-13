@@ -116,10 +116,11 @@ public class TabDetailCommentFragment extends Fragment implements IClickListener
             public void onFailure(Call<comments> call, Throwable t) {
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(detailActivity)
-                        .setTitle("Thất bại")
+                        .setTitle("Thông báo")
                         .setMessage("Thêm bình luận thất bại")
+                        .setType("error")
                         .Build();
-                customAlertActivity.showErrorDialog();
+                customAlertActivity.showDialog();
             }
         });
     }
@@ -134,7 +135,13 @@ public class TabDetailCommentFragment extends Fragment implements IClickListener
 
             @Override
             public void onFailure(Call<List<comments>> call, Throwable t) {
-                Toast.makeText(detailActivity, "Call API Error", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(detailActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Lỗi không thể lấy dữ liệu")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
             }
         });
     }
@@ -239,10 +246,11 @@ public class TabDetailCommentFragment extends Fragment implements IClickListener
             else{
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(detailActivity)
-                        .setTitle("Lỗi")
+                        .setTitle("Thông báo")
                         .setMessage("Không thể xóa comment của người khác")
+                        .setType("error")
                         .Build();
-                customAlertActivity.showSuccessDialog();
+                customAlertActivity.showDialog();
             }
         }
     }
@@ -258,10 +266,11 @@ public class TabDetailCommentFragment extends Fragment implements IClickListener
             public void onFailure(Call<comments> call, Throwable t) {
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(detailActivity)
-                        .setTitle("Lỗi")
+                        .setTitle("Thông báo")
                         .setMessage("Không thể xóa comment")
+                        .setType("error")
                         .Build();
-                customAlertActivity.showSuccessDialog();
+                customAlertActivity.showDialog();
             }
         });
     }

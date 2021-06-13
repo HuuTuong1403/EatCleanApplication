@@ -135,19 +135,21 @@ public class AddRecipeFragment extends Fragment {
                 edt_addRecipe_recipeTime.getText().toString().isEmpty()) {
             CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                     .setActivity(mMainActivity)
-                    .setTitle("Thêm công thức món ăn thất bại")
+                    .setTitle("Thông báo")
                     .setMessage("Các trường nhập liệu không được trống")
+                    .setType("error")
                     .Build();
-            customAlertActivity.showErrorDialog();
+            customAlertActivity.showDialog();
         }
         else{
             if(mUri == null){
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(mMainActivity)
-                        .setTitle("Thêm công thức món ăn thất bại")
+                        .setTitle("Thông báo")
                         .setMessage("Vui lòng tải hình ảnh món ăn lên")
+                        .setType("error")
                         .Build();
-                customAlertActivity.showErrorDialog();
+                customAlertActivity.showDialog();
             }
             else{
                 Random rd = new Random();
@@ -185,10 +187,11 @@ public class AddRecipeFragment extends Fragment {
             public void onResponse(Call<recipes> call, Response<recipes> response) {
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(mMainActivity)
-                        .setTitle("Thêm công thức món ăn thành công")
+                        .setTitle("Thông báo")
                         .setMessage("Gửi phê duyệt công thức món ăn thành công")
+                        .setType("success")
                         .Build();
-                customAlertActivity.showSuccessDialog();
+                customAlertActivity.showDialog();
                 edt_addRecipe_recipeTitle.setText("");
                 edt_addRecipe_recipeContent.setText("");
                 edt_addRecipe_recipeNutritional.setText("");
@@ -202,10 +205,11 @@ public class AddRecipeFragment extends Fragment {
             public void onFailure(Call<recipes> call, Throwable t) {
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(mMainActivity)
-                        .setTitle("Thêm công thức món ăn thất bại")
+                        .setTitle("Thông báo")
                         .setMessage("Gửi phê duyệt công thức món ăn thất bại")
+                        .setType("error")
                         .Build();
-                customAlertActivity.showErrorDialog();
+                customAlertActivity.showDialog();
             }
         });
     }
@@ -219,7 +223,13 @@ public class AddRecipeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<recipes>> call, Throwable t) {
-                Toast.makeText(mMainActivity, "Call API Error", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Lỗi không thể lấy dữ liệu")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
             }
         });
     }

@@ -197,10 +197,11 @@ public class ProfileFragment extends Fragment {
                 loadingDialog.dismissDialog();
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(mSubActivity)
-                        .setTitle("Upload avartar thành công")
-                        .setMessage("Lưu hình ảnh thành công")
+                        .setTitle("Thông báo")
+                        .setMessage("Tải hình ảnh cá nhân thành công")
+                        .setType("success")
                         .Build();
-                customAlertActivity.showSuccessDialog();
+                customAlertActivity.showDialog();
             }
 
             @Override
@@ -208,10 +209,11 @@ public class ProfileFragment extends Fragment {
                 loadingDialog.dismissDialog();
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(mSubActivity)
-                        .setTitle("Upload avartar thất bại")
-                        .setMessage("Lưu hình ảnh thất bại")
+                        .setTitle("Thông báo")
+                        .setMessage("Tải hình ảnh cá nhân thất bại")
+                        .setType("error")
                         .Build();
-                customAlertActivity.showSuccessDialog();
+                customAlertActivity.showDialog();
             }
         });
     }

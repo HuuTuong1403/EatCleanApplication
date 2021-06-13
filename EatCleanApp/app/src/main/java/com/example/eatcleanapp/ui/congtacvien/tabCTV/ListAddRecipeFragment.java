@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
@@ -72,7 +73,13 @@ public class ListAddRecipeFragment extends Fragment implements IClickListener {
 
             @Override
             public void onFailure(Call<List<recipeimages>> call, Throwable t) {
-                Toast.makeText(mMainActivity, "Call Api Error", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Lỗi không lấy được dữ liệu")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
             }
         });
     }
@@ -90,7 +97,13 @@ public class ListAddRecipeFragment extends Fragment implements IClickListener {
             @Override
             public void onFailure(Call<List<recipes>> call, Throwable t) {
                 loadingDialog.dismissDialog();
-                Toast.makeText(mMainActivity, "Call Api Error", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(getActivity())
+                        .setTitle("Thông báo")
+                        .setMessage("Lỗi không lấy được dữ liệu")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
             }
         });
     }

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.blogs;
@@ -113,12 +114,24 @@ public class ApprovalBlogAdapter extends RecyclerView.Adapter<ApprovalBlogAdapte
         APIService.apiService.denyBlog(IDBlog).enqueue(new Callback<blogs>() {
             @Override
             public void onResponse(Call<blogs> call, Response<blogs> response) {
-                Toast.makeText(context, "Từ chối phê duyệt blog thành công", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Từ chối phê duyệt blog thành công")
+                        .setType("success")
+                        .Build();
+                customAlertActivity.showDialog();
             }
 
             @Override
             public void onFailure(Call<blogs> call, Throwable t) {
-                Toast.makeText(context, "Từ chối phê duyệt blog thất bại", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Từ chối phê duyệt blog thất bại")
+                        .setType("success")
+                        .Build();
+                customAlertActivity.showDialog();
             }
         });
     }
@@ -127,12 +140,24 @@ public class ApprovalBlogAdapter extends RecyclerView.Adapter<ApprovalBlogAdapte
         APIService.apiService.approveBlog(IDBlog).enqueue(new Callback<blogs>() {
             @Override
             public void onResponse(Call<blogs> call, Response<blogs> response) {
-                Toast.makeText(context, "Phê duyệt blog thành công", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Phê duyệt blog thành công")
+                        .setType("success")
+                        .Build();
+                customAlertActivity.showDialog();
             }
 
             @Override
             public void onFailure(Call<blogs> call, Throwable t) {
-                Toast.makeText(context, "Phê duyệt blog thất bại", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Phê duyệt blog thất bại")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
             }
         });
     }

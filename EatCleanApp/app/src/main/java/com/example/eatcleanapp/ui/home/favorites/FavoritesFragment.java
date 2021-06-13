@@ -22,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
@@ -109,7 +110,6 @@ public class FavoritesFragment extends Fragment implements IClickListener {
             @Override
             public void onResponse(Call<List<recipes>> call, Response<List<recipes>> response) {
                 listFavoritesRecipes = response.body();
-                Log.d("AAA", response.body().toString());
                 mRecipesAdapter.setData(listFavoritesRecipes);
                 GetImage();
                 loadingDialog.dismissDialog();
@@ -117,7 +117,13 @@ public class FavoritesFragment extends Fragment implements IClickListener {
 
             @Override
             public void onFailure(Call<List<recipes>> call, Throwable t) {
-                Toast.makeText(mMainActivity, "Call Api Error", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Lỗi không lấy được dữ liệu")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
             }
         });
     }
@@ -139,8 +145,13 @@ public class FavoritesFragment extends Fragment implements IClickListener {
 
             @Override
             public void onFailure(Call<List<recipeimages>> call, Throwable t) {
-                Toast.makeText(mMainActivity, "Call Api Error", Toast.LENGTH_SHORT).show();
-            }
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Lỗi không lấy được dữ liệu")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();            }
         }));
     }
     @Override

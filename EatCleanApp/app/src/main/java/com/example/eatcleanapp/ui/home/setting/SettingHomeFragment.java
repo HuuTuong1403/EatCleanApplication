@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.users;
@@ -58,6 +59,13 @@ public class SettingHomeFragment extends Fragment {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                    .setActivity(getActivity())
+                                    .setTitle("Thông báo")
+                                    .setMessage("Đăng xuất thành công")
+                                    .setType("success")
+                                    .Build();
+                            customAlertActivity.showDialog();
                             DataLocalManager.deleteUser();
                             settingLogOut();
                         }

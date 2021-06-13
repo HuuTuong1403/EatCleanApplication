@@ -36,7 +36,7 @@ public class CustomAlertActivity {
         this.Type = builder.Type;
     }
 
-    public void showSuccessDialog(){
+    public void showDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.SlidingDialogAnim);
         View view;
         if(Type.equals("success")){
@@ -63,6 +63,7 @@ public class CustomAlertActivity {
         WindowManager.LayoutParams windowAtributes = window.getAttributes();
         windowAtributes.gravity = Gravity.TOP;
         window.setAttributes(windowAtributes);
+
         if (alertDialog.getWindow() != null){
             alertDialog.getWindow().getAttributes().windowAnimations = R.style.SlidingDialogAnim;
         }
@@ -77,28 +78,6 @@ public class CustomAlertActivity {
         alertDialog.show();
     }
 
-    public void showErrorDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.SlidingDialogAnim);
-        View view = LayoutInflater.from(activity).inflate(R.layout.layout_error_dialog, (LinearLayout) activity.findViewById (R.id.layoutDialogContainer));
-        builder.setView(view);
-        ((TextView) view.findViewById(R.id.textTitle)).setText(Title);
-        ((TextView) view.findViewById(R.id.textMessage)).setText(Message);
-        final AlertDialog alertDialog = builder.create();
-        Window window = alertDialog.getWindow();
-        if(window == null){
-            return;
-        }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        WindowManager.LayoutParams windowAtributes = window.getAttributes();
-        windowAtributes.gravity = Gravity.BOTTOM;
-        window.setAttributes(windowAtributes);
-
-        if (alertDialog.getWindow() != null){
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-        }
-        alertDialog.show();
-    }
     public static class Builder {
         private Activity activity;
         private String Title;

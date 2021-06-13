@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.recipeimages;
@@ -63,8 +64,13 @@ public class RecipesApprovalAdminFragment extends Fragment implements IClickList
 
             @Override
             public void onFailure(Call<List<recipes>> call, Throwable t) {
-                Toast.makeText(mAdminActivity, "Call Api Error", Toast.LENGTH_SHORT).show();
-            }
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mAdminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Lỗi không thể lấy dữ liệu")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();              }
         });
     }
 
@@ -86,8 +92,13 @@ public class RecipesApprovalAdminFragment extends Fragment implements IClickList
 
             @Override
             public void onFailure(Call<List<recipeimages>> call, Throwable t) {
-                Toast.makeText(mAdminActivity, "Call Api Error", Toast.LENGTH_SHORT).show();
-            }
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mAdminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Lỗi không thể lấy dữ liệu")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();              }
         });
     }
 

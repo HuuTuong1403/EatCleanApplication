@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.blogimages;
@@ -68,8 +69,13 @@ public class BlogApprovalAdminFragment extends Fragment implements IClickListene
 
             @Override
             public void onFailure(Call<List<blogs>> call, Throwable t) {
-                Toast.makeText(adminActivity, "Call Api Error", Toast.LENGTH_SHORT).show();
-            }
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Lỗi không thể lấy dữ liệu")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();              }
         });
     }
 
@@ -91,8 +97,13 @@ public class BlogApprovalAdminFragment extends Fragment implements IClickListene
 
             @Override
             public void onFailure(Call<List<blogimages>> call, Throwable t) {
-                Toast.makeText(adminActivity, "Call Api Error", Toast.LENGTH_SHORT).show();
-            }
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Lỗi không thể lấy dữ liệu")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();              }
         });
     }
 

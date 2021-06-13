@@ -129,10 +129,11 @@ public class UpdateRecipeFragment extends Fragment {
                 edt_updateRecipe_recipeTime.getText().toString().isEmpty()) {
             CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                     .setActivity(detailActivity)
-                    .setTitle("Chỉnh sửa công thức món ăn thất bại")
+                    .setTitle("Thông báo")
                     .setMessage("Các trường thông tin không được để trống")
+                    .setType("error")
                     .Build();
-            customAlertActivity.showErrorDialog();
+            customAlertActivity.showDialog();
         }
         else{
             String recipeTitle          = edt_updateRecipe_recipeTitle.getText().toString();
@@ -154,20 +155,22 @@ public class UpdateRecipeFragment extends Fragment {
             public void onResponse(Call<recipes> call, Response<recipes> response) {
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(detailActivity)
-                        .setTitle("Chỉnh sửa công thức món ăn thành công")
-                        .setMessage("Chỉnh sửa công thức món ăn thành công, vui lòng đợi quản trị viên phê duyêht")
+                        .setTitle("Thông báo")
+                        .setMessage("Chỉnh sửa công thức món ăn thành công, vui lòng đợi quản trị viên phê duyệt")
+                        .setType("error")
                         .Build();
-                customAlertActivity.showErrorDialog();
+                customAlertActivity.showDialog();
             }
 
             @Override
             public void onFailure(Call<recipes> call, Throwable t) {
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(detailActivity)
-                        .setTitle("Chỉnh sửa công thức món ăn thất bại")
+                        .setTitle("Thông báo")
                         .setMessage("Chỉnh sửa công thức món ăn thất bại")
+                        .setType("error")
                         .Build();
-                customAlertActivity.showErrorDialog();
+                customAlertActivity.showDialog();
             }
         });
     }

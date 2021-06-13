@@ -168,11 +168,11 @@ public class SignInFragment extends Fragment {
                         else{
                             CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                                     .setActivity(getActivity())
-                                    .setTitle("Đăng nhập thất bại")
+                                    .setTitle("Thông báo")
                                     .setMessage("Thông tin đăng nhập không đúng")
                                     .setType("error")
                                     .Build();
-                            customAlertActivity.showSuccessDialog();
+                            customAlertActivity.showDialog();
                         }
 
                     }

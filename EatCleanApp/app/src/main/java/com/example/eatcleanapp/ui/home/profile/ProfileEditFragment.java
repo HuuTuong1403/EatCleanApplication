@@ -76,7 +76,13 @@ public class ProfileEditFragment extends Fragment {
                     public void run() {
                         getUsers();
                         if(profileEdit_edt_email.getText().toString().isEmpty() || profileEdit_edt_fullName.getText().toString().isEmpty()){
-                            Toast.makeText(mSubActivity, "Thông tin email hoặc họ tên không được trống", Toast.LENGTH_SHORT).show();
+                            CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                    .setActivity(mSubActivity)
+                                    .setTitle("Thông báo")
+                                    .setMessage("Thông tin email hoặc họ tên không được trống")
+                                    .setType("error")
+                                    .Build();
+                            customAlertActivity.showDialog();
                             return;
                         }
                         else{
@@ -96,8 +102,13 @@ public class ProfileEditFragment extends Fragment {
                                 profileEdit_layout_fullName.setHint(FullName);
                             }
                             else{
-                                Toast.makeText(mSubActivity, "Email đã tồn tại", Toast.LENGTH_SHORT).show();
-                            }
+                                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                        .setActivity(mSubActivity)
+                                        .setTitle("Thông báo")
+                                        .setMessage("Email đã tồn tại")
+                                        .setType("error")
+                                        .Build();
+                                customAlertActivity.showDialog();                            }
                         }
                     }
                 }, 400);
@@ -153,8 +164,13 @@ public class ProfileEditFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<users>> call, Throwable t) {
-                Toast.makeText(mSubActivity, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
-            }
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mSubActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Đã xảy ra lỗi")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();            }
         });
     }
 
@@ -168,7 +184,13 @@ public class ProfileEditFragment extends Fragment {
 
             @Override
             public void onFailure(Call<users> call, Throwable t) {
-                Toast.makeText(mSubActivity, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mSubActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Đã xảy ra lỗi")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
             }
         });
     }
@@ -180,20 +202,22 @@ public class ProfileEditFragment extends Fragment {
                 getUserByUsername(user.getUsername());
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(mSubActivity)
-                        .setTitle("Đổi thông tin thành công")
+                        .setTitle("Thông báo")
                         .setMessage("Thay đổi thông tin thành công")
+                        .setType("success")
                         .Build();
-                customAlertActivity.showSuccessDialog();
+                customAlertActivity.showDialog();
             }
 
             @Override
             public void onFailure(Call<users> call, Throwable t) {
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(mSubActivity)
-                        .setTitle("Đổi thông tin thất bại")
+                        .setTitle("Thông báo")
                         .setMessage("Thay đổi thông tin thất bại")
+                        .setType("error")
                         .Build();
-                customAlertActivity.showErrorDialog();
+                customAlertActivity.showDialog();
             }
         });
     }

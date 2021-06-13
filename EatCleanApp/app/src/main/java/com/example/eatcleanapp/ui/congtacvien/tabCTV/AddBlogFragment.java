@@ -104,19 +104,21 @@ public class AddBlogFragment extends Fragment {
         if(edt_addBlog_blogTitle.getText().toString().isEmpty() || edt_addBlog_blogContent.getText().toString().isEmpty()){
             CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                     .setActivity(mMainActivity)
-                    .setTitle("Thêm blog thất bại")
+                    .setTitle("Thông báo")
                     .setMessage("Các trường nhập liệu không được trống")
+                    .setType("error")
                     .Build();
-            customAlertActivity.showErrorDialog();
+            customAlertActivity.showDialog();
         }
         else{
             if(mUri == null) {
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(mMainActivity)
-                        .setTitle("Thêm blog thất bại")
+                        .setTitle("Thông báo")
                         .setMessage("Vui lòng tải hình ảnh blog lên")
+                        .setType("error")
                         .Build();
-                customAlertActivity.showErrorDialog();
+                customAlertActivity.showDialog();
             }
             else{
                 Random rd = new Random();
@@ -153,10 +155,11 @@ public class AddBlogFragment extends Fragment {
             public void onResponse(Call<blogs> call, Response<blogs> response) {
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(mMainActivity)
-                        .setTitle("Thêm blog thành công")
+                        .setTitle("Thông báo")
                         .setMessage("Gửi phê duyệt blog thành công")
+                        .setType("success")
                         .Build();
-                customAlertActivity.showSuccessDialog();
+                customAlertActivity.showDialog();
                 edt_addBlog_blogTitle.setText("");
                 edt_addBlog_blogContent.setText("");
                 imgV_addBlog_uploadImage.setImageResource(R.drawable.up);
@@ -166,10 +169,11 @@ public class AddBlogFragment extends Fragment {
             public void onFailure(Call<blogs> call, Throwable t) {
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(mMainActivity)
-                        .setTitle("Thêm blog thất bại")
+                        .setTitle("Thông báo")
                         .setMessage("Gửi phê duyệt blog thất bại")
+                        .setType("error")
                         .Build();
-                customAlertActivity.showErrorDialog();
+                customAlertActivity.showDialog();
             }
         });
     }

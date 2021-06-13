@@ -66,6 +66,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
     private final IClickListener iClickListener;
     private boolean checkIsFavorite;
     private List<recipes> listFavoriteRecipes;
+
     public RecipesAdapter(Context context, IClickListener iClickListener, boolean checkIsFavorite) {
         this.iClickListener = iClickListener;
         this.context = context;

@@ -76,65 +76,79 @@ public class SignUpFragment extends Fragment {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Random rd = new Random();
+                        if(edtFullName.getText().toString().isEmpty() || edtEmail.getText().toString().isEmpty() || edtPassword.getText().toString().isEmpty() || edtPasswordAgain.getText().toString().isEmpty() || edtUsername.getText().toString().isEmpty()){
+                            CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                    .setActivity(getActivity())
+                                    .setTitle("Thông báo")
+                                    .setMessage("Các trường thông tin không được trống")
+                                    .setType("error")
+                                    .Build();
+                            customAlertActivity.showDialog();
+                        }
+                        else{
+                            Random rd = new Random();
 
-                        String Username = edtUsername.getText().toString().trim();
-                        String Email = edtEmail.getText().toString().trim();
+                            String Username = edtUsername.getText().toString().trim();
+                            String Email = edtEmail.getText().toString().trim();
 
-                        boolean checkIDUser = true;
-                        while (checkIDUser){
-                            checkIDUser = false;
-                            int x = rd.nextInt((50000-1000 + 1) + 1000);
-                            IDUser = "ID-U-" + x;
-                            for (users user: usersList
-                            ) {
-                                if (IDUser.equals(user.getIDUser())){
-                                    checkIDUser = true;
-                                    break;
+                            boolean checkIDUser = true;
+                            while (checkIDUser){
+                                checkIDUser = false;
+                                int x = rd.nextInt((50000-1000 + 1) + 1000);
+                                IDUser = "ID-U-" + x;
+                                for (users user: usersList
+                                ) {
+                                    if (IDUser.equals(user.getIDUser())){
+                                        checkIDUser = true;
+                                        break;
+                                    }
                                 }
                             }
-                        }
 
-                        boolean checkEmail = false;
-                        boolean checkUsername = false;
-                        for (users user: usersList) {
-                            if (Email.equals(user.getEmail())){
-                                checkEmail = true;
+                            boolean checkEmail = false;
+                            boolean checkUsername = false;
+                            for (users user: usersList) {
+                                if (Email.equals(user.getEmail())){
+                                    checkEmail = true;
+                                }
+                                if (Username.equals(user.getUsername())){
+                                    checkUsername = true;
+                                }
                             }
-                            if (Username.equals(user.getUsername())){
-                                checkUsername = true;
-                            }
-                        }
-                        if (!checkEmail){
-                            if (!checkUsername){
-                                if (edtPassword.getText().toString().trim().equals(edtPasswordAgain.getText().toString().trim())){
-                                    registerUser(registerUserLink);
+                            if (!checkEmail){
+                                if (!checkUsername){
+                                    if (edtPassword.getText().toString().trim().equals(edtPasswordAgain.getText().toString().trim())){
+                                        registerUser(registerUserLink);
+                                    }
+                                    else{
+                                        CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                                .setActivity(getActivity())
+                                                .setTitle("Thông báo")
+                                                .setMessage("Mật khẩu nhập lại không khớp")
+                                                .setType("error")
+                                                .Build();
+                                        customAlertActivity.showDialog();
+                                    }
                                 }
                                 else{
                                     CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                                             .setActivity(getActivity())
-                                            .setTitle("Đăng ký thất bại")
-                                            .setMessage("Mật khẩu không khớp")
+                                            .setTitle("Thông báo")
+                                            .setMessage("Username bị trùng, vui lòng nhập username khác")
+                                            .setType("error")
                                             .Build();
-                                    customAlertActivity.showErrorDialog();
+                                    customAlertActivity.showDialog();
                                 }
                             }
                             else{
                                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                                         .setActivity(getActivity())
-                                        .setTitle("Đăng ký thất bại")
-                                        .setMessage("Username bị trùng, vui lòng nhập username khác")
+                                        .setTitle("Thông báo")
+                                        .setMessage("Email bị trùng, vui lòng nhập email khác")
+                                        .setType("error")
                                         .Build();
-                                customAlertActivity.showErrorDialog();
+                                customAlertActivity.showDialog();
                             }
-                        }
-                        else{
-                            CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
-                                    .setActivity(getActivity())
-                                    .setTitle("Đăng ký thất bại")
-                                    .setMessage("Email bị trùng, vui lòng nhập email khác")
-                                    .Build();
-                            customAlertActivity.showErrorDialog();
                         }
                     }
                 }, 400);
@@ -166,10 +180,11 @@ public class SignUpFragment extends Fragment {
                 if (response.trim().equals("success")){
                     CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                             .setActivity(getActivity())
-                            .setTitle("Đăng ký thành công")
-                            .setMessage("Đăng ký thành công")
+                            .setTitle("Thông báo")
+                            .setMessage("Đăng ký tài khoản thành công")
+                            .setType("success")
                             .Build();
-                    customAlertActivity.showSuccessDialog();
+                    customAlertActivity.showDialog();
                     edtUsername.setText("");
                     edtEmail.setText("");
                     edtPassword.setText("");
@@ -179,10 +194,11 @@ public class SignUpFragment extends Fragment {
                 else{
                     CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                             .setActivity(getActivity())
-                            .setTitle("Đăng ký thất bại")
-                            .setMessage("Có lỗi xảy ra trong quá trình đăng ký")
+                            .setTitle("Thông báo")
+                            .setMessage("Có lỗi xảy ra trong quá trình đăng ký tài khoản")
+                            .setType("error")
                             .Build();
-                    customAlertActivity.showErrorDialog();
+                    customAlertActivity.showDialog();
                 }
             }
         }, new Response.ErrorListener() {
@@ -190,10 +206,11 @@ public class SignUpFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(getActivity())
-                        .setTitle("Đăng ký thất bại")
-                        .setMessage("Lỗi: " + error.toString())
+                        .setTitle("Thông báo")
+                        .setMessage("Đã xảy ra lỗi: " + error.toString())
+                        .setType("error")
                         .Build();
-                customAlertActivity.showErrorDialog();
+                customAlertActivity.showDialog();
             }
         }){
             protected Map<String, String> getParams () throws AuthFailureError{
@@ -221,7 +238,13 @@ public class SignUpFragment extends Fragment {
 
             @Override
             public void onFailure(@NotNull Call<List<users>> call, @NotNull Throwable t) {
-                Toast.makeText(view.getContext(), t.toString(), Toast.LENGTH_SHORT).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(getActivity())
+                        .setTitle("Thông báo")
+                        .setMessage("Đã xảy ra lỗi khi lấy dữ liệu")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
             }
         });
     }

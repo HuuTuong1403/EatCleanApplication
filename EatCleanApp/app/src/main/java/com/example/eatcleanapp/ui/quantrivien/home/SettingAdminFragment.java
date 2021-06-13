@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.users;
@@ -45,6 +46,13 @@ public class SettingAdminFragment extends Fragment {
     }
 
     private void LogOutAdmin(){
+        CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                .setActivity(mAdminActivity)
+                .setTitle("Thông báo")
+                .setMessage("Đăng xuất thành công")
+                .setType("success")
+                .Build();
+        customAlertActivity.showDialog();
         Intent intent = new Intent(view.getContext(), MainActivity.class);
         DataLocalManager.deleteUser();
         startActivity(intent);

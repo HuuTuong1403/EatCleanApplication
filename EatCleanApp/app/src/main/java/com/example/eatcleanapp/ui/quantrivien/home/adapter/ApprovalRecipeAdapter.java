@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.recipes;
@@ -97,12 +98,24 @@ public class ApprovalRecipeAdapter extends RecyclerView.Adapter<ApprovalRecipeAd
         APIService.apiService.approveRecipe(IDRecipes).enqueue(new Callback<recipes>() {
             @Override
             public void onResponse(Call<recipes> call, Response<recipes> response) {
-                Toast.makeText(context, "Phê duyệt công thức thành công", Toast.LENGTH_LONG).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Phê duyệt công thức thành công")
+                        .setType("success")
+                        .Build();
+                customAlertActivity.showDialog();
             }
 
             @Override
             public void onFailure(Call<recipes> call, Throwable t) {
-                Toast.makeText(context, "Phê duyệt công thức thất bại", Toast.LENGTH_LONG).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Phê duyệt công thức thất bại")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
             }
         });
     }
@@ -111,13 +124,23 @@ public class ApprovalRecipeAdapter extends RecyclerView.Adapter<ApprovalRecipeAd
         APIService.apiService.denyRecipe(IDRecipes).enqueue(new Callback<recipes>() {
             @Override
             public void onResponse(Call<recipes> call, Response<recipes> response) {
-                Toast.makeText(context, "Từ chối phê duyệt công thức thành công", Toast.LENGTH_LONG).show();
-            }
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Từ chối phê duyệt công thức thành công")
+                        .setType("success")
+                        .Build();
+                customAlertActivity.showDialog();            }
 
             @Override
             public void onFailure(Call<recipes> call, Throwable t) {
-                Toast.makeText(context, "Từ chối phê duyệt công thức thất bại", Toast.LENGTH_LONG).show();
-            }
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Từ chối phê duyệt công thức thất bại")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();            }
         });
     }
 

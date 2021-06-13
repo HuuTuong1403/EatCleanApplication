@@ -119,10 +119,11 @@ public class UpdateBlogFragment extends Fragment {
         if(edt_updateBlog_blogTitle.getText().toString().isEmpty() || edt_updateBlog_blogContent.getText().toString().isEmpty()){
             CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                     .setActivity(detailActivity)
-                    .setTitle("Chỉnh sửa blog thất bại")
+                    .setTitle("Thông báo")
                     .setMessage("Các trường thông tin không được để trống")
+                    .setType("error")
                     .Build();
-            customAlertActivity.showErrorDialog();
+            customAlertActivity.showDialog();
         }
         else{
             String BlogTitle    = edt_updateBlog_blogTitle.getText().toString();
@@ -140,20 +141,22 @@ public class UpdateBlogFragment extends Fragment {
             public void onResponse(Call<blogs> call, Response<blogs> response) {
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(detailActivity)
-                        .setTitle("Chỉnh sửa blog thất bại")
-                        .setMessage("Gửi phê duyệt blog thành công, vui lòng chờ quản trị viên phê duyệt")
+                        .setTitle("Thông báo")
+                        .setMessage("Chỉnh sửa blog thành công! Gửi phê duyệt blog thành công, vui lòng chờ quản trị viên phê duyệt")
+                        .setType("success")
                         .Build();
-                customAlertActivity.showSuccessDialog();
+                customAlertActivity.showDialog();
             }
 
             @Override
             public void onFailure(Call<blogs> call, Throwable t) {
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                         .setActivity(detailActivity)
-                        .setTitle("Chỉnh sửa blog thất bại")
+                        .setTitle("Thông báo")
                         .setMessage("Chỉnh sửa blog thất bại")
+                        .setType("error")
                         .Build();
-                customAlertActivity.showErrorDialog();
+                customAlertActivity.showDialog();
             }
         });
     }

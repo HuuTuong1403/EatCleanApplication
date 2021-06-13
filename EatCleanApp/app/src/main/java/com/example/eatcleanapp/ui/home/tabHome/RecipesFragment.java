@@ -30,6 +30,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
@@ -121,7 +122,6 @@ public class RecipesFragment extends Fragment implements IClickListener {
         String s = edt_search_recycle.getText().toString();
         mRecipesAdapter.getFilter().filter(s);
         listRecipes = mRecipesAdapter.change();
-        Log.e("AAA", "size: " + listRecipes.size() + " string: " + s);
     }
 
 
@@ -176,7 +176,13 @@ public class RecipesFragment extends Fragment implements IClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_LONG).show();
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Đã xảy ra lỗi: " + error.toString())
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
             }
         });
         requestQueue.add(jsonArrayRequest);
