@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -46,10 +47,9 @@ public class SignUpFragment extends Fragment {
     private View view;
     private TextInputEditText edtUsername, edtEmail, edtPassword, edtPasswordAgain, edtFullName;
     private Button btnRegister;
+    private CheckBox cb_chooseCtv;
     private final String registerUserLink = "https://msteatclean.000webhostapp.com/registerUser.php";
-    private final String getUserLink = "https://msteatclean.000webhostapp.com/getUser.php";
     private  List<users> usersList;
-    private ScrollView scrollView;
     private SubActivity mSubActivity;
     private String IDUser;
 
@@ -163,13 +163,13 @@ public class SignUpFragment extends Fragment {
     }
 
     private void Mapping(){
-        edtUsername = (TextInputEditText) view.findViewById(R.id.signup_edtUsername);
-        edtEmail = (TextInputEditText) view.findViewById(R.id.signup_edtEmail);
-        edtPassword = (TextInputEditText) view.findViewById(R.id.signup_edtPassword);
-        edtPasswordAgain = (TextInputEditText) view.findViewById(R.id.signup_edtPasswordAgain);
-        edtFullName = (TextInputEditText) view.findViewById(R.id.signup_edtFullname);
-        btnRegister = (Button) view.findViewById(R.id.signup_btnRegister);
-        scrollView = (ScrollView)view.findViewById(R.id.backgroundSignUp);
+        edtUsername         = (TextInputEditText) view.findViewById(R.id.signup_edtUsername);
+        edtEmail            = (TextInputEditText) view.findViewById(R.id.signup_edtEmail);
+        edtPassword         = (TextInputEditText) view.findViewById(R.id.signup_edtPassword);
+        edtPasswordAgain    = (TextInputEditText) view.findViewById(R.id.signup_edtPasswordAgain);
+        edtFullName         = (TextInputEditText) view.findViewById(R.id.signup_edtFullname);
+        btnRegister         = (Button) view.findViewById(R.id.signup_btnRegister);
+        cb_chooseCtv        = (CheckBox) view.findViewById(R.id.cb_chooseCtv);
     }
     private void registerUser(String url){
         String password = MD5Hash.MD5(edtPassword.getText().toString().trim());
@@ -190,6 +190,7 @@ public class SignUpFragment extends Fragment {
                     edtPassword.setText("");
                     edtPasswordAgain.setText("");
                     edtFullName.setText("");
+                    cb_chooseCtv.setChecked(false);
                 }
                 else{
                     CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
@@ -221,7 +222,12 @@ public class SignUpFragment extends Fragment {
                 params.put("FullName", edtFullName.getText().toString().trim());
                 params.put("Image", "https://msteatclean.000webhostapp.com/uploads/noavatar.png");
                 params.put("LoginFB", "0");
-                params.put("IDRole", "R003");
+                if(cb_chooseCtv.isChecked()){
+                    params.put("IDRole", "R002");
+                }
+                else{
+                    params.put("IDRole", "R003");
+                }
                 params.put("Username", edtUsername.getText().toString().trim());
                 return  params;
             }

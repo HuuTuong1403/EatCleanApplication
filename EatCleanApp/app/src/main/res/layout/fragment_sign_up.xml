@@ -123,6 +123,14 @@
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
+            <CheckBox
+                android:id="@+id/cb_chooseCtv"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layoutDirection="rtl"
+                android:text="Để trở thành cộng tác viên! Hãy chọn vào ô này."
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
             <Button
                 android:layout_marginBottom="20dp"
                 android:layout_width="match_parent"
