@@ -95,7 +95,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="35dp">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_approvalBlog_Deny"
@@ -108,7 +108,7 @@
                 android:layout_marginEnd="15dp"
                 android:textColor="@color/custom_color_text"
                 android:background="@drawable/custom_button"
-                android:backgroundTint="@color/gray_empty_favorites"/>
+                android:backgroundTint="@color/gray"/>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_approvalBlog_Approval"
                 android:layout_width="wrap_content"
@@ -120,7 +120,7 @@
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/custom_button"
                 android:textColor="@color/custom_color_text"
-                android:backgroundTint="@color/gray_empty_favorites"/>
+                android:backgroundTint="@color/gray"/>
         </LinearLayout>
 
     </LinearLayout>

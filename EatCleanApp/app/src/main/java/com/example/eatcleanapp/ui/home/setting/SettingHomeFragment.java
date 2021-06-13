@@ -59,13 +59,6 @@ public class SettingHomeFragment extends Fragment {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
-                                    .setActivity(getActivity())
-                                    .setTitle("Thông báo")
-                                    .setMessage("Đăng xuất thành công")
-                                    .setType("success")
-                                    .Build();
-                            customAlertActivity.showDialog();
                             DataLocalManager.deleteUser();
                             settingLogOut();
                         }

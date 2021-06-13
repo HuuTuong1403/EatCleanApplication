@@ -46,13 +46,6 @@ public class SettingAdminFragment extends Fragment {
     }
 
     private void LogOutAdmin(){
-        CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
-                .setActivity(mAdminActivity)
-                .setTitle("Thông báo")
-                .setMessage("Đăng xuất thành công")
-                .setType("success")
-                .Build();
-        customAlertActivity.showDialog();
         Intent intent = new Intent(view.getContext(), MainActivity.class);
         DataLocalManager.deleteUser();
         startActivity(intent);
