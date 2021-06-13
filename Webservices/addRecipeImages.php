@@ -1,37 +1,27 @@
 <?php
 	require "dbConfig.php";
 
-	$IDRecipes = $_GET['IDRecipes'];
-	$RecipesTitle = $_POST['RecipesTitle'];
-	$RecipesAuthor = $_POST['RecipesAuthor'];	
-	$RecipesContent = $_GET['RecipesContent'];
-	$NutritionalIngredients = $_POST['NutritionalIngredients'];
-	$Ingredients = $_POST['Ingredients'];	
-	$Steps = $_GET['Steps'];
-	$Time = $_POST['Time'];
-	$Status = $_POST['Status'];	
+	$IDRecipes = $_POST['IDRecipes'];
+	$IDRecipesImages = $_POST['IDRecipesImages'];
+	$RecipesImages = $_POST['RecipesImages'];
 
-	$query = " UPDATE recipes SET RecipesTitle = '$RecipesTitle', 
-								RecipesAuthor = '$RecipesAuthor',
-								RecipesContent = '$RecipesContent', 
-								NutritionalIngredients = '$NutritionalIngredients',
-								Ingredients = '$Ingredients',
-								Steps = '$Steps',
-								Time = '$Time', 
-								Status = '$Status'
-							WHERE IDRecipes = '$IDRecipes' ";
-							
+	$query_add = "INSERT INTO recipesimages VALUES ('$IDRecipesImages', '$RecipesImages', '$IDRecipes')";
+
 	$response = array();
-	if (mysqli_query($connect, $query)){
-		Thành công
+
+	if (mysqli_query($connect, $query_add)){
+				//Thành công
 		$response = array(
             'message' => 'Thành công'
         );
-	}else{
-		//lỗi
+
+	}
+	else{
 		$response = array(
-             'message' => 'Thất bại'
-       );
+            'message' => 'Thất bại'
+        );
+		
 	}
 	echo json_encode($response);
+
 ?>

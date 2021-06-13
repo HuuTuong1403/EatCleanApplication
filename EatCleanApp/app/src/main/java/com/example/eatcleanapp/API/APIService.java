@@ -97,6 +97,11 @@ public interface APIService {
                                  @Field("Steps") String Steps,
                                  @Field("Time") String Time,
                                  @Field("Status") String Status);
+     @FormUrlEncoded
+     @POST("addRecipeImages.php")
+     Call<recipeimages> addRecipeImage (@Field("IDRecipes") String IDRecipes,
+                                        @Field("IDRecipesImages") String IDRecipesImages,
+                                        @Field("RecipesImages") String RecipesImages);
 
      @FormUrlEncoded
      @POST("addFavoriteRecipes.php")
@@ -109,7 +114,8 @@ public interface APIService {
      @GET("deleteFavoriteRecipes.php")
      Call<favoriterecipes> deleteFavoriteRecipes(@Query("IDUser") String IDUser,
                                                  @Query("IDRecipes") String IDRecipes);
-
+     @GET("getRecipeImages.php")
+     Call<List<recipeimages>> getRecipeImages ();
      @POST("updateUser.php")
      @FormUrlEncoded
      Call<users> updateUser(@Query("IDUser") String IDUser,
@@ -128,7 +134,9 @@ public interface APIService {
      Call<users> uploadImage(@Query("IDUser") String IDUser,
                              @Part MultipartBody.Part fileToUpload);
 
-
+     @Multipart
+     @POST("uploadImage.php")
+     Call<String> uploadImage1 (@Part MultipartBody.Part fileToUpload);
      @FormUrlEncoded
      @POST("addComment.php")
      Call<comments> addComment(@Field("IDUser") String IDUser,
