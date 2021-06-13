@@ -41,8 +41,6 @@ public interface APIService {
      @GET("getUser.php")
      Call<List<users>> getUser();
 
-     @GET("getRecipeImages.php")
-     Call<List<recipeimages>> getImageRecipe();
 
      @GET("getRecipesNoImg.php")
      Call<List<recipes>> getRecipesNoImage();
@@ -102,7 +100,11 @@ public interface APIService {
      Call<recipeimages> addRecipeImage (@Field("IDRecipes") String IDRecipes,
                                         @Field("IDRecipesImages") String IDRecipesImages,
                                         @Field("RecipesImages") String RecipesImages);
-
+     @FormUrlEncoded
+     @POST("addBlogImages.php")
+     Call<blogimages> addBlogImage (@Field("IDBlogImages") String IDBlogImages,
+                                        @Field("BlogImages") String BlogImages,
+                                        @Field("IDBlog") String IDBlog);
      @FormUrlEncoded
      @POST("addFavoriteRecipes.php")
      Call<favoriterecipes> addFavoriteRecipes (@Field("IDUser") String IDUser,
@@ -116,6 +118,7 @@ public interface APIService {
                                                  @Query("IDRecipes") String IDRecipes);
      @GET("getRecipeImages.php")
      Call<List<recipeimages>> getRecipeImages ();
+
      @POST("updateUser.php")
      @FormUrlEncoded
      Call<users> updateUser(@Query("IDUser") String IDUser,

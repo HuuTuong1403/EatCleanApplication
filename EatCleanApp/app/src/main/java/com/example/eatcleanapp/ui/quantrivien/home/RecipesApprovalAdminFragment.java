@@ -75,7 +75,7 @@ public class RecipesApprovalAdminFragment extends Fragment implements IClickList
     }
 
     private void GetImage() {
-        APIService.apiService.getImageRecipe().enqueue(new Callback<List<recipeimages>>() {
+        APIService.apiService.getRecipeImages().enqueue(new Callback<List<recipeimages>>() {
             @Override
             public void onResponse(Call<List<recipeimages>> call, Response<List<recipeimages>> response) {
                 listRecipeImage = response.body();

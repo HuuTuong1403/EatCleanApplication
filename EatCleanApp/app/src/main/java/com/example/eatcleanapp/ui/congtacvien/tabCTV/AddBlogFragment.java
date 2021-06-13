@@ -33,7 +33,10 @@ import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
+import com.example.eatcleanapp.RealPathUtil;
+import com.example.eatcleanapp.model.blogimages;
 import com.example.eatcleanapp.model.blogs;
+import com.example.eatcleanapp.model.recipeimages;
 import com.example.eatcleanapp.model.recipes;
 import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;
@@ -53,6 +56,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,7 +74,8 @@ public class AddBlogFragment extends Fragment {
     private List<blogs> listBlogs;
     private Uri mUri;
     private String IDBlog;
-
+    private String urlBlogImage;
+    private List<blogimages> listBlogImage;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -93,6 +100,7 @@ public class AddBlogFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getBlogs();
+                getBlogImages();
                 sendApproval();
             }
         });
@@ -142,7 +150,7 @@ public class AddBlogFragment extends Fragment {
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date now = new Date();
                 String Time = df.format(now);
-
+                getUrlImage();
                 addBlogCtv(IDBlog, BlogTitle, BlogAuthor, BlogContent, Time, Status);
 
             }
@@ -153,16 +161,7 @@ public class AddBlogFragment extends Fragment {
         APIService.apiService.addBlogCtv(id, title, author, content, time, status).enqueue(new Callback<blogs>() {
             @Override
             public void onResponse(Call<blogs> call, Response<blogs> response) {
-                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
-                        .setActivity(mMainActivity)
-                        .setTitle("Thông báo")
-                        .setMessage("Gửi phê duyệt blog thành công")
-                        .setType("success")
-                        .Build();
-                customAlertActivity.showDialog();
-                edt_addBlog_blogTitle.setText("");
-                edt_addBlog_blogContent.setText("");
-                imgV_addBlog_uploadImage.setImageResource(R.drawable.up);
+                addBlogImage(id, urlBlogImage);
             }
 
             @Override
@@ -177,7 +176,72 @@ public class AddBlogFragment extends Fragment {
             }
         });
     }
+    private void addBlogImage (String IDBlog, String Url){
+        String IDBlogImages = "";
+        Random rd = new Random();
+        boolean checkIDBlogImages = true;
+        while (checkIDBlogImages){
+            checkIDBlogImages = false;
+            int x = rd.nextInt((50000-1000 + 1) + 1000);
+            IDBlogImages = "RM-" + x;
+            for (blogimages blogimage: listBlogImage
+            ) {
+                if (IDBlogImages.equals(blogimage.getBlogImages())) {
+                    checkIDBlogImages = true;
+                    break;
+                }
+            }
+        }
+        APIService.apiService.addBlogImage(IDBlogImages, Url, IDBlog).enqueue(new Callback<blogimages>() {
+            @Override
+            public void onResponse(Call<blogimages> call, Response<blogimages> response) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Gửi phê duyệt blog thành công")
+                        .setType("success")
+                        .Build();
+                customAlertActivity.showDialog();
+                edt_addBlog_blogTitle.setText("");
+                edt_addBlog_blogContent.setText("");
+                imgV_addBlog_uploadImage.setImageResource(R.drawable.up);
+            }
 
+            @Override
+            public void onFailure(Call<blogimages> call, Throwable t) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Hình ảnh tải lên thất bại")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
+        });
+    }
+    private void getUrlImage (){
+        String strRealPath = RealPathUtil.getRealPath(view.getContext(), mUri);
+        File file = new File(strRealPath);
+        RequestBody requestBodyAvatar = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part multipartBodyAvatar = MultipartBody.Part.createFormData("fileToUpload", file.getName(), requestBodyAvatar);
+        APIService.apiService.uploadImage1(multipartBodyAvatar).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                urlBlogImage = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thông báo")
+                        .setMessage(t.toString())
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
+        });
+    }
     private void getBlogs(){
         APIService.apiService.getBlogs().enqueue(new Callback<List<blogs>>() {
             @Override
@@ -191,7 +255,25 @@ public class AddBlogFragment extends Fragment {
             }
         });
     }
+    private void getBlogImages(){
+        APIService.apiService.getImageBlog().enqueue(new Callback<List<blogimages>>() {
+            @Override
+            public void onResponse(Call<List<blogimages>> call, Response<List<blogimages>> response) {
+                listBlogImage = response.body();
+            }
 
+            @Override
+            public void onFailure(Call<List<blogimages>> call, Throwable t) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Lỗi không thể lấy dữ liệu")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
+        });
+    }
     private void Mapping() {
         imgV_addBlog_uploadImage    = (ImageView)view.findViewById(R.id.imgV_addBlog_uploadImage);
         edt_addBlog_blogTitle       = (EditText)view.findViewById(R.id.edt_addBlog_blogTitle);
