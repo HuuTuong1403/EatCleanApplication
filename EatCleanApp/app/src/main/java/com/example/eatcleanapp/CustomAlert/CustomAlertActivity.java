@@ -37,7 +37,7 @@ public class CustomAlertActivity {
     }
 
     public void showDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.SlidingDialogAnim);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.AlertDialog);
         View view;
         if(Type.equals("success")){
             view = LayoutInflater.from(activity).inflate(R.layout.layout_success_dialog, (LinearLayout) activity.findViewById (R.id.layoutDialogContainer));
@@ -64,17 +64,13 @@ public class CustomAlertActivity {
         windowAtributes.gravity = Gravity.TOP;
         window.setAttributes(windowAtributes);
 
-        if (alertDialog.getWindow() != null){
-            alertDialog.getWindow().getAttributes().windowAnimations = R.style.SlidingDialogAnim;
-        }
-
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 alertDialog.dismiss();
             }
-        }, 1600);
+        }, 1800);
         alertDialog.show();
     }
 
