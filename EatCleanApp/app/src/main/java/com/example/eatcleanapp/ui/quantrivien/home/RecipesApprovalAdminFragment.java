@@ -98,7 +98,8 @@ public class RecipesApprovalAdminFragment extends Fragment implements IClickList
                         .setMessage("Lỗi không thể lấy dữ liệu")
                         .setType("error")
                         .Build();
-                customAlertActivity.showDialog();              }
+                customAlertActivity.showDialog();
+            }
         });
     }
 

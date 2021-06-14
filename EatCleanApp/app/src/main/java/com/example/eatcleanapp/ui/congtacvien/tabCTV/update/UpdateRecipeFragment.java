@@ -150,7 +150,7 @@ public class UpdateRecipeFragment extends Fragment {
             String recipeIngredient     = edt_updateRecipe_recipeIngredients.getText().toString();
             String recipeStep           = edt_updateRecipe_recipeSteps.getText().toString();
             String recipeTime           = edt_updateRecipe_recipeTime.getText().toString();
-            String recipeStatus         = "waittingforapproval";
+            String recipeStatus         = "waitingforapproval";
             updateRecipeCtv(recipe.getIDRecipes(), recipeTitle, recipeAuthor, recipeContent, recipeNutritional, recipeIngredient, recipeStep, recipeTime, recipeStatus);
         }
     }

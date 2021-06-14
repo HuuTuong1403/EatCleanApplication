@@ -76,6 +76,7 @@ public class SignInFragment extends Fragment {
         view = inflater.inflate(R.layout.sign_in_fragment, container, false);
         loginButton();
         Mapping();
+        GetUsers();
         loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
         loginButton.setFragment(this);
         setLogin_Button();
@@ -176,7 +177,7 @@ public class SignInFragment extends Fragment {
                         }
 
                     }
-                }, 400);
+                }, 600);
             }
         });
         return view;
