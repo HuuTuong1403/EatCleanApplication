@@ -14,9 +14,11 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.databinding.ActivityMainBinding;
 import com.example.eatcleanapp.model.users;
@@ -117,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         Mapping();
-
         appBarLayout = (AppBarLayout)findViewById(R.id.app_bar_search);
         appBarHome = (AppBarLayout)findViewById(R.id.app_home);
         searchBox = (ImageButton)findViewById(R.id.searchBox);
@@ -167,8 +168,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         APIService.apiService.getUserByUsername(Username).enqueue(new Callback<users>() {
             @Override
             public void onResponse(Call<users> call, Response<users> response) {
-                DataLocalManager.setUser(response.body());
-                user = DataLocalManager.getUser();
+                user = response.body();
+                DataLocalManager.setUser(user);
             }
 
             @Override
