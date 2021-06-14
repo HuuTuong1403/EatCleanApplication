@@ -19,8 +19,10 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.R;
@@ -48,6 +50,7 @@ public class ProfileEditFragment extends Fragment {
     private Toolbar toolbar;
     private users user;
     private List<users> lstUsers;
+    private ImageView imageView_avatar_user_edit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,12 +59,15 @@ public class ProfileEditFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_profile_edit, container, false);
         Mapping();
         user = DataLocalManager.getUser();
+        if(user != null){
+            profileEdit_edt_userName.setText(user.getUsername());
 
-        profileEdit_edt_userName.setText(user.getUsername());
+            //Set layout
+            profileEdit_layout_email.setHint(user.getEmail());
+            profileEdit_layout_fullName.setHint(user.getFullName());
+            Glide.with(view).load(user.getImage()).placeholder(R.drawable.gray).into(imageView_avatar_user_edit);
+        }
 
-        //Set layout
-        profileEdit_layout_email.setHint(user.getEmail());
-        profileEdit_layout_fullName.setHint(user.getFullName());
 
         //Animate and Delay
         Animation animButton = mSubActivity.getAnimButton(view);
@@ -152,6 +158,7 @@ public class ProfileEditFragment extends Fragment {
         profileEdit_edt_fullName    = (TextInputEditText)view.findViewById(R.id.profileEdit_edt_fullName);
         profileEdt_btn_saveChange   = (Button)view.findViewById(R.id.profileEdit_btn_saveChange);
         profileEdt_btn_cancelChange = (Button)view.findViewById(R.id.profileEdit_btn_cancelChange);
+        imageView_avatar_user_edit  = (ImageView)view.findViewById(R.id.imageView_avatar_user_edit);
         lstUsers                    = new ArrayList<>();
     }
 

@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageView_avatar_user"
+            android:id="@+id/imageView_avatar_user_edit"
             android:layout_marginTop="20dp"
             android:layout_width="150dp"
             android:layout_gravity="center"
