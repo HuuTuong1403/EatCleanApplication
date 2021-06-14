@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
+import com.example.eatcleanapp.MD5.MD5Hash;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.SubActivity;
 import com.example.eatcleanapp.model.users;
@@ -64,7 +65,7 @@ public class ProfileChangePassFragment extends Fragment {
                             return;
                         }
                         else{
-                            String oldPass = profileChangePass_edt_oldPassword.getText().toString();
+                            String oldPass = MD5Hash.MD5(profileChangePass_edt_oldPassword.getText().toString());
                             String newPass = profileChangePass_edt_newPassword.getText().toString();
                             String newPassAgain = profileChangePass_edt_newPasswordAgain.getText().toString();
                             if(oldPass.equals(user.getPassword())){
@@ -158,7 +159,8 @@ public class ProfileChangePassFragment extends Fragment {
     }
 
     private void changePass(String IDUser, String Password){
-        APIService.apiService.changePass(IDUser, Password).enqueue(new Callback<users>() {
+        String passwordHash = MD5Hash.MD5(Password);
+        APIService.apiService.changePass(IDUser, passwordHash).enqueue(new Callback<users>() {
             @Override
             public void onResponse(Call<users> call, Response<users> response) {
                 getUserByUsername(user.getUsername());
