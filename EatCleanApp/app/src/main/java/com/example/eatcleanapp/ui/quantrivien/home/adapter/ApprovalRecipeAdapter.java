@@ -67,80 +67,76 @@ public class ApprovalRecipeAdapter extends RecyclerView.Adapter<ApprovalRecipeAd
         holder.txv_approvalRecipe_Author.setText(recipe.getRecipesAuthor());
 
         bottomNavigationView = adminActivity.findViewById(R.id.bottom_menu_admin);
+
+
         holder.btn_approvalRecipe_Approval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                approvalRecipe(listRecipes.get(position).getIDRecipes());
-                listRecipes.remove(listRecipes.get(position));
-                BadgeDrawable badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.menu_recipes24_not_approval);
-                badgeDrawable.setNumber(listRecipes.size());
-                badgeDrawable.setVisible(true);
-                notifyItemRemoved(position);
-                notifyDataSetChanged();
+                APIService.apiService.approveRecipe(listRecipes.get(position).getIDRecipes()).enqueue(new Callback<recipes>() {
+                    @Override
+                    public void onResponse(Call<recipes> call, Response<recipes> response) {
+                        CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                .setActivity(adminActivity)
+                                .setTitle("Thông báo")
+                                .setMessage("Phê duyệt công thức thành công")
+                                .setType("success")
+                                .Build();
+                        customAlertActivity.showDialog();
+                        listRecipes.remove(listRecipes.get(position));
+                        BadgeDrawable badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.menu_recipes24_not_approval);
+                        badgeDrawable.setNumber(listRecipes.size());
+                        badgeDrawable.setVisible(true);
+                        notifyItemRemoved(position);
+                        notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailure(Call<recipes> call, Throwable t) {
+                        CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                .setActivity(adminActivity)
+                                .setTitle("Thông báo")
+                                .setMessage("Phê duyệt công thức thất bại")
+                                .setType("error")
+                                .Build();
+                        customAlertActivity.showDialog();
+                    }
+                });
             }
         });
 
         holder.btn_approvalRecipe_Deny.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deny(listRecipes.get(position).getIDRecipes());
-                listRecipes.remove(listRecipes.get(position));
-                BadgeDrawable badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.menu_recipes24_not_approval);
-                badgeDrawable.setNumber(listRecipes.size());
-                badgeDrawable.setVisible(true);
-                notifyItemRemoved(position);
-                notifyDataSetChanged();
+                APIService.apiService.denyRecipe(listRecipes.get(position).getIDRecipes()).enqueue(new Callback<recipes>() {
+                    @Override
+                    public void onResponse(Call<recipes> call, Response<recipes> response) {
+                        CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                .setActivity(adminActivity)
+                                .setTitle("Thông báo")
+                                .setMessage("Từ chối phê duyệt công thức thành công")
+                                .setType("success")
+                                .Build();
+                        customAlertActivity.showDialog();
+                        listRecipes.remove(listRecipes.get(position));
+                        BadgeDrawable badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.menu_recipes24_not_approval);
+                        badgeDrawable.setNumber(listRecipes.size());
+                        badgeDrawable.setVisible(true);
+                        notifyItemRemoved(position);
+                        notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailure(Call<recipes> call, Throwable t) {
+                        CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                .setActivity(adminActivity)
+                                .setTitle("Thông báo")
+                                .setMessage("Từ chối phê duyệt công thức thất bại")
+                                .setType("error")
+                                .Build();
+                        customAlertActivity.showDialog();
+                    }
+                });
             }
-        });
-    }
-
-    private void approvalRecipe(String IDRecipes){
-        APIService.apiService.approveRecipe(IDRecipes).enqueue(new Callback<recipes>() {
-            @Override
-            public void onResponse(Call<recipes> call, Response<recipes> response) {
-                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
-                        .setActivity(adminActivity)
-                        .setTitle("Thông báo")
-                        .setMessage("Phê duyệt công thức thành công")
-                        .setType("success")
-                        .Build();
-                customAlertActivity.showDialog();
-            }
-
-            @Override
-            public void onFailure(Call<recipes> call, Throwable t) {
-                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
-                        .setActivity(adminActivity)
-                        .setTitle("Thông báo")
-                        .setMessage("Phê duyệt công thức thất bại")
-                        .setType("error")
-                        .Build();
-                customAlertActivity.showDialog();
-            }
-        });
-    }
-
-    private void deny(String IDRecipes){
-        APIService.apiService.denyRecipe(IDRecipes).enqueue(new Callback<recipes>() {
-            @Override
-            public void onResponse(Call<recipes> call, Response<recipes> response) {
-                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
-                        .setActivity(adminActivity)
-                        .setTitle("Thông báo")
-                        .setMessage("Từ chối phê duyệt công thức thành công")
-                        .setType("success")
-                        .Build();
-                customAlertActivity.showDialog();            }
-
-            @Override
-            public void onFailure(Call<recipes> call, Throwable t) {
-                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
-                        .setActivity(adminActivity)
-                        .setTitle("Thông báo")
-                        .setMessage("Từ chối phê duyệt công thức thất bại")
-                        .setType("error")
-                        .Build();
-                customAlertActivity.showDialog();            }
         });
     }
 

@@ -77,26 +77,70 @@ public class ApprovalBlogAdapter extends RecyclerView.Adapter<ApprovalBlogAdapte
         holder.btn_approvalBlog_Approval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                approvalBlog(listBlogs.get(position).getIDBlog());
-                listBlogs.remove(listBlogs.get(position));
-                BadgeDrawable badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.menu_blog_not_approval);
-                badgeDrawable.setNumber(listBlogs.size());
-                badgeDrawable.setVisible(true);
-                notifyItemRemoved(position);
-                notifyDataSetChanged();
+                APIService.apiService.approveBlog(listBlogs.get(position).getIDBlog()).enqueue(new Callback<blogs>() {
+                    @Override
+                    public void onResponse(Call<blogs> call, Response<blogs> response) {
+                        CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                .setActivity(adminActivity)
+                                .setTitle("Thông báo")
+                                .setMessage("Phê duyệt blog thành công")
+                                .setType("success")
+                                .Build();
+                        customAlertActivity.showDialog();
+                        listBlogs.remove(listBlogs.get(position));
+                        BadgeDrawable badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.menu_blog_not_approval);
+                        badgeDrawable.setNumber(listBlogs.size());
+                        badgeDrawable.setVisible(true);
+                        notifyItemRemoved(position);
+                        notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailure(Call<blogs> call, Throwable t) {
+                        CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                .setActivity(adminActivity)
+                                .setTitle("Thông báo")
+                                .setMessage("Phê duyệt blog thất bại")
+                                .setType("error")
+                                .Build();
+                        customAlertActivity.showDialog();
+                    }
+                });
             }
         });
 
         holder.btn_approvalBlog_Deny.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                denyBlog(listBlogs.get(position).getIDBlog());
-                listBlogs.remove(listBlogs.get(position));
-                BadgeDrawable badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.menu_blog_not_approval);
-                badgeDrawable.setNumber(listBlogs.size());
-                badgeDrawable.setVisible(true);
-                notifyItemRemoved(position);
-                notifyDataSetChanged();
+                APIService.apiService.denyBlog(listBlogs.get(position).getIDBlog()).enqueue(new Callback<blogs>() {
+                    @Override
+                    public void onResponse(Call<blogs> call, Response<blogs> response) {
+                        CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                .setActivity(adminActivity)
+                                .setTitle("Thông báo")
+                                .setMessage("Từ chối phê duyệt blog thành công")
+                                .setType("success")
+                                .Build();
+                        customAlertActivity.showDialog();
+                        listBlogs.remove(listBlogs.get(position));
+                        BadgeDrawable badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.menu_blog_not_approval);
+                        badgeDrawable.setNumber(listBlogs.size());
+                        badgeDrawable.setVisible(true);
+                        notifyItemRemoved(position);
+                        notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailure(Call<blogs> call, Throwable t) {
+                        CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                                .setActivity(adminActivity)
+                                .setTitle("Thông báo")
+                                .setMessage("Từ chối phê duyệt blog thất bại")
+                                .setType("success")
+                                .Build();
+                        customAlertActivity.showDialog();
+                    }
+                });
             }
         });
 
@@ -108,58 +152,6 @@ public class ApprovalBlogAdapter extends RecyclerView.Adapter<ApprovalBlogAdapte
             return listBlogs.size();
         }
         return 0;
-    }
-
-    private void denyBlog(String IDBlog){
-        APIService.apiService.denyBlog(IDBlog).enqueue(new Callback<blogs>() {
-            @Override
-            public void onResponse(Call<blogs> call, Response<blogs> response) {
-                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
-                        .setActivity(adminActivity)
-                        .setTitle("Thông báo")
-                        .setMessage("Từ chối phê duyệt blog thành công")
-                        .setType("success")
-                        .Build();
-                customAlertActivity.showDialog();
-            }
-
-            @Override
-            public void onFailure(Call<blogs> call, Throwable t) {
-                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
-                        .setActivity(adminActivity)
-                        .setTitle("Thông báo")
-                        .setMessage("Từ chối phê duyệt blog thất bại")
-                        .setType("success")
-                        .Build();
-                customAlertActivity.showDialog();
-            }
-        });
-    }
-
-    private void approvalBlog(String IDBlog){
-        APIService.apiService.approveBlog(IDBlog).enqueue(new Callback<blogs>() {
-            @Override
-            public void onResponse(Call<blogs> call, Response<blogs> response) {
-                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
-                        .setActivity(adminActivity)
-                        .setTitle("Thông báo")
-                        .setMessage("Phê duyệt blog thành công")
-                        .setType("success")
-                        .Build();
-                customAlertActivity.showDialog();
-            }
-
-            @Override
-            public void onFailure(Call<blogs> call, Throwable t) {
-                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
-                        .setActivity(adminActivity)
-                        .setTitle("Thông báo")
-                        .setMessage("Phê duyệt blog thất bại")
-                        .setType("error")
-                        .Build();
-                customAlertActivity.showDialog();
-            }
-        });
     }
 
     private String FormatDate(String date){
