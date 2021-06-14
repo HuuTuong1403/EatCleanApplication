@@ -150,7 +150,6 @@ public class AddBlogFragment extends Fragment {
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date now = new Date();
                 String Time = df.format(now);
-                getUrlImage();
                 addBlogCtv(IDBlog, BlogTitle, BlogAuthor, BlogContent, Time, Status);
 
             }
@@ -161,7 +160,7 @@ public class AddBlogFragment extends Fragment {
         APIService.apiService.addBlogCtv(id, title, author, content, time, status).enqueue(new Callback<blogs>() {
             @Override
             public void onResponse(Call<blogs> call, Response<blogs> response) {
-                addBlogImage(id, urlBlogImage);
+                getUrlImage(id);
             }
 
             @Override
@@ -219,7 +218,7 @@ public class AddBlogFragment extends Fragment {
             }
         });
     }
-    private void getUrlImage (){
+    private void getUrlImage (String IDBlog){
         String strRealPath = RealPathUtil.getRealPath(view.getContext(), mUri);
         File file = new File(strRealPath);
         RequestBody requestBodyAvatar = RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -228,6 +227,7 @@ public class AddBlogFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 urlBlogImage = response.body();
+                addBlogImage(IDBlog, urlBlogImage);
             }
 
             @Override
@@ -243,7 +243,7 @@ public class AddBlogFragment extends Fragment {
         });
     }
     private void getBlogs(){
-        APIService.apiService.getBlogs().enqueue(new Callback<List<blogs>>() {
+        APIService.apiService.getBlogsAll().enqueue(new Callback<List<blogs>>() {
             @Override
             public void onResponse(Call<List<blogs>> call, Response<List<blogs>> response) {
                 listBlogs = response.body();

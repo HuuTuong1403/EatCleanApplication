@@ -180,7 +180,6 @@ public class AddRecipeFragment extends Fragment {
                 String recipeStep           = edt_addRecipe_recipeSteps.getText().toString();
                 String recipeTime           = edt_addRecipe_recipeTime.getText().toString();
                 String recipeStatus         = "waittingforapproval";
-                getUrlImage();
                 addRecipeCtv(IDRecipe, recipeTitle, recipeAuthor, recipeContent, recipeNutritional, recipeIngredient, recipeStep, recipeTime, recipeStatus);
             }
         }
@@ -190,7 +189,7 @@ public class AddRecipeFragment extends Fragment {
         APIService.apiService.addRecipeCtv(id, title, author, content, nuTri, ingredient, step, time, status).enqueue(new Callback<recipes>() {
             @Override
             public void onResponse(Call<recipes> call, Response<recipes> response) {
-                addRecipeImage(id, urlImage);
+                getUrlImage(id);
             }
 
             @Override
@@ -252,7 +251,7 @@ public class AddRecipeFragment extends Fragment {
             }
         });
     }
-    private void getUrlImage (){
+    private void getUrlImage (String IDRecipe){
         String strRealPath = RealPathUtil.getRealPath(view.getContext(), mUri);
         File file = new File(strRealPath);
         RequestBody requestBodyAvatar = RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -261,6 +260,7 @@ public class AddRecipeFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                  urlImage = response.body();
+                addRecipeImage(IDRecipe, urlImage);
             }
 
             @Override

@@ -35,6 +35,8 @@ import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.R;
+import com.example.eatcleanapp.RealPathUtil;
+import com.example.eatcleanapp.model.recipeimages;
 import com.example.eatcleanapp.model.recipes;
 import com.example.eatcleanapp.ui.home.detail.DetailActivity;
 import com.karumi.dexter.Dexter;
@@ -49,6 +51,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,7 +67,8 @@ public class UpdateRecipeFragment extends Fragment {
     private EditText edt_updateRecipe_recipeTitle, edt_updateRecipe_recipeContent, edt_updateRecipe_recipeNutritional, edt_updateRecipe_recipeIngredients, edt_updateRecipe_recipeSteps, edt_updateRecipe_recipeTime;
     private Button btn_updateRecipe_sendApproval;
     private Uri mUri;
-
+    private String urlRecipeImage = "";
+    private List<recipeimages> listRecipeImages;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,6 +93,7 @@ public class UpdateRecipeFragment extends Fragment {
         btn_updateRecipe_sendApproval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getRecipesImages();
                 sendUpdate();
             }
         });
@@ -144,7 +151,6 @@ public class UpdateRecipeFragment extends Fragment {
             String recipeStep           = edt_updateRecipe_recipeSteps.getText().toString();
             String recipeTime           = edt_updateRecipe_recipeTime.getText().toString();
             String recipeStatus         = "waittingforapproval";
-
             updateRecipeCtv(recipe.getIDRecipes(), recipeTitle, recipeAuthor, recipeContent, recipeNutritional, recipeIngredient, recipeStep, recipeTime, recipeStatus);
         }
     }
@@ -153,15 +159,20 @@ public class UpdateRecipeFragment extends Fragment {
         APIService.apiService.updateRecipeCtv(id, title, author, content, nuTri, ingredient, step, time, status).enqueue(new Callback<recipes>() {
             @Override
             public void onResponse(Call<recipes> call, Response<recipes> response) {
-                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
-                        .setActivity(detailActivity)
-                        .setTitle("Thông báo")
-                        .setMessage("Chỉnh sửa công thức món ăn thành công, vui lòng đợi quản trị viên phê duyệt")
-                        .setType("error")
-                        .Build();
-                customAlertActivity.showDialog();
+                if (mUri != null)
+                {
+                    getUrlImage(recipe.getIDRecipes(), recipe.getImage());
+                }
+                else {
+                    CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                            .setActivity(detailActivity)
+                            .setTitle("Thông báo")
+                            .setMessage("Chỉnh sửa công thức món ăn thành công, vui lòng đợi quản trị viên phê duyệt")
+                            .setType("success")
+                            .Build();
+                    customAlertActivity.showDialog();
+                }
             }
-
             @Override
             public void onFailure(Call<recipes> call, Throwable t) {
                 CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
@@ -174,7 +185,92 @@ public class UpdateRecipeFragment extends Fragment {
             }
         });
     }
+    private void updateRecipeImage (String IDRecipe, String RecipeImage, String url){
+        String IDRecipeImage = "";
+        for (recipeimages recipeimage: listRecipeImages
+             ) {
+            if (RecipeImage.equals(recipeimage.getRecipesImages())){
+                IDRecipeImage = recipeimage.getIDRecipesImages();
+                break;
+            }
+        }
+        if (!IDRecipeImage.equals("")){
+            APIService.apiService.updateRecipeImage(IDRecipeImage, url).enqueue(new Callback<recipeimages>() {
+                @Override
+                public void onResponse(Call<recipeimages> call, Response<recipeimages> response) {
+                    CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                            .setActivity(detailActivity)
+                            .setTitle("Thông báo")
+                            .setMessage("Chỉnh sửa công thức món ăn thành công, vui lòng đợi quản trị viên phê duyệt")
+                            .setType("success")
+                            .Build();
+                    customAlertActivity.showDialog();
+                }
+                @Override
+                public void onFailure(Call<recipeimages> call, Throwable t) {
+                    CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                            .setActivity(detailActivity)
+                            .setTitle("Thông báo")
+                            .setMessage("Chỉnh sửa hình ảnh món ăn thất bại")
+                            .setType("error")
+                            .Build();
+                    customAlertActivity.showDialog();
+                }
+            });
+        }
+        else {
+            CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                    .setActivity(detailActivity)
+                    .setTitle("Thông báo")
+                    .setMessage("Không tìm thấy hình ảnh")
+                    .setType("error")
+                    .Build();
+            customAlertActivity.showDialog();
+        }
+    }
+    private void getUrlImage (String IDRecipe, String RecipeImage){
+        String strRealPath = RealPathUtil.getRealPath(view.getContext(), mUri);
+        File file = new File(strRealPath);
+        RequestBody requestBodyAvatar = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part multipartBodyAvatar = MultipartBody.Part.createFormData("fileToUpload", file.getName(), requestBodyAvatar);
+        APIService.apiService.uploadImage1(multipartBodyAvatar).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                urlRecipeImage = response.body();
+                updateRecipeImage(IDRecipe, RecipeImage, urlRecipeImage);
+            }
 
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(detailActivity)
+                        .setTitle("Thông báo")
+                        .setMessage(t.toString())
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
+        });
+    }
+    private void getRecipesImages(){
+        APIService.apiService.getRecipeImages().enqueue(new Callback<List<recipeimages>>() {
+            @Override
+            public void onResponse(Call<List<recipeimages>> call, Response<List<recipeimages>> response) {
+                listRecipeImages = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<List<recipeimages>> call, Throwable t) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(detailActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Lỗi không thể lấy dữ liệu")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
+        });
+    }
     private void Mapping() {
         imgV_updateRecipe_uploadImage       = (ImageView)view.findViewById(R.id.imgV_updateRecipe_uploadImage);
         edt_updateRecipe_recipeTitle        = (EditText)view.findViewById(R.id.edt_updateRecipe_recipeTitle);

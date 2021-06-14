@@ -59,7 +59,7 @@ public class ListAddBlogFragment extends Fragment implements IClickListener {
     }
 
     private void GetData(){
-        APIService.apiService.getBlogs().enqueue(new Callback<List<blogs>>() {
+        APIService.apiService.getBlogsAll().enqueue(new Callback<List<blogs>>() {
             @Override
             public void onResponse(Call<List<blogs>> call, Response<List<blogs>> response) {
                 listBlogs = response.body();

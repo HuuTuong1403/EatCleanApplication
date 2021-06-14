@@ -1,7 +1,7 @@
 <?php
 	require "dbConfig.php";
 
-	$query = "SELECT * FROM blogs  WHERE Status = 'approval'";
+	$query = "SELECT * FROM blogs   ";
 
 	$data = mysqli_query($connect, $query);
 	class Blog {

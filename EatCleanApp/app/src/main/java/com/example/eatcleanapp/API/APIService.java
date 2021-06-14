@@ -56,12 +56,23 @@ public interface APIService {
                                    @Field("Steps") String Steps,
                                    @Field("Time") String Time,
                                    @Field("Status") String Status);
+     @POST("updateRecipeImage.php")
+     @FormUrlEncoded
+     Call<recipeimages> updateRecipeImage (@Query("IDRecipesImages") String IDRecipesImages,
+                                           @Field("RecipesImages") String RecipesImages);
 
+     @POST("updateBlogImage.php")
+     @FormUrlEncoded
+     Call<blogimages> updateBlogImage (@Query("IDBlogImages") String IDBlogImages,
+                                           @Field("BlogImages") String BlogImages);
      @GET("getBlogImages.php")
      Call<List<blogimages>> getImageBlog();
 
      @GET("getBlogs.php")
      Call<List<blogs>> getBlogs();
+
+     @GET(" getBlogAll.php")
+     Call<List<blogs>> getBlogsAll();
 
      @FormUrlEncoded
      @POST("updateBlog.php")

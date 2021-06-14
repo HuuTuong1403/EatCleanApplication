@@ -35,7 +35,10 @@ import com.bumptech.glide.Glide;
 import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.R;
+import com.example.eatcleanapp.RealPathUtil;
+import com.example.eatcleanapp.model.blogimages;
 import com.example.eatcleanapp.model.blogs;
+import com.example.eatcleanapp.model.recipeimages;
 import com.example.eatcleanapp.ui.home.detail.DetailActivity;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -49,6 +52,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,7 +68,8 @@ public class UpdateBlogFragment extends Fragment {
     private Button btn_updateBlog_sendApproval;
     private blogs blog;
     private Uri mUri;
-
+    private List<blogimages> listBlogImage;
+    private String urlBlogImage;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,6 +95,7 @@ public class UpdateBlogFragment extends Fragment {
         btn_updateBlog_sendApproval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getBlogImages();
                 sendUpdate();
             }
         });
@@ -139,13 +147,19 @@ public class UpdateBlogFragment extends Fragment {
         APIService.apiService.updateBlogCtv(idBlog, blogTitle, blogAuthor, blogContent, status).enqueue(new Callback<blogs>() {
             @Override
             public void onResponse(Call<blogs> call, Response<blogs> response) {
-                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
-                        .setActivity(detailActivity)
-                        .setTitle("Thông báo")
-                        .setMessage("Chỉnh sửa blog thành công! Gửi phê duyệt blog thành công, vui lòng chờ quản trị viên phê duyệt")
-                        .setType("success")
-                        .Build();
-                customAlertActivity.showDialog();
+                if (mUri != null)
+                {
+                    getUrlImage();
+                }
+                else {
+                    CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                            .setActivity(detailActivity)
+                            .setTitle("Thông báo")
+                            .setMessage("Chỉnh sửa blog thành công, vui lòng đợi quản trị viên phê duyệt")
+                            .setType("success")
+                            .Build();
+                    customAlertActivity.showDialog();
+                }
             }
 
             @Override
@@ -160,7 +174,93 @@ public class UpdateBlogFragment extends Fragment {
             }
         });
     }
+    private void getBlogImages(){
+        APIService.apiService.getImageBlog().enqueue(new Callback<List<blogimages>>() {
+            @Override
+            public void onResponse(Call<List<blogimages>> call, Response<List<blogimages>> response) {
+                listBlogImage = response.body();
+            }
 
+            @Override
+            public void onFailure(Call<List<blogimages>> call, Throwable t) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(detailActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Lỗi không thể lấy dữ liệu")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
+        });
+    }
+    private void getUrlImage (){
+        String strRealPath = RealPathUtil.getRealPath(view.getContext(), mUri);
+        File file = new File(strRealPath);
+        RequestBody requestBodyAvatar = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part multipartBodyAvatar = MultipartBody.Part.createFormData("fileToUpload", file.getName(), requestBodyAvatar);
+        APIService.apiService.uploadImage1(multipartBodyAvatar).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                urlBlogImage = response.body();
+                updateBlogImages(blog.getIDBlog(),blog.getImage(),urlBlogImage);
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(detailActivity)
+                        .setTitle("Thông báo")
+                        .setMessage(t.toString())
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
+        });
+    }
+    private void updateBlogImages(String IDBlog, String BlogImage, String url){
+        String IDBlogImages = "";
+        for (blogimages blogimage: listBlogImage
+        ) {
+            if (BlogImage.equals(blogimage.getBlogImages()) && IDBlog.equals(blogimage.getIDBlog())){
+                IDBlogImages = blogimage.getIDBlogImages();
+                break;
+            }
+        }
+        if (!IDBlogImages.equals("")){
+            APIService.apiService.updateBlogImage(IDBlogImages, url).enqueue(new Callback<blogimages>() {
+                @Override
+                public void onResponse(Call<blogimages> call, Response<blogimages> response) {
+                    CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                            .setActivity(detailActivity)
+                            .setTitle("Thông báo")
+                            .setMessage("Chỉnh sửa blog thành công, vui lòng đợi quản trị viên phê duyệt")
+                            .setType("success")
+                            .Build();
+                    customAlertActivity.showDialog();
+                }
+
+                @Override
+                public void onFailure(Call<blogimages> call, Throwable t) {
+                    CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                            .setActivity(detailActivity)
+                            .setTitle("Thông báo")
+                            .setMessage("Chỉnh sửa hình ảnh blog thất bại")
+                            .setType("error")
+                            .Build();
+                    customAlertActivity.showDialog();
+                }
+            });
+        }
+        else {
+            CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                    .setActivity(detailActivity)
+                    .setTitle("Thông báo")
+                    .setMessage("Không tìm thấy hình ảnh")
+                    .setType("error")
+                    .Build();
+            customAlertActivity.showDialog();
+        }
+    }
     private void setScrollEditText(View view, MotionEvent motionEvent){
         view.getParent().requestDisallowInterceptTouchEvent(true);
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK){
