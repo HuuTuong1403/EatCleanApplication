@@ -96,12 +96,6 @@ public class HomeFragment extends Fragment {
                     case R.id.menu_blog_home:
                         viewPager.setCurrentItem(1);
                         break;
-                    case R.id.menu_listAdd_recipe:
-                        viewPager.setCurrentItem(2);
-                        break;
-                    case R.id.menu_listAdd_blog:
-                        viewPager.setCurrentItem(3);
-                        break;
                 }
                 return true;
             }
@@ -121,12 +115,6 @@ public class HomeFragment extends Fragment {
                         break;
                     case 1:
                         bottomNavigationView.getMenu().findItem(R.id.menu_blog_home).setChecked(true);
-                        break;
-                    case 2:
-                        bottomNavigationView.getMenu().findItem(R.id.menu_listAdd_recipe).setChecked(true);
-                        break;
-                    case 3:
-                        bottomNavigationView.getMenu().findItem(R.id.menu_listAdd_blog).setChecked(true);
                         break;
                 }
             }

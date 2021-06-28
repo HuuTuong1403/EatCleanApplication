@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_admin_statistic_userForeachMonth"
+        android:title="Thống kê người dùng"
+        android:icon="@drawable/ctv_24"/>
+    <item android:id="@+id/menu_admin_statistic_commentForeachMonth"
+        android:title="Thống kê bình luận"
+        android:icon="@drawable/baseline_forum_24"/>
+</menu>

@@ -23,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.SubActivity;
 import com.example.eatcleanapp.databinding.ActivityAdminBinding;
@@ -30,13 +32,19 @@ import com.example.eatcleanapp.model.users;
 
 import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;
 import com.example.eatcleanapp.ui.quantrivien.home.HomeAdminFragment;
+import com.example.eatcleanapp.ui.quantrivien.statistic.AdminStatisticFragment;
 import com.google.android.material.navigation.NavigationView;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AdminActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActivityAdminBinding binding;
     private TextView txvTitleAdmin;
     private static final int FRAGMENT_HOME = 1;
+    private static final int FRAGMENT_STATISTIC = 2;
     private boolean doubleBackToExitPressedOnce = false;
     private int currentFragment = FRAGMENT_HOME;
     private ImageButton btnProfile_Admin;
@@ -65,6 +73,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
 
         user = DataLocalManager.getUser();
         if(user != null){
+            getUserByUsername(user.getUsername());
             ChangeText(user);
         }
         else{
@@ -90,6 +99,21 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
         replaceFragment(new HomeAdminFragment(), "Trang chủ Admin");
         currentFragment = FRAGMENT_HOME;
         navigationView.getMenu().findItem(R.id.menu_home_nav_admin).setChecked(true);
+    }
+
+    private void getUserByUsername(String Username){
+        APIService.apiService.getUserByUsername(Username).enqueue(new Callback<users>() {
+            @Override
+            public void onResponse(Call<users> call, Response<users> response) {
+                user = response.body();
+                DataLocalManager.setUser(user);
+            }
+
+            @Override
+            public void onFailure(Call<users> call, Throwable t) {
+                Toast.makeText(AdminActivity.this , "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void Mapping(){
@@ -139,6 +163,16 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                 {
                     replaceFragment(new HomeAdminFragment(), "Trang chủ");
                     currentFragment = FRAGMENT_HOME;
+                    navigationView.getMenu().findItem(R.id.menu_home_nav_admin).setChecked(true);
+                    navigationView.getMenu().findItem(R.id.menu_statistic_nav_admin).setChecked(false);
+                }
+                break;
+            case R.id.menu_statistic_nav_admin:
+                if(FRAGMENT_STATISTIC != currentFragment) {
+                    replaceFragment(new AdminStatisticFragment(), "Thống kê");
+                    currentFragment = FRAGMENT_STATISTIC;
+                    navigationView.getMenu().findItem(R.id.menu_home_nav_admin).setChecked(false);
+                    navigationView.getMenu().findItem(R.id.menu_statistic_nav_admin).setChecked(true);
                 }
                 break;
         }

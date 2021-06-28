@@ -33,6 +33,7 @@ android {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -57,4 +58,5 @@ dependencies {
     implementation 'com.makeramen:roundedimageview:2.3.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.karumi:dexter:6.2.2'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
