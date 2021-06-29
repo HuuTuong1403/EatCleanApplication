@@ -1,7 +1,8 @@
 <?php
 	require "dbConfig.php";
+	$Year = $_GET['Year'];
 
-	$query = "SELECT count(*) as count , MONTH(createTime) FROM  recipes WHERE Status = 'approval' GROUP BY MONTH(createTime) ";
+	$query = "SELECT count(*) as count , MONTH(createTime) FROM  recipes WHERE Status = 'approval' AND YEAR(createTime) = '$Year' GROUP BY MONTH(createTime) ";
 
 	$data = mysqli_query($connect, $query);
 

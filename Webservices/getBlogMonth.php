@@ -1,7 +1,9 @@
 <?php
 	require "dbConfig.php";
 
-	$query = "SELECT count(*) as count , MONTH(Time) FROM  blogs WHERE Status = 'approval' GROUP BY MONTH(Time) ";
+	$Year = $_GET['Year'];
+
+	$query = "SELECT count(*) as count , MONTH(Time) FROM  blogs WHERE Status = 'approval' AND YEAR(Time) = '$Year' GROUP BY MONTH(Time) ";
 
 	$data = mysqli_query($connect, $query);
 
