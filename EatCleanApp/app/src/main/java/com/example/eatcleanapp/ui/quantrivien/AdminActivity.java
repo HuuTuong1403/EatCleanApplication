@@ -32,6 +32,7 @@ import com.example.eatcleanapp.model.users;
 
 import com.example.eatcleanapp.ui.nguoidung.data_local.DataLocalManager;
 import com.example.eatcleanapp.ui.quantrivien.home.HomeAdminFragment;
+import com.example.eatcleanapp.ui.quantrivien.management.UserManagementFragment;
 import com.example.eatcleanapp.ui.quantrivien.statistic.AdminStatisticFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -45,6 +46,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
     private TextView txvTitleAdmin;
     private static final int FRAGMENT_HOME = 1;
     private static final int FRAGMENT_STATISTIC = 2;
+    private static final int FRAGMENT_MANAGEMENT = 3;
     private boolean doubleBackToExitPressedOnce = false;
     private int currentFragment = FRAGMENT_HOME;
     private ImageButton btnProfile_Admin;
@@ -165,6 +167,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                     currentFragment = FRAGMENT_HOME;
                     navigationView.getMenu().findItem(R.id.menu_home_nav_admin).setChecked(true);
                     navigationView.getMenu().findItem(R.id.menu_statistic_nav_admin).setChecked(false);
+                    navigationView.getMenu().findItem(R.id.menu_userManagement_nav_admin).setChecked(false);
                 }
                 break;
             case R.id.menu_statistic_nav_admin:
@@ -173,6 +176,16 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                     currentFragment = FRAGMENT_STATISTIC;
                     navigationView.getMenu().findItem(R.id.menu_home_nav_admin).setChecked(false);
                     navigationView.getMenu().findItem(R.id.menu_statistic_nav_admin).setChecked(true);
+                    navigationView.getMenu().findItem(R.id.menu_userManagement_nav_admin).setChecked(false);
+                }
+                break;
+            case R.id.menu_userManagement_nav_admin:
+                if(FRAGMENT_MANAGEMENT != currentFragment) {
+                    replaceFragment(new UserManagementFragment(), "Quản lý người dùng");
+                    currentFragment = FRAGMENT_MANAGEMENT;
+                    navigationView.getMenu().findItem(R.id.menu_userManagement_nav_admin).setChecked(true);
+                    navigationView.getMenu().findItem(R.id.menu_home_nav_admin).setChecked(false);
+                    navigationView.getMenu().findItem(R.id.menu_statistic_nav_admin).setChecked(false);
                 }
                 break;
         }

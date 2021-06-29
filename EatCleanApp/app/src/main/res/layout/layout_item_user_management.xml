@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_userManagement">
+
+    <LinearLayout
+        android:background="#EFEDED"
+        android:id="@+id/bottom_wrapper"
+        android:layout_width="265dp"
+        android:weightSum="1"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_userManagement_Delete"
+            android:layout_marginStart="5dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:text="Xóa"
+            android:textSize="12sp"
+            android:backgroundTint="@color/colorError"
+            android:background="@drawable/custom_button"
+            android:drawableStart="@drawable/baseline_delete_24" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_userManagement_UnLock"
+            android:visibility="gone"
+            android:layout_marginStart="5dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:text="Mở khóa"
+            android:textSize="12sp"
+            android:backgroundTint="@color/bg_nav"
+            android:background="@drawable/custom_button"
+            android:drawableStart="@drawable/baseline_lock_open_24" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_userManagement_Lock"
+            android:layout_marginStart="5dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:text="Khóa"
+            android:textSize="12sp"
+            android:backgroundTint="@color/bg_nav"
+            android:background="@drawable/custom_button"
+            android:drawableStart="@drawable/baseline_lock_24"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_userManagement_Approval"
+            android:layout_marginStart="5dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:text="Duyệt"
+            android:textSize="12sp"
+            android:backgroundTint="@color/colorSuccess"
+            android:background="@drawable/custom_button"
+            android:drawableStart="@drawable/baseline_approval_24" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgv_avatar_userManagement"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="5dp"
+            android:src="@drawable/login"/>
+        <LinearLayout
+            android:paddingStart="15dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/txv_fullName_userManagement"
+                android:layout_marginBottom="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Họ tên: Nguyễn Hữu Tường"
+                android:textSize="14sp"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/txv_userName_userManagement"
+                android:layout_marginBottom="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên đăng nhập: tuongkl01"
+                android:textSize="14sp"
+                android:textColor="@color/black"/>
+            <TextView
+                android:minWidth="280dp"
+                android:id="@+id/txv_email_userManagement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Email: huutuong1403@gmail.com"
+                android:textSize="14sp"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/txv_role_userManagement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Chức vụ: Người dùng"
+                android:textSize="14sp"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/txv_status_userManagement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tình trạng tài khoản: Đã khóa"
+                android:textSize="14sp"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</com.daimajia.swipe.SwipeLayout>
