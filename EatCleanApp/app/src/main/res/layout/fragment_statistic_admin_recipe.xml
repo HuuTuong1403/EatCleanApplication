@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.quantrivien.statistic.tabStatistic.StatisticAdminCommentFragment">
+    tools:context=".ui.quantrivien.statistic.tabStatistic.StatisticAdminRecipeFragment">
 
     <EditText
         android:hint="Nhập năm"
@@ -20,6 +20,6 @@
         android:layout_marginVertical="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/statistic_comment_barChart"/>
+        android:id="@+id/statistic_recipe_barChart"/>
 
 </LinearLayout>

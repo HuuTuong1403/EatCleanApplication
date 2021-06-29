@@ -3,7 +3,10 @@
     <item android:id="@+id/menu_admin_statistic_userForeachMonth"
         android:title="Thống kê người dùng"
         android:icon="@drawable/ctv_24"/>
-    <item android:id="@+id/menu_admin_statistic_commentForeachMonth"
-        android:title="Thống kê bình luận"
-        android:icon="@drawable/baseline_forum_24"/>
+    <item android:id="@+id/menu_admin_statistic_recipeForeachMonth"
+        android:title="Thống kê món ăn"
+        android:icon="@drawable/outline_menu_book_24"/>
+    <item android:id="@+id/menu_admin_statistic_blogForeachMonth"
+        android:title="Thống kê blog"
+        android:icon="@drawable/outline_article_24"/>
 </menu>

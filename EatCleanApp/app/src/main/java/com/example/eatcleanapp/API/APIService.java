@@ -10,6 +10,7 @@ import com.example.eatcleanapp.model.recipes;
 import com.example.eatcleanapp.model.users;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 
 import java.util.List;
 
@@ -197,4 +198,13 @@ public interface APIService {
 
      @GET("unlockUser.php")
      Call<users> unlockUser(@Query("IDUser") String IDUser);
+
+     @GET("getUserMonth.php")
+     Call<JsonArray> getUserMonth(@Query("Year") String Year);
+
+     @GET("getBlogMonth.php")
+     Call<JsonArray> getBlogMonth(@Query("Year") String Year);
+
+     @GET("getRecipeMonth.php")
+     Call<JsonArray> getRecipeMonth(@Query("Year") String Year);
 }

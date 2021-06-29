@@ -5,7 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.example.eatcleanapp.ui.quantrivien.statistic.tabStatistic.StatisticAdminCommentFragment;
+import com.example.eatcleanapp.ui.quantrivien.statistic.tabStatistic.StatisticAdminBlogFragment;
+import com.example.eatcleanapp.ui.quantrivien.statistic.tabStatistic.StatisticAdminRecipeFragment;
 import com.example.eatcleanapp.ui.quantrivien.statistic.tabStatistic.StatisticAdminUserFragment;
 
 public class ViewPagerAdapterStatistic extends FragmentStatePagerAdapter {
@@ -21,7 +22,9 @@ public class ViewPagerAdapterStatistic extends FragmentStatePagerAdapter {
             case 0:
                 return new StatisticAdminUserFragment();
             case 1:
-                return new StatisticAdminCommentFragment();
+                return new StatisticAdminRecipeFragment();
+            case 2:
+                return new StatisticAdminBlogFragment();
             default:
                 return new StatisticAdminUserFragment();
         }
@@ -29,6 +32,6 @@ public class ViewPagerAdapterStatistic extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 }

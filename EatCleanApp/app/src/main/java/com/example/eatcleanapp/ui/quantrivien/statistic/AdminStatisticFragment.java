@@ -52,8 +52,11 @@ public class AdminStatisticFragment extends Fragment {
                     case R.id.menu_admin_statistic_userForeachMonth:
                         viewPager.setCurrentItem(0);
                         break;
-                    case R.id.menu_admin_statistic_commentForeachMonth:
+                    case R.id.menu_admin_statistic_recipeForeachMonth:
                         viewPager.setCurrentItem(1);
+                        break;
+                    case R.id.menu_admin_statistic_blogForeachMonth:
+                        viewPager.setCurrentItem(2);
                         break;
                 }
                 return true;
@@ -73,7 +76,10 @@ public class AdminStatisticFragment extends Fragment {
                         bottomNavigationView.getMenu().findItem(R.id.menu_admin_statistic_userForeachMonth).setChecked(true);
                         break;
                     case 1:
-                        bottomNavigationView.getMenu().findItem(R.id.menu_admin_statistic_commentForeachMonth).setChecked(true);
+                        bottomNavigationView.getMenu().findItem(R.id.menu_admin_statistic_recipeForeachMonth).setChecked(true);
+                        break;
+                    case 2:
+                        bottomNavigationView.getMenu().findItem(R.id.menu_admin_statistic_blogForeachMonth).setChecked(true);
                         break;
                 }
             }
