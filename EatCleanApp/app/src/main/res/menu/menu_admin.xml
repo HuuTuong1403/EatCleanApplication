@@ -6,4 +6,7 @@
     <item android:id="@+id/menu_statistic_nav_admin"
         android:icon="@drawable/baseline_analytics_24"
         android:title="Thống kê"/>
+    <item android:id="@+id/menu_userManagement_nav_admin"
+        android:icon="@drawable/baseline_manage_accounts_24"
+        android:title="Quản lý người dùng"/>
 </menu>
