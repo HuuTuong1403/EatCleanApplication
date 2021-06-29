@@ -13,6 +13,7 @@ public class users implements Serializable {
     private String IDRole;
     private String Username;
     private String createTime;
+    private String Status;
     public String getLoginFB() {
         return LoginFB;
     }
@@ -29,8 +30,8 @@ public class users implements Serializable {
         Username = username;
     }
 
-    public users(String IDUser, String email, String password, String fullName, String image,
-                 String loginFB, String IDRole, String username, String createTime) {
+    public users(String IDUser, String email, String password, String fullName, String image, String loginFB, String IDRole,
+                 String username, String createTime, String status) {
         this.IDUser = IDUser;
         Email = email;
         Password = password;
@@ -40,6 +41,7 @@ public class users implements Serializable {
         this.IDRole = IDRole;
         Username = username;
         this.createTime = createTime;
+        Status = status;
     }
 
     public String getIDUser() {
@@ -98,6 +100,14 @@ public class users implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
     }
 
     @Override
