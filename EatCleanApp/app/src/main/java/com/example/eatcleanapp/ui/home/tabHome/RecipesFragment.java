@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,10 +31,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.IClickListener;
 import com.example.eatcleanapp.MainActivity;
 import com.example.eatcleanapp.R;
+import com.example.eatcleanapp.model.recipeimages;
 import com.example.eatcleanapp.model.recipes;
 import com.example.eatcleanapp.ui.home.LoadingDialog;
 import com.example.eatcleanapp.ui.home.detail.DetailActivity;
@@ -46,6 +49,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 
 
 public class RecipesFragment extends Fragment implements IClickListener {
@@ -59,7 +66,8 @@ public class RecipesFragment extends Fragment implements IClickListener {
     private EditText edt_search_recycle;
     private MainActivity mMainActivity;
     private LoadingDialog loadingDialog;
-
+    private List<recipeimages> listRecipeImages;
+    private CountDownTimer timer;
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -74,7 +82,6 @@ public class RecipesFragment extends Fragment implements IClickListener {
         GetData(getRecipeLink);
         rcvRecipes.setAdapter(mRecipesAdapter);
         Handler handler = new Handler();
-
         edt_search_recycle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -169,9 +176,7 @@ public class RecipesFragment extends Fragment implements IClickListener {
                         e.printStackTrace();
                     }
                 }
-                mRecipesAdapter.setData(listRecipes);
-                mRecipesAdapter.setOldData(oldList);
-                loadingDialog.dismissDialog();
+                GetImageRandom();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -187,7 +192,29 @@ public class RecipesFragment extends Fragment implements IClickListener {
         });
         requestQueue.add(jsonArrayRequest);
     }
+    public void GetImageRandom() {
+        APIService.apiService.getRecipeImages().enqueue(new Callback<List<recipeimages>>() {
+            @Override
+            public void onResponse(Call<List<recipeimages>> call, retrofit2.Response<List<recipeimages>> response) {
+                listRecipeImages = response.body();
+                mRecipesAdapter.setData(listRecipes);
+                mRecipesAdapter.setOldData(oldList);
+                loadingDialog.dismissDialog();
+                randomPicture ();
+            }
 
+            @Override
+            public void onFailure(Call<List<recipeimages>> call, Throwable t) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(mMainActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Lỗi không lấy được dữ liệu")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
+        });
+    }
     @Override
     public void clickItem(int position) {
         Intent intent = new Intent(view.getContext(), DetailActivity.class);
@@ -196,5 +223,41 @@ public class RecipesFragment extends Fragment implements IClickListener {
         bundle.putSerializable("item", listRecipes.get(position));
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+    public void randomPicture (){
+        timer = new CountDownTimer(2000, 20) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+            }
+            @Override
+            public void onFinish() {
+                try{
+                    repeatPicture();
+                }catch(Exception e){
+                    Log.e("Error", "Error: " + e.toString());
+                }
+            }
+        }.start();
+    }
+    public void repeatPicture (){
+        List<recipeimages> lstTemp = new ArrayList<>();
+        for (int i = 0; i < oldList.size(); i ++){
+            lstTemp.clear();
+            for (int j = 0; j < listRecipeImages.size(); j ++){
+                if ( listRecipeImages.get(j).getIDRecipes().equals(oldList.get(i).getIDRecipes())){
+                    lstTemp.add(listRecipeImages.get(j));
+                }
+            }
+            Random rd = new Random();
+            if (lstTemp.size() > 0){
+                int x = rd.nextInt(((lstTemp.size() - 1) - 0 + 1) + 0);
+                oldList.get(i).setImage(lstTemp.get(x).getRecipesImages());
+                listRecipes.get(i).setImage(lstTemp.get(x).getRecipesImages());
+            }
+        }
+        mRecipesAdapter.setData(listRecipes);
+        mRecipesAdapter.setOldData(oldList);
+        randomPicture ();
     }
 }
