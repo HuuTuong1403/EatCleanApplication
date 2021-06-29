@@ -51,7 +51,9 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -180,13 +182,16 @@ public class AddRecipeFragment extends Fragment {
                 String recipeStep           = edt_addRecipe_recipeSteps.getText().toString();
                 String recipeTime           = edt_addRecipe_recipeTime.getText().toString();
                 String recipeStatus         = "waitingforapproval";
-                addRecipeCtv(IDRecipe, recipeTitle, recipeAuthor, recipeContent, recipeNutritional, recipeIngredient, recipeStep, recipeTime, recipeStatus);
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date now = new Date();
+                String createTime = df.format(now);
+                addRecipeCtv(IDRecipe, recipeTitle, recipeAuthor, recipeContent, recipeNutritional, recipeIngredient, recipeStep, recipeTime, recipeStatus,createTime);
             }
         }
 
     }
-    private void addRecipeCtv(String id, String title, String author, String content, String nuTri, String ingredient, String step, String time, String status){
-        APIService.apiService.addRecipeCtv(id, title, author, content, nuTri, ingredient, step, time, status).enqueue(new Callback<recipes>() {
+    private void addRecipeCtv(String id, String title, String author, String content, String nuTri, String ingredient, String step, String time, String status, String createTime){
+        APIService.apiService.addRecipeCtv(id, title, author, content, nuTri, ingredient, step, time, status, createTime).enqueue(new Callback<recipes>() {
             @Override
             public void onResponse(Call<recipes> call, Response<recipes> response) {
                 getUrlImage(id);

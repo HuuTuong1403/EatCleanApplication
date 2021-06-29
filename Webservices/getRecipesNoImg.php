@@ -7,7 +7,7 @@
 
 
 	class Recipes{
-		function __construct($IDRecipes, $RecipesAuthor, $RecipesTitle, $RecipesContent, $NutritionalIngredients, $Ingredients, $Steps, $Time, $Status){
+		function __construct($IDRecipes, $RecipesAuthor, $RecipesTitle, $RecipesContent, $NutritionalIngredients, $Ingredients, $Steps, $Time, $Status, $createTime){
 			$this -> IDRecipes = $IDRecipes;
 			$this -> RecipesAuthor = $RecipesAuthor;
 			$this -> RecipesTitle = $RecipesTitle;
@@ -17,6 +17,7 @@
 			$this -> Steps = $Steps;
 			$this -> Time = $Time;
 			$this -> Status = $Status;
+			$this -> createTime = $createTime;
 			
 		}
 	}
@@ -25,7 +26,7 @@
 
 	//Thêm phần tử vào màng
 	while ($row = mysqli_fetch_assoc($data)){
-		array_push($recipes_array, new Recipes($row ['IDRecipes'], $row ['RecipesAuthor'], $row ['RecipesTitle'],  $row ['RecipesContent'], $row ['NutritionalIngredients'], $row ['Ingredients'], $row ['Steps'], $row ['Time'], $row ['Status']));
+		array_push($recipes_array, new Recipes($row ['IDRecipes'], $row ['RecipesAuthor'], $row ['RecipesTitle'],  $row ['RecipesContent'], $row ['NutritionalIngredients'], $row ['Ingredients'], $row ['Steps'], $row ['Time'], $row ['Status'], $row ['createTime']));
 	}
 
 	//Chuyển định dạng mảng qua json

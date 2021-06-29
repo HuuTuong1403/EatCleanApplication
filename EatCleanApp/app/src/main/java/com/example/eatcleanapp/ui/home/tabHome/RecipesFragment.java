@@ -160,7 +160,8 @@ public class RecipesFragment extends Fragment implements IClickListener {
                                 object.getString("Steps"),
                                 object.getString("Time"),
                                 object.getString("Status"),
-                                object.getString("RecipesImages")
+                                object.getString("RecipesImages"),
+                                object.getString("createTime")
                         );
                         for (recipes recipetemp: listRecipes) {
                             if (recipetemp.getIDRecipes().equals(recipe.getIDRecipes())){

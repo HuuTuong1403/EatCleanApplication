@@ -13,11 +13,10 @@ public class recipes implements Serializable {
     private String Time;
     private String Status;
     private String Image;
+    private String createTime;
 
-
-    public recipes(String IDRecipes, String recipesTitle, String recipesAuthor,
-                   String recipesContent, String nutritionalIngredients, String ingredients,
-                   String steps, String time, String status, String image) {
+    public recipes(String IDRecipes, String recipesTitle, String recipesAuthor, String recipesContent, String nutritionalIngredients, String ingredients,
+                   String steps, String time, String status, String image, String createTime) {
         this.IDRecipes = IDRecipes;
         RecipesTitle = recipesTitle;
         RecipesAuthor = recipesAuthor;
@@ -28,6 +27,7 @@ public class recipes implements Serializable {
         Time = time;
         Status = status;
         Image = image;
+        this.createTime = createTime;
     }
 
     public String getIDRecipes() {
@@ -107,5 +107,13 @@ public class recipes implements Serializable {
 
     public void setImage(String image) {
         Image = image;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

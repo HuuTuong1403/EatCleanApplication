@@ -10,10 +10,10 @@
 	$Steps = $_POST['Steps'];
 	$Time = $_POST['Time'];
 	$Status = $_POST['Status'];
-
+	$createTime = $_POST['createTime'];
 
 	class Receipes {
-		function __construct($IDRecipes, $RecipesTitle ,$RecipesAuthor, $RecipesContent, $NutritionalIngredients, $Ingredients, $Steps, $Time, $Status){
+		function __construct($IDRecipes, $RecipesTitle ,$RecipesAuthor, $RecipesContent, $NutritionalIngredients, $Ingredients, $Steps, $Time, $Status, $createTime){
 			$this -> IDRecipes = $IDRecipes;
 			$this -> RecipesAuthor = $RecipesAuthor;
 			$this -> RecipesTitle = $RecipesTitle;
@@ -23,9 +23,10 @@
 			$this -> Steps = $Steps;
 			$this -> Time = $Time;
 			$this -> Status = $Status;
+			$this -> createTime = $createTime;
 		}
 	}
-	$query_add = "INSERT INTO recipes VALUES ('$IDRecipes', '$RecipesTitle', '$RecipesAuthor', '$RecipesContent', '$NutritionalIngredients', '$Ingredients', '$Steps', '$Time', '$Status')";
+	$query_add = "INSERT INTO recipes VALUES ('$IDRecipes', '$RecipesTitle', '$RecipesAuthor', '$RecipesContent', '$NutritionalIngredients', '$Ingredients', '$Steps', '$Time', '$Status', '$createTime')";
 
 	$response = array();
 

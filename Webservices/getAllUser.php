@@ -1,7 +1,7 @@
 <?php
 	require "dbConfig.php";
 
-	$query = "SELECT * FROM users WHERE Status = 'approval' ";
+	$query = "SELECT * FROM users ";
 
 	$data = mysqli_query($connect, $query);
 

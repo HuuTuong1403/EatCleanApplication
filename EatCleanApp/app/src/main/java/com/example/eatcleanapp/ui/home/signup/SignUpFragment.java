@@ -33,7 +33,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -222,11 +224,17 @@ public class SignUpFragment extends Fragment {
                 params.put("FullName", edtFullName.getText().toString().trim());
                 params.put("Image", "https://msteatclean.000webhostapp.com/uploads/noavatar.png");
                 params.put("LoginFB", "0");
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date now = new Date();
+                String createTime = df.format(now);
+                params.put("createTime", createTime);
                 if(cb_chooseCtv.isChecked()){
                     params.put("IDRole", "R002");
+                    params.put("Status", "waitingforapproval");
                 }
                 else{
                     params.put("IDRole", "R003");
+                    params.put("Status", "approval");
                 }
                 params.put("Username", edtUsername.getText().toString().trim());
                 return  params;
