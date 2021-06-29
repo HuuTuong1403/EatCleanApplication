@@ -185,4 +185,16 @@ public interface APIService {
 
      @GET("denyBlog.php")
      Call<blogs> denyBlog(@Query("IDBlog") String IDBlog);
+
+     @GET("approvalUser.php")
+     Call<users> approvalUser(@Query("IDUser") String IDUser);
+
+     @GET("denyUser.php")
+     Call<users> denyUser(@Query("IDUser") String IDUser);
+
+     @GET("lockUser.php")
+     Call<users> lockUser(@Query("IDUser") String IDUser);
+
+     @GET("unlockUser.php")
+     Call<users> unlockUser(@Query("IDUser") String IDUser);
 }

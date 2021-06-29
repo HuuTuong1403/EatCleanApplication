@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.daimajia.swipe.SwipeLayout;
+import com.example.eatcleanapp.API.APIService;
+import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.model.users;
 import com.example.eatcleanapp.ui.quantrivien.AdminActivity;
@@ -22,6 +24,10 @@ import com.example.eatcleanapp.ui.quantrivien.AdminActivity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UserManagementSwipeViewAdapter extends RecyclerView.Adapter<UserManagementSwipeViewAdapter.UserManagementSwipeViewHolder> {
 
@@ -154,19 +160,107 @@ public class UserManagementSwipeViewAdapter extends RecyclerView.Adapter<UserMan
     }
 
     private void deniedCongTacVien(String IDUser) {
+        APIService.apiService.denyUser(IDUser).enqueue(new Callback<users>() {
+            @Override
+            public void onResponse(Call<users> call, Response<users> response) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Từ chối phê duyệt cộng tác viên thành công")
+                        .setType("success")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
 
+            @Override
+            public void onFailure(Call<users> call, Throwable t) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Từ chối phê duyệt cộng tác viên thất bại")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
+        });
     }
 
     private void approvalCongTacvien(String IDUser) {
+        APIService.apiService.approvalUser(IDUser).enqueue(new Callback<users>() {
+            @Override
+            public void onResponse(Call<users> call, Response<users> response) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Phê duyệt cộng tác viên thành công")
+                        .setType("success")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
 
+            @Override
+            public void onFailure(Call<users> call, Throwable t) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Phê duyệt cộng tác viên thất bại")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
+        });
     }
 
     private void unLockUser(String IDUser) {
+        APIService.apiService.unlockUser(IDUser).enqueue(new Callback<users>() {
+            @Override
+            public void onResponse(Call<users> call, Response<users> response) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Mở khóa user thành công")
+                        .setType("success")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
 
+            @Override
+            public void onFailure(Call<users> call, Throwable t) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Mở khóa user thất bại")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
+             });
     }
 
     private void lockUser(String IDUser) {
+        APIService.apiService.lockUser(IDUser).enqueue(new Callback<users>() {
+            @Override
+            public void onResponse(Call<users> call, Response<users> response) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Khóa user thành công")
+                        .setType("success")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
 
+            @Override
+            public void onFailure(Call<users> call, Throwable t) {
+                CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
+                        .setActivity(adminActivity)
+                        .setTitle("Thông báo")
+                        .setMessage("Khóa user thất bại")
+                        .setType("error")
+                        .Build();
+                customAlertActivity.showDialog();
+            }
+        });
     }
 
     private void deleteUser(String IDUser) {
