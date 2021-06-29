@@ -41,6 +41,9 @@ public interface APIService {
      @GET("getUser.php")
      Call<List<users>> getUser();
 
+     @GET("getAllUser.php")
+     Call<List<users>> getAllUser();
+
 
      @GET("getRecipesNoImg.php")
      Call<List<recipes>> getRecipesNoImage();

@@ -69,6 +69,10 @@ public class UserManagementSwipeViewAdapter extends RecyclerView.Adapter<UserMan
         holder.txv_role_userManagement.setText(HtmlCompat.fromHtml(changeNameRole(user.getIDRole()), HtmlCompat.FROM_HTML_MODE_LEGACY));
     }
 
+    /*private String changeNameStatus(String Status) {
+
+    }*/
+
     private String getBold(String name){
         return "<b>" + name + "<b>";
     }
