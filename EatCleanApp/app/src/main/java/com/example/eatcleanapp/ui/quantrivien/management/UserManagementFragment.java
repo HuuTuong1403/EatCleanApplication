@@ -53,7 +53,7 @@ public class UserManagementFragment extends Fragment {
     }
 
     private void GetData() {
-        APIService.apiService.getUser().enqueue(new Callback<List<users>>() {
+        APIService.apiService.getAllUser().enqueue(new Callback<List<users>>() {
             @Override
             public void onResponse(Call<List<users>> call, Response<List<users>> response) {
                 List<users> list = response.body();
