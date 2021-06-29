@@ -50,6 +50,17 @@
             android:background="@drawable/custom_button"
             android:drawableStart="@drawable/baseline_lock_24"/>
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_userManagement_Denied"
+            android:layout_marginStart="5dp"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:text="Từ chối"
+            android:textSize="12sp"
+            android:backgroundTint="@color/colorError"
+            android:background="@drawable/custom_button"
+            android:drawableStart="@drawable/baseline_do_not_disturb_on_24" />
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_userManagement_Approval"
             android:layout_marginStart="5dp"
             android:layout_width="80dp"
