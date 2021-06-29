@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.eatcleanapp.API.APIService;
 import com.example.eatcleanapp.CustomAlert.CustomAlertActivity;
 import com.example.eatcleanapp.R;
 import com.example.eatcleanapp.ui.quantrivien.AdminActivity;
@@ -25,6 +26,10 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,25 +38,29 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class StatisticAdminUserFragment extends Fragment {
 
     private View view;
     private LineChart chart;
     private EditText statistic_edt_chooseYear;
     private AdminActivity adminActivity;
+    private  List<Entry> totalUserForeachMonth ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         adminActivity = (AdminActivity) getActivity();
         view = inflater.inflate(R.layout.fragment_statistic_admin_user, container, false);
-
-        statistic_edt_chooseYear = view.findViewById(R.id.statistic_edt_chooseYear);
-
+        Mapping();
         statistic_edt_chooseYear.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
+                    totalUserForeachMonth.clear();
                     if(statistic_edt_chooseYear.getText().toString().isEmpty()){
                         CustomAlertActivity customAlertActivity = new CustomAlertActivity.Builder()
                                 .setActivity(adminActivity)
@@ -74,47 +83,27 @@ public class StatisticAdminUserFragment extends Fragment {
                             customAlertActivity.showDialog();
                         }
                         else{
+                            getData(statistic_edt_chooseYear.getText().toString());
                             statistic_edt_chooseYear.setText("");
                         }
                     }
+                    Mapping();
                 }
                 return false;
             }
         });
 
 
-        chart = view.findViewById(R.id.statistic_user_lineChart);
-        chart.setTouchEnabled(true);
-        chart.setDragEnabled(true);
-        chart.setScaleEnabled(true);
-        chart.setPinchZoom(false);
-
-        List<Entry> totalUserForeachMonth = getListData();
-
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        xAxis.setCenterAxisLabels(true);
-        xAxis.setEnabled(true);
-
-
-        List<String> xAxisValues = new ArrayList<>(Arrays.asList("1", "2", "3", "4", "5", "6","7", "8", "9", "10", "11", "12"));
-        chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xAxisValues));
-
-        LineDataSet lineDataSet = new LineDataSet(totalUserForeachMonth, "Total user");
-        chart.animateXY(2000,2000);
-        LineData data = new LineData(lineDataSet);
-        data.setValueFormatter(new CustomValueData());
-        data.setValueTextSize(10);
-        lineDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        chart.setData(data);
-        chart.invalidate();
-
-        chart.getLegend().setEnabled(false);
-        chart.getDescription().setEnabled(false);
-
-
         return view;
+    }
+
+    private void Mapping() {
+        statistic_edt_chooseYear = view.findViewById(R.id.statistic_edt_chooseYear);
+        chart = view.findViewById(R.id.statistic_user_lineChart);
+        totalUserForeachMonth = new ArrayList<>();
+        for(int i = 1; i <= 12; i++) {
+            totalUserForeachMonth.add(i - 1, new Entry(i, 0));
+        }
     }
 
     static class CustomValueData extends ValueFormatter {
@@ -128,19 +117,60 @@ public class StatisticAdminUserFragment extends Fragment {
         }
     }
 
-    private List<Entry> getListData() {
-        List<Entry> lists = new ArrayList<>();
-        lists.add(new Entry(1, 1));
-        lists.add(new Entry(2, 10));
-        lists.add(new Entry(3, 20));
-        lists.add(new Entry(4, 5));
-        lists.add(new Entry(6, 10));
-        lists.add(new Entry(7, 15));
-        lists.add(new Entry(8, 17));
-        lists.add(new Entry(9, 20));
-        lists.add(new Entry(10, 21));
-        lists.add(new Entry(11, 13));
-        lists.add(new Entry(12, 50));
-        return lists;
+    private void getData(String Year){
+        APIService.apiService.getUserMonth(Year).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                List<Entry> list = new ArrayList<>();
+                JsonArray jsonArray = response.body();
+                for(int i = 0; i < jsonArray.size(); i++){
+                    JsonObject object = jsonArray.get(i).getAsJsonObject();
+                    String objectCount = object.get("count").getAsString() ;
+                    float count = Float.parseFloat(objectCount);
+                    String objectmonth = object.get("month").getAsString();
+                    float month = Float.parseFloat(objectmonth);
+                    list.add(new Entry(month, count));
+                }
+
+                for(int i = 0; i < list.size(); i++) {
+                    totalUserForeachMonth.remove((int)list.get(i).getX());
+                    totalUserForeachMonth.add((int)list.get(i).getX(), new Entry(list.get(i).getX(), list.get(i).getY()));
+                }
+
+                chart.setTouchEnabled(true);
+                chart.setDragEnabled(true);
+                chart.setScaleEnabled(true);
+                chart.setPinchZoom(false);
+
+
+
+                XAxis xAxis = chart.getXAxis();
+                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                xAxis.setDrawGridLines(false);
+                xAxis.setCenterAxisLabels(true);
+                xAxis.setEnabled(true);
+
+
+                List<String> xAxisValues = new ArrayList<>(Arrays.asList("1", "2", "3", "4", "5", "6","7", "8", "9", "10", "11", "12"));
+                chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xAxisValues));
+
+                LineDataSet lineDataSet = new LineDataSet(totalUserForeachMonth, "Total user");
+                chart.animateXY(2000,2000);
+                LineData data = new LineData(lineDataSet);
+                data.setValueFormatter(new CustomValueData());
+                data.setValueTextSize(10);
+                lineDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+                chart.setData(data);
+                chart.invalidate();
+
+                chart.getLegend().setEnabled(false);
+                chart.getDescription().setEnabled(false);
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                Toast.makeText(adminActivity, t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
